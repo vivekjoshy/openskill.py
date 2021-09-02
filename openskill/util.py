@@ -1,0 +1,135 @@
+import math
+from functools import reduce
+from itertools import zip_longest
+from typing import List, Optional
+
+from openskill.constants import Constants
+from openskill.rating import Rating
+
+
+def score(q, i) -> float:
+    if q < i:
+        return 0.0
+
+    if q > i:
+        return 1.0
+
+    return 0.5
+
+
+def rankings(teams, rank: Optional[List[int]] = None):
+    if rank:
+        team_scores = [rank[i] or i for i, _ in enumerate(teams)]
+    else:
+        team_scores = [i for i, _ in enumerate(teams)]
+
+    out_rank = {}
+    s = 0
+    for index, value in enumerate(team_scores):
+        if index > 0:
+            if team_scores[index - 1] < team_scores[index]:
+                s = index
+        out_rank[index] = s
+    return list(out_rank.values())
+
+
+def team_rating(game: List[List[Rating]], **options):
+    if "rank" in options:
+        rank = rankings(game, options["rank"])
+    else:
+        rank = rankings(game)
+
+    result = []
+    for index, team in enumerate(game):
+        team_result = []
+        mu_i = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
+        sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma ** 2, team))
+        team_result.extend([mu_i, sigma_squared, team, rank[index]])
+        result.append(team_result)
+    return result
+
+
+def ladder_pairs(ranks: List[int]):
+    left = [None]
+    left.extend(ranks[:-1])
+    right = list(ranks[1:])
+    right.append(None)
+    zipped_lr = zip_longest(left, right)
+    result = []
+    for _left, _right in zipped_lr:
+        if _left and _right:
+            result.append([_left, _right])
+        elif _left and not _right:
+            result.append([_left])
+        elif not _left and _right:
+            result.append([_right])
+        else:
+            result.append([])
+    return result
+
+
+def util_c(team_ratings, **options):
+    constants = Constants(**options)
+    beta_squared = constants.BETA_SQUARED
+    collective_team_sigma = 0
+    for team in team_ratings:
+        _team_mu, team_sigma_squared, _team, _rank = team
+        collective_team_sigma += team_sigma_squared + beta_squared
+    return math.sqrt(collective_team_sigma)
+
+
+def util_sum_q(team_ratings, c):
+    sum_q = {}
+    for i, i_team in enumerate(team_ratings):
+        team_i_mu, _team_i_sigma_squared, _i_team, i_rank = i_team
+        temp = math.exp(team_i_mu / c)
+        for q, q_team in enumerate(team_ratings):
+            _team_q_mu, _team_q_sigma_squared, _q_team, q_rank = q_team
+            if i_rank >= q_rank:
+                if q in sum_q:
+                    sum_q[q] += temp
+                else:
+                    sum_q[q] = temp
+    return list(sum_q.values())
+
+
+def util_a(team_ratings):
+    result = list(
+        map(
+            lambda i: len(list(filter(lambda q: i[3] == q[3], team_ratings))),
+            team_ratings,
+        )
+    )
+    return result
+
+
+def gamma(**options):
+    if "gamma" in options:
+        return options["gamma"]
+    else:
+        return (
+            lambda c, _k, _mu, sigma_squared, _team, _q_rank: math.sqrt(sigma_squared)
+            / c
+        )
+
+
+def transpose(xs):
+    return [list(map(lambda r: r[i], xs)) for i, _ in enumerate(xs[0])]
+
+
+def unwind(ranks, teams):
+    if not ranks or not teams:
+        return None, None
+
+    def sorter(teams):
+        unsorted_list = transpose([[ranks[i], [x, i]] for i, x in enumerate(teams)])
+        sorted_list = [
+            x
+            for _, x in sorted(
+                zip(unsorted_list[0], unsorted_list[1]), key=lambda pair: pair[0]
+            )
+        ]
+        return [x for x, _ in sorted_list], [x for _, x in sorted_list]
+
+    return sorter(teams) if isinstance(teams, list) else sorter
+

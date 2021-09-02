@@ -1,0 +1,39 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  tests:
+    name: ${{ matrix.os }} / ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [Ubuntu, MacOS, Windows]
+        python-version: [3.9]
+        experimental: [false]
+        include:
+          - os: Ubuntu
+            python-version: "3.10.0-alpha - 3.10.0"
+            experimental: true
+    defaults:
+      run:
+        shell: bash
+    steps:
+        - uses: actions/checkout@v2
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v2
+          with:
+            python-version: ${{ matrix.python-version }}
+        - name: Install Poetry
+          uses: snok/install-poetry@v1.1.6
+          with:
+            virtualenvs-create: true
+            virtualenvs-in-project: true
+        - name: Run Tests
+          run: |
+              poetry install
+              source $VENV
+              poetry build
+              poetry run twine check dist/*
+              poetry run black --check .
+              poetry run pytest .
