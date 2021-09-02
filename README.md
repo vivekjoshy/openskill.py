@@ -9,7 +9,7 @@ pip install openskill
 ```
 
 ## Usage
-```python-repl
+```python
 >>> from openskill import Rating, rate
 >>> a1 = Rating()
 >>> a1
@@ -27,7 +27,7 @@ Rating(mu=25.188, sigma=6.211)
 
 If `a1` and `a2` are on a team, and wins against a team of `b1` and `b2`, send this into rate:
 
-```python-repl
+```python
 >>> [[x1, x2], [y1, y2]] = rate([[a1, a2], [b1, b2]])
 >>> x1, x2, y1, y2
 ([28.669648436582808, 8.071520788025197], [33.83086971107981, 5.062772998705765], [43.071274808241974, 2.4166900452721256], [23.149503312339064, 6.1378606973362135])
@@ -35,7 +35,7 @@ If `a1` and `a2` are on a team, and wins against a team of `b1` and `b2`, send t
 
 You can also create `Rating` objects by importing `create_rating`:
 
-```python-repl
+```python
 >>> from openskill import create_rating
 >>> x1 = create_rating(x1)
 >>> x1
@@ -45,7 +45,7 @@ Rating(mu=28.669648436582808, sigma=8.071520788025197)
 ## Ranks
 When displaying a rating, or sorting a list of ratings, you can use `ordinal`:
 
-```python-repl
+```python
 >>> from openskill import ordinal
 >>> ordinal(mu=43.07, sigma=2.42)
 35.81
@@ -56,7 +56,7 @@ By default, this returns `mu - 3 * sigma`, showing a rating for which there's a 
 ## Artificial Ranks
 If your teams are listed in one order but your ranking is in a different order, for convenience you can specify a ranks option, such as:
 
-```python-repl
+```python
 >>> a1 = b1 = c1 = d1 = Rating()
 >>> result = [[a2], [b2], [c2], [d2]] = rate([[a1], [b1], [c1], [d1]], rank=[4, 1, 3, 2])
 >>> result
@@ -67,7 +67,7 @@ It's assumed that the lower ranks are better (wins), while higher ranks are wors
 
 Ties should have either equivalent rank or score.
 
-```python-repl
+```python
 >>> a1 = b1 = c1 = d1 = Rating()
 >>> result = [[a2], [b2], [c2], [d2]] = rate([[a1], [b1], [c1], [d1]], score=[37, 19, 37, 42])
 [[[24.68943500312503, 8.179213704945203]], [[22.826045021875203, 8.179213704945203]], [[24.68943500312503, 8.179213704945203]], [[27.795084971874736, 8.263160757613477]]]
@@ -78,7 +78,7 @@ Ties should have either equivalent rank or score.
 
 The default model is `PlackettLuce`. You can import alternate models from `openskill.models` like so:
 
-```python-repl
+```python
 >>> from openskill.models import BradelyTerryFull
 >>> a1 = b1 = c1 = d1 = Rating()
 >>> rate([[a1], [b1], [c1], [d1]], rank=[4, 1, 3, 2], model=BradleyTerryFull)
