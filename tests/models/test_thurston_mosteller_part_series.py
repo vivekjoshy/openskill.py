@@ -35,4 +35,3 @@ def test_thurston_mosteller_part_series():
     assert p31.sigma == pytest.approx(7.620583708)
     assert p41.mu == pytest.approx(25.0)
     assert p41.sigma == pytest.approx(7.905694531)
-

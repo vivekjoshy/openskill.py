@@ -132,4 +132,3 @@ def unwind(ranks, teams):
         return [x for x, _ in sorted_list], [x for _, x in sorted_list]
 
     return sorter(teams) if isinstance(teams, list) else sorter
-
