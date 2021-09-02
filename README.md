@@ -1,4 +1,6 @@
 # openskill.py
+[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml)
+
 Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill
 
 This is a port of the amazing [openskill.js](https://github.com/philihp/openskill.js) package.
