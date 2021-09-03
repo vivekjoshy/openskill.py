@@ -36,4 +36,7 @@ jobs:
               poetry build
               poetry run twine check dist/*
               poetry run black --check .
-              poetry run pytest .
+              poetry run pytest . --cov --cov-report=term-missing -vv
+              poetry run coverage report
+              poetry run coverage html
+              poetry run coverage xml --ignore-errors
