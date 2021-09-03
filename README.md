@@ -1,4 +1,6 @@
-# openskill.py
+![](https://i.imgur.com/tSTFzZY.gif)
+
+
 [![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml)
 
 Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill
