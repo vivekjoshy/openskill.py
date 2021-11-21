@@ -866,7 +866,7 @@ telegram = ["requests"]
 
 [[package]]
 name = "twine"
-version = "3.4.2"
+version = "3.6.0"
 description = "Collection of utilities for publishing packages on PyPI"
 category = "dev"
 optional = false
@@ -938,7 +938,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9, < 3.10"
-content-hash = "12ea6793adf6ae40f4c74b27eef6d1684c78a2e75666ebd60d053f954fb4a37d"
+content-hash = "00588747537c45c048db9c304de1c6b8335ec9d265737785a596fa652d8f2078"
 
 [metadata.files]
 alabaster = [
@@ -1548,8 +1548,8 @@ tqdm = [
     {file = "tqdm-4.62.2.tar.gz", hash = "sha256:a4d6d112e507ef98513ac119ead1159d286deab17dffedd96921412c2d236ff5"},
 ]
 twine = [
-    {file = "twine-3.4.2-py3-none-any.whl", hash = "sha256:087328e9bb405e7ce18527a2dca4042a84c7918658f951110b38bc135acab218"},
-    {file = "twine-3.4.2.tar.gz", hash = "sha256:4caec0f1ed78dc4c9b83ad537e453d03ce485725f2aea57f1bb3fdde78dae936"},
+    {file = "twine-3.6.0-py3-none-any.whl", hash = "sha256:916070f8ecbd1985ebed5dbb02b9bda9a092882a96d7069d542d4fc0bb5c673c"},
+    {file = "twine-3.6.0.tar.gz", hash = "sha256:4caad5ef4722e127b3749052fcbffaaf71719b19d4fd4973b29c469957adeba2"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.6-py2.py3-none-any.whl", hash = "sha256:39fb8672126159acb139a7718dd10806104dec1e2f0f6c88aab05d17df10c8d4"},
