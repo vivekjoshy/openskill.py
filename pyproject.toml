@@ -42,7 +42,7 @@ python = ">=3.9, < 3.10"
 scipy = "^1.7.1"
 
 [tool.poetry.dev-dependencies]
-Sphinx = "^4.0.2"
+Sphinx = "^4.3.0"
 sphinx-rtd-theme = "^0.5.2"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
