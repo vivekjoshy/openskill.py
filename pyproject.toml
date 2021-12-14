@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "openskill"
-version = "0.1.0-alpha.2"
+version = "0.1.0-beta.0"
 description = "Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill."
 authors = ["Taven <taven@outlook.in>"]
 license = "MIT"
@@ -38,18 +38,18 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9, < 3.10"
-scipy = "^1.7.1"
+python = ">=3.9, < 3.11"
+scipy = "^1.7.3"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.0.2"
-sphinx-rtd-theme = "^0.5.2"
+sphinx-rtd-theme = "^1.0.0"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 tox = "^3.24.4"
-check-manifest = "^0.46"
+check-manifest = "^0.47"
 pylama = "^7.7.1"
-readme-renderer = {extras = ["md"], version = "^30.0"}
+readme-renderer = {extras = ["md"], version = "^32.0"}
 Pygments = "^2.9.0"
 isort = "^5.9.1"
 twine = "^3.6.0"
