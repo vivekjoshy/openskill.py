@@ -38,8 +38,8 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9, < 3.10"
-scipy = "^1.7.1"
+python = ">=3.9, < 3.11"
+scipy = "^1.7.3"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.0.2"
