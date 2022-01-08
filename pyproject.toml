@@ -46,7 +46,7 @@ Sphinx = "^4.0.2"
 sphinx-rtd-theme = "^1.0.0"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
-tox = "^3.24.4"
+tox = "^3.24.5"
 check-manifest = "^0.47"
 pylama = "^7.7.1"
 readme-renderer = {extras = ["md"], version = "^30.0"}
