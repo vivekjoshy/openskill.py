@@ -48,7 +48,7 @@ pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 tox = "^3.24.5"
 check-manifest = "^0.47"
-pylama = "^7.7.1"
+pylama = "^8.3.6"
 readme-renderer = {extras = ["md"], version = "^30.0"}
 Pygments = "^2.11.2"
 isort = "^5.9.1"
