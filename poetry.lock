@@ -517,17 +517,26 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pylama"
-version = "7.7.1"
-description = "pylama -- Code audit tool for python"
+version = "8.3.7"
+description = "Code audit tool for python"
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 
 [package.dependencies]
-mccabe = ">=0.5.2"
-pycodestyle = ">=2.3.1"
-pydocstyle = ">=2.0.0"
-pyflakes = ">=1.5.0"
+mccabe = ">=0.6.1"
+pycodestyle = ">=2.8.0"
+pydocstyle = ">=6.1.1"
+pyflakes = ">=2.4.0"
+
+[package.extras]
+all = ["pylint", "eradicate", "radon", "mypy", "vulture"]
+eradicate = ["eradicate"]
+mypy = ["mypy"]
+pylint = ["pylint"]
+radon = ["radon"]
+tests = ["pytest", "pytest-mypy", "eradicate (>=2.0.0)", "radon (>=5.1.0)", "mypy", "pylint (>=2.11.1)", "pylama-quotes", "vulture", "types-setuptools"]
+vulture = ["vulture"]
 
 [[package]]
 name = "pyparsing"
@@ -941,7 +950,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9, < 3.11"
-content-hash = "f23a740f07030410daebf37980c53d52a7e7caeb48ea4438638120306247d437"
+content-hash = "28d1775aab9a4de4a4c799ea7de098ffd56ea228cc4a9b5d7b4c0ef6ef54694e"
 
 [metadata.files]
 alabaster = [
@@ -1385,8 +1394,8 @@ pygments = [
     {file = "Pygments-2.11.2.tar.gz", hash = "sha256:4e426f72023d88d03b2fa258de560726ce890ff3b630f88c21cbb8b2503b8c6a"},
 ]
 pylama = [
-    {file = "pylama-7.7.1-py2.py3-none-any.whl", hash = "sha256:fd61c11872d6256b019ef1235be37b77c922ef37ac9797df6bd489996dddeb15"},
-    {file = "pylama-7.7.1.tar.gz", hash = "sha256:9bae53ef9c1a431371d6a8dca406816a60d547147b60a4934721898f553b7d8f"},
+    {file = "pylama-8.3.7-py3-none-any.whl", hash = "sha256:ca47a1d341ede3aafbe117dc69f9e573cd1b749b2bacf5ac99d8daf6657001ec"},
+    {file = "pylama-8.3.7.tar.gz", hash = "sha256:d6b48087c810db3be5267d44ac0e1998a8c015c5d3eee0524fec90fbfaf8ad26"},
 ]
 pyparsing = [
     {file = "pyparsing-3.0.6-py3-none-any.whl", hash = "sha256:04ff808a5b90911829c55c4e26f75fa5ca8a2f5f36aa3a51f68e27033341d3e4"},
