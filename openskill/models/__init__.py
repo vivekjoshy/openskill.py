@@ -1,5 +1,5 @@
 from openskill.models.bradley_terry_full import BradleyTerryFull
 from openskill.models.bradley_terry_part import BradleyTerryPart
 from openskill.models.plackett_luce import PlackettLuce
-from openskill.models.thurston_mosteller_full import ThurstonMostellerFull
-from openskill.models.thurston_mosteller_part import ThurstonMostellerPart
+from openskill.models.thurstone_mosteller_full import ThurstoneMostellerFull
+from openskill.models.thurstone_mosteller_part import ThurstoneMostellerPart

@@ -1,5 +1,5 @@
 from openskill import Rating, rate
-from openskill.models import ThurstonMostellerFull
+from openskill.models import ThurstoneMostellerFull
 
 r = Rating()
 team_1 = [r]
@@ -7,24 +7,24 @@ team_2 = [r, r]
 team_3 = [r, r, r]
 
 
-def test_thurston_mosteller_full():
-    assert rate([team_1], model=ThurstonMostellerFull) == [team_1]
+def test_thurstone_mosteller_full():
+    assert rate([team_1], model=ThurstoneMostellerFull) == [team_1]
 
     # 2P FFA
-    assert rate([team_1, team_1], model=ThurstonMostellerFull) == [
+    assert rate([team_1, team_1], model=ThurstoneMostellerFull) == [
         [[29.205246334857588, 7.632833420130952]],
         [[20.794753665142412, 7.632833420130952]],
     ]
 
     # 3P FFA
-    assert rate([team_1, team_1, team_1], model=ThurstonMostellerFull) == [
+    assert rate([team_1, team_1, team_1], model=ThurstoneMostellerFull) == [
         [[33.410492669715175, 6.861184124806115]],
         [[25.0, 6.861184124806115]],
         [[16.589507330284825, 6.861184124806115]],
     ]
 
     # 4P FFA
-    assert rate([team_1, team_1, team_1, team_1], model=ThurstonMostellerFull) == [
+    assert rate([team_1, team_1, team_1, team_1], model=ThurstoneMostellerFull) == [
         [[37.61573900457276, 5.990955614049813]],
         [[29.205246334857588, 5.990955614049813]],
         [[20.794753665142412, 5.990955614049813]],
@@ -33,7 +33,7 @@ def test_thurston_mosteller_full():
 
     # 5P FFA
     assert rate(
-        [team_1, team_1, team_1, team_1, team_1], model=ThurstonMostellerFull
+        [team_1, team_1, team_1, team_1, team_1], model=ThurstoneMostellerFull
     ) == [
         [[41.82098533943035, 4.970638866839803]],
         [[33.410492669715175, 4.970638866839803]],
@@ -43,7 +43,7 @@ def test_thurston_mosteller_full():
     ]
 
     # 3 Different Sized Teams
-    assert rate([team_3, team_1, team_2], model=ThurstonMostellerFull) == [
+    assert rate([team_3, team_1, team_2], model=ThurstoneMostellerFull) == [
         [
             [25.72407717049428, 8.154234193613432],
             [25.72407717049428, 8.154234193613432],
@@ -58,7 +58,7 @@ def test_thurston_mosteller_full():
 
     # Can use a custom gamma with k=2
     assert rate(
-        [team_1, team_1], gamma=lambda c, k, *_: 1 / k, model=ThurstonMostellerFull
+        [team_1, team_1], gamma=lambda c, k, *_: 1 / k, model=ThurstoneMostellerFull
     ) == [
         [[29.205246334857588, 7.784759481252749]],
         [[20.794753665142412, 7.784759481252749]],
@@ -68,7 +68,7 @@ def test_thurston_mosteller_full():
     assert rate(
         [team_1, team_1, team_1, team_1, team_1],
         gamma=lambda c, k, *_: 1 / k,
-        model=ThurstonMostellerFull,
+        model=ThurstoneMostellerFull,
     ) == [
         [[41.82098533943035, 7.436215544405679]],
         [[33.410492669715175, 7.436215544405679]],
@@ -81,7 +81,7 @@ def test_thurston_mosteller_full():
     assert rate(
         [team_1, team_1, team_1, team_1, team_1],
         rank=[1, 2, 2, 4, 5],
-        model=ThurstonMostellerFull,
+        model=ThurstoneMostellerFull,
     ) == [
         [[41.82098533943035, 4.970638866839803]],
         [[29.20528633485759, 4.280577057550792]],

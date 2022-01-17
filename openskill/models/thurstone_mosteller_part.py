@@ -5,7 +5,7 @@ from openskill.statistics import v, vt, w, wt
 from openskill.util import gamma, ladder_pairs, team_rating
 
 
-class ThurstonMostellerPart:
+class ThurstoneMostellerPart:
     def __init__(self, game, **options):
         self.constants = Constants(**options)
         self.EPSILON = self.constants.EPSILON

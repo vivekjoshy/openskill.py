@@ -1,10 +1,10 @@
 import pytest
 
 from openskill import Rating, create_rating, rate
-from openskill.models import ThurstonMostellerPart
+from openskill.models import ThurstoneMostellerPart
 
 
-def test_thurston_mosteller_part_series():
+def test_thurstone_mosteller_part_series():
     p00 = Rating()
     p10 = Rating()
     p20 = Rating()
@@ -16,7 +16,7 @@ def test_thurston_mosteller_part_series():
         score=[9, 7, 7, 5, 5],
         epsilon=0.1,
         gamma=lambda *_: 1,
-        model=ThurstonMostellerPart,
+        model=ThurstoneMostellerPart,
     )
     [[p01], [p11], [p21], [p31], [p41]] = result
     p01 = create_rating(p01)

@@ -1,10 +1,10 @@
 import pytest
 
 from openskill import Rating, create_rating, rate
-from openskill.models import ThurstonMostellerFull
+from openskill.models import ThurstoneMostellerFull
 
 
-def test_thurston_mosteller_full_series():
+def test_thurstone_mosteller_full_series():
     p00 = Rating()
     p10 = Rating()
     p20 = Rating()
@@ -15,7 +15,7 @@ def test_thurston_mosteller_full_series():
         [[p00], [p10], [p20], [p30], [p40]],
         score=[9, 7, 7, 5, 5],
         epsilon=0.1,
-        model=ThurstonMostellerFull,
+        model=ThurstoneMostellerFull,
     )
     [[p01], [p11], [p21], [p31], [p41]] = result
     p01 = create_rating(p01)
@@ -27,7 +27,10 @@ def test_thurston_mosteller_full_series():
     p02 = p01
     p32 = p31
     result = rate(
-        [[p41], [p21], [p11]], score=[9, 5, 5], epsilon=0.1, model=ThurstonMostellerFull
+        [[p41], [p21], [p11]],
+        score=[9, 5, 5],
+        epsilon=0.1,
+        model=ThurstoneMostellerFull,
     )
     [[p42], [p22], [p12]] = result
     p42 = create_rating(p42)
@@ -39,7 +42,7 @@ def test_thurston_mosteller_full_series():
         [[p32], [p12], [p22], [p02]],
         score=[9, 9, 7, 7],
         epsilon=0.1,
-        model=ThurstonMostellerFull,
+        model=ThurstoneMostellerFull,
     )
     [[p33], [p13], [p23], [p03]] = result
     p33 = create_rating(p33)
