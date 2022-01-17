@@ -107,5 +107,6 @@ The default model is `PlackettLuce`. You can import alternate models from `opens
 ## Implementations in other Languages
 - [Javascript](https://github.com/philihp/openskill.js)
 - [Elixir](https://github.com/philihp/openskill.ex)
-- [Kotlin](https://github.com/brezinajn/openskill)
+- [Kotlin](https://github.com/brezinajn/openskill.kt)
+- [Lua](https://github.com/Vaschex/openskill.lua)
 
