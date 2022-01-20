@@ -1,4 +1,5 @@
 from openskill.ordinal import ordinal
+from openskill.predict import predict_win
 from openskill.rate import rate
 from openskill.rating import Rating, create_rating
 
