@@ -16,6 +16,7 @@ class Rating:
     :param sigma: How confident the system is the skill of an agent.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
     """
+
     def __init__(
         self, mu: Optional[float] = None, sigma: Optional[float] = None, **options
     ):
