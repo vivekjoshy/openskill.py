@@ -1,4 +1,4 @@
-from openskill.rating import Rating
+from openskill import Rating
 from openskill.util import rankings
 
 a = "a"

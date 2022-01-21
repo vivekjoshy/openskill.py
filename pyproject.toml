@@ -43,19 +43,15 @@ scipy = "^1.7.3"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.4.0"
-sphinx-rtd-theme = "^1.0.0"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
-tox = "^3.24.5"
-check-manifest = "^0.47"
-pylama = "^8.3.7"
-readme-renderer = {extras = ["md"], version = "^32.0"}
 Pygments = "^2.11.2"
 isort = "^5.9.1"
 twine = "^3.6.0"
 codecov = "^2.1.11"
 bump2version = "^1.0.1"
 black = "^21.11b1"
+furo = "^2022.1.2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

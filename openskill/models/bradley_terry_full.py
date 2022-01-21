@@ -1,11 +1,12 @@
 import math
+from typing import Callable
 
 from openskill.constants import Constants
-from openskill.util import gamma, team_rating
+from openskill.util import gamma
 
 
 class BradleyTerryFull:
-    def __init__(self, game, **options):
+    def __init__(self, game, team_rating: Callable, **options):
         self.constants = Constants(**options)
         self.EPSILON = self.constants.EPSILON
         self.TWO_BETA_SQUARED = self.constants.TWO_BETA_SQUARED

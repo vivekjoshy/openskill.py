@@ -1,11 +1,12 @@
 import math
+from typing import Callable
 
 from openskill.constants import Constants
-from openskill.util import gamma, team_rating, util_a, util_c, util_sum_q
+from openskill.util import gamma, util_a, util_c, util_sum_q
 
 
 class PlackettLuce:
-    def __init__(self, game, **options):
+    def __init__(self, game, team_rating: Callable, **options):
         self.constants = Constants(**options)
         self.EPSILON = self.constants.EPSILON
         self.team_ratings = team_rating(game, **options)

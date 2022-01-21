@@ -1,7 +1,7 @@
 import pytest
 
-from openskill.rating import Rating
-from openskill.util import team_rating
+from openskill import Rating
+from openskill import team_rating
 
 r = Rating()
 team_1 = [r]
