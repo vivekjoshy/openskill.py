@@ -1,8 +1,8 @@
 .. _installing_bot:
 
-==================
-Installing the bot
-==================
+======================
+Installing the Library
+======================
 
 For Users
 =========
