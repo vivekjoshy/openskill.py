@@ -94,7 +94,7 @@ from ``openskill.models`` like so:
 
 .. code:: python
 
-   >>> from openskill.models import BradelyTerryFull
+   >>> from openskill.models import BradleyTerryFull
    >>> a1 = b1 = c1 = d1 = Rating()
    >>> rate([[a1], [b1], [c1], [d1]], rank=[4, 1, 3, 2], model=BradleyTerryFull)
    [[[17.09430584957905, 7.5012190693964005]], [[32.90569415042095, 7.5012190693964005]], [[22.36476861652635, 7.5012190693964005]], [[27.63523138347365, 7.5012190693964005]]]
