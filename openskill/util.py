@@ -1,10 +1,8 @@
 import math
-from functools import reduce
 from itertools import zip_longest
 from typing import List, Optional
 
 from openskill.constants import Constants
-from openskill.rating import Rating
 
 
 def score(q, i) -> float:
@@ -31,22 +29,6 @@ def rankings(teams, rank: Optional[List[int]] = None):
                 s = index
         out_rank[index] = s
     return list(out_rank.values())
-
-
-def team_rating(game: List[List[Rating]], **options):
-    if "rank" in options:
-        rank = rankings(game, options["rank"])
-    else:
-        rank = rankings(game)
-
-    result = []
-    for index, team in enumerate(game):
-        team_result = []
-        mu_i = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
-        sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma ** 2, team))
-        team_result.extend([mu_i, sigma_squared, team, rank[index]])
-        result.append(team_result)
-    return result
 
 
 def ladder_pairs(ranks: List[int]):

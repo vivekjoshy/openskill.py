@@ -1,7 +1,8 @@
 ![](https://i.imgur.com/tSTFzZY.gif)
 
 
-[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill)
+[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill) [![Documentation Status](https://readthedocs.org/projects/openskillpy/badge/?version=latest)](https://openskillpy.readthedocs.io/en/latest/?badge=latest)
+
 
 Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill
 
@@ -74,6 +75,7 @@ Ties should have either equivalent rank or score.
 ```python
 >>> a1 = b1 = c1 = d1 = Rating()
 >>> result = [[a2], [b2], [c2], [d2]] = rate([[a1], [b1], [c1], [d1]], score=[37, 19, 37, 42])
+>>> result
 [[[24.68943500312503, 8.179213704945203]], [[22.826045021875203, 8.179213704945203]], [[24.68943500312503, 8.179213704945203]], [[27.795084971874736, 8.263160757613477]]]
 ```
 
@@ -83,7 +85,7 @@ Ties should have either equivalent rank or score.
 The default model is `PlackettLuce`. You can import alternate models from `openskill.models` like so:
 
 ```python
->>> from openskill.models import BradelyTerryFull
+>>> from openskill.models import BradleyTerryFull
 >>> a1 = b1 = c1 = d1 = Rating()
 >>> rate([[a1], [b1], [c1], [d1]], rank=[4, 1, 3, 2], model=BradleyTerryFull)
 [[[17.09430584957905, 7.5012190693964005]], [[32.90569415042095, 7.5012190693964005]], [[22.36476861652635, 7.5012190693964005]], [[27.63523138347365, 7.5012190693964005]]]
