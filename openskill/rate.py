@@ -55,8 +55,7 @@ def team_rating(game: List[List[Rating]], **options) -> List[List[Union[int, flo
 
     :param game: A list of teams, where teams are lists of :class:`~openskill.rate.Rating` objects.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
-    :return: Returns a list of lists containing `mu` and
-             `sigma` values that can be passed into :func:`~openskill.rate.create_rating`
+    :return: Returns a list of lists containing `mu`, `sigma`, the `team` object and the current rank of the team.
     """
     if "rank" in options:
         rank = rankings(game, options["rank"])
@@ -119,26 +118,8 @@ def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]
     This algorithm has a time complexity of O(n!) where 'n' is the number of teams.
 
     :param teams: A list of two or more teams, where teams are lists of :class:`~openskill.rate.Rating` objects.
-    :param rank: A list of :class:`~int` where the lower values represent the winners.
-    :param score: A list of :class:`~int` where higher values represent the winners.
     :return: A list of probabilities of each team winning.
     """
-    if "rank" in options:
-        rank = options["rank"]
-    else:
-        if "score" in options:
-            rank = list(map(lambda points: -points, options["score"]))
-            options["rank"] = rank
-        else:
-            rank = None
-
-    tenet = None
-    if rank:
-        ordered_teams, tenet = unwind(rank, teams)
-        teams = ordered_teams
-        rank = sorted(rank)
-        options["rank"] = rank
-
     if len(teams) < 2:
         raise ValueError(f"Expected at least two teams.")
 
