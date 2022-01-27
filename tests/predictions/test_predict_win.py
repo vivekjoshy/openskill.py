@@ -16,13 +16,5 @@ def test_predict_win():
     probabilities = predict_win(teams=[team_1, team_2, [a2], [a1], [b1]])
     assert sum(probabilities) == pytest.approx(1)
 
-    probabilities = predict_win(
-        teams=[team_1, team_2, [a2], [a1], [b1]], rank=[2, 3, 1, 4, 5]
-    )
-    assert sum(probabilities) == pytest.approx(1)
-
-    probabilities = predict_win(teams=[team_1, team_2], score=[3, 10])
-    assert sum(probabilities) == pytest.approx(1)
-
     with pytest.raises(ValueError):
         predict_win(teams=[team_1])
