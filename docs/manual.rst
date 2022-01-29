@@ -99,6 +99,22 @@ from ``openskill.models`` like so:
    >>> rate([[a1], [b1], [c1], [d1]], rank=[4, 1, 3, 2], model=BradleyTerryFull)
    [[[17.09430584957905, 7.5012190693964005]], [[32.90569415042095, 7.5012190693964005]], [[22.36476861652635, 7.5012190693964005]], [[27.63523138347365, 7.5012190693964005]]]
 
+Predicting Winners
+------------------
+
+You can compare two or more teams to get the probabilities of each team winning.
+
+.. code:: python
+
+   >>> from openskill import predict_win
+   >>> a1 = Rating()
+   >>> a2 = Rating(mu=33.564, sigma=1.123)
+   >>> predictions = predict_win(teams=[[a1], [a2]])
+   >>> predictions
+   [0.45110901512761536, 0.5488909848723846]
+   >>> sum(predictions)
+   1.0
+
 Available Models
 ~~~~~~~~~~~~~~~~
 
