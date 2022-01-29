@@ -52,6 +52,9 @@ codecov = "^2.1.11"
 bump2version = "^1.0.1"
 black = "^21.11b1"
 furo = "^2022.1.2"
+jsonlines = "^3.0.0"
+prompt-toolkit = "^3.0.26"
+trueskill = "^0.4.5"
 
 [tool.poetry.extras]
 docs = ["sphinx", "furo"]
