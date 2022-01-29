@@ -110,6 +110,7 @@ You can compare two or more teams to get the probabilities of each team winning.
    >>> a1 = Rating()
    >>> a2 = Rating(mu=33.564, sigma=1.123)
    >>> predictions = predict_win(teams=[[a1], [a2]])
+   >>> predictions
    [0.45110901512761536, 0.5488909848723846]
    >>> sum(predictions)
    1.0
