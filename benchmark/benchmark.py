@@ -128,7 +128,6 @@ def process_ts_match(match: dict):
     ts_players.update(ts_red_players)
 
 
-
 def predict_os_match(match: dict):
     result = match.get("result")
     won = True if result == "WIN" else False
@@ -248,9 +247,17 @@ with jsonlines.open("v2_jsonl_teams.jsonl") as reader:
                 predict_ts_match(match=line)
 
 
-print(HTML(f"Predictions Made with OpenSkill's <style fg='Green'><u>{input_model}</u></style> Model:"))
-print(HTML(f"Correct: <style fg='Yellow'>{os_correct_predictions}</style> | "
-           f"Incorrect: <style fg='Yellow'>{os_incorrect_predictions}</style>"))
+print(
+    HTML(
+        f"Predictions Made with OpenSkill's <style fg='Green'><u>{input_model}</u></style> Model:"
+    )
+)
+print(
+    HTML(
+        f"Correct: <style fg='Yellow'>{os_correct_predictions}</style> | "
+        f"Incorrect: <style fg='Yellow'>{os_incorrect_predictions}</style>"
+    )
+)
 print(
     HTML(
         f"Accuracy: <style fg='Yellow'>"
@@ -261,8 +268,12 @@ print(
 print(HTML(f"Process Duration: <style fg='Yellow'>{os_time}</style>"))
 print("-" * 40)
 print(HTML(f"Predictions Made with <style fg='Green'><u>TrueSkill</u></style> Model:"))
-print(HTML(f"Correct: <style fg='Yellow'>{ts_correct_predictions}</style> | "
-           f"Incorrect: <style fg='Yellow'>{ts_incorrect_predictions}</style>"))
+print(
+    HTML(
+        f"Correct: <style fg='Yellow'>{ts_correct_predictions}</style> | "
+        f"Incorrect: <style fg='Yellow'>{ts_incorrect_predictions}</style>"
+    )
+)
 print(
     HTML(
         f"Accuracy: <style fg='Yellow'>"
