@@ -108,7 +108,7 @@ You can compare two or more teams to get the probabilities of each team winning.
 
 ### Available Models
 - `BradleyTerryFull`: Full Pairing for Bradley-Terry
-- `BradleyTerryPart`: Partial Pairing for Bradely-Terry
+- `BradleyTerryPart`: Partial Pairing for Bradley-Terry
 - `PlackettLuce`: Generalized Bradley-Terry
 - `ThurstoneMostellerFull`: Full Pairing for Thurstone-Mosteller
 - `ThurstoneMostellerPart`: Partial Pairing for Thurstone-Mosteller
