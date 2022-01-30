@@ -23,7 +23,7 @@ Fixes #
 By submitting this Pull Request or typing my (user)name below,
 I affirm the [Developer Certificate of Origin](https://developercertificate.org)
 with respect to all commits and content included in this PR,
-and understand I am releasing the same under Erin's Apache 2.0 license.
+and understand I am releasing the same under openskill.py's MIT license.
 
 <!--- TYPE YOUR USER/NAME AFTER THE FOLLOWING: --->
 I certify the above statement is true and correct:
