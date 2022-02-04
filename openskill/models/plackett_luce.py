@@ -38,7 +38,7 @@ class PlackettLuce:
                         omega -= i_mu_over_ce_over_sum_q / self.a[q]
 
             omega *= i_sigma_squared / self.c
-            delta *= i_sigma_squared / self.c ** 2
+            delta *= i_sigma_squared / self.c**2
 
             gamma = self.gamma(self.c, len(self.team_ratings), *i_team_ratings)
             delta *= gamma
@@ -47,9 +47,9 @@ class PlackettLuce:
             for j, j_players in enumerate(i_team):
                 mu = j_players.mu
                 sigma = j_players.sigma
-                mu += (sigma ** 2 / i_sigma_squared) * omega
+                mu += (sigma**2 / i_sigma_squared) * omega
                 sigma *= math.sqrt(
-                    max(1 - (sigma ** 2 / i_sigma_squared) * delta, self.EPSILON),
+                    max(1 - (sigma**2 / i_sigma_squared) * delta, self.EPSILON),
                 )
                 intermediate_result_per_team.append([mu, sigma])
             result.append(intermediate_result_per_team)

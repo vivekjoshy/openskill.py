@@ -66,7 +66,7 @@ def team_rating(game: List[List[Rating]], **options) -> List[List[Union[int, flo
     for index, team in enumerate(game):
         team_result = []
         mu_i = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
-        sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma ** 2, team))
+        sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma**2, team))
         team_result.extend([mu_i, sigma_squared, team, rank[index]])
         result.append(team_result)
     return result
@@ -136,7 +136,7 @@ def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]
         pairwise_probabilities.append(
             phi_major(
                 (mu_a - mu_b)
-                / math.sqrt(n * beta(**options) ** 2 + sigma_a ** 2 + sigma_b ** 2)
+                / math.sqrt(n * beta(**options) ** 2 + sigma_a**2 + sigma_b**2)
             )
         )
 

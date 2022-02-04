@@ -63,9 +63,9 @@ class ThurstoneMostellerFull:
             for j, j_players in enumerate(i_team):
                 mu = j_players.mu
                 sigma = j_players.sigma
-                mu += (sigma ** 2 / i_sigma_squared) * omega
+                mu += (sigma**2 / i_sigma_squared) * omega
                 sigma *= math.sqrt(
-                    max(1 - (sigma ** 2 / i_sigma_squared) * delta, self.EPSILON),
+                    max(1 - (sigma**2 / i_sigma_squared) * delta, self.EPSILON),
                 )
                 intermediate_result_per_team.append([mu, sigma])
             result.append(intermediate_result_per_team)

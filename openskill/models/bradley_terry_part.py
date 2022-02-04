@@ -46,9 +46,9 @@ class BradleyTerryPart:
             for j, j_players in enumerate(i_team):
                 mu = j_players.mu
                 sigma = j_players.sigma
-                mu += (sigma ** 2 / i_sigma_squared) * i_omega
+                mu += (sigma**2 / i_sigma_squared) * i_omega
                 sigma *= math.sqrt(
-                    max(1 - (sigma ** 2 / i_sigma_squared) * i_delta, self.EPSILON),
+                    max(1 - (sigma**2 / i_sigma_squared) * i_delta, self.EPSILON),
                 )
                 intermediate_result_per_team.append([mu, sigma])
             return intermediate_result_per_team

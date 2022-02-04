@@ -7,11 +7,12 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/OpenDebates/openskill.py"
 repository = "https://github.com/OpenDebates/openskill.py"
-documentation = "https://openskill.readthedocs.io"
+documentation = "https://openskillpy.readthedocs.io"
 keywords = [
     "ranking",
     "trueskill",
-    "bayesian"
+    "bayesian",
+    "rating"
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
@@ -43,14 +44,14 @@ scipy = "^1.7.3"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.4.0"
-pytest = "^6.2.5"
+pytest = "^7.0.0"
 pytest-cov = "^3.0.0"
 Pygments = "^2.11.2"
 isort = "^5.9.1"
-twine = "^3.6.0"
+twine = "^3.8.0"
 codecov = "^2.1.11"
 bump2version = "^1.0.1"
-black = "^21.11b1"
+black = "^22.1.0"
 furo = "^2022.1.2"
 jsonlines = "^3.0.0"
 prompt-toolkit = "^3.0.26"
