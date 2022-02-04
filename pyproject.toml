@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "openskill"
-version = "0.2.0-beta.0"
+version = "1.0.0"
 description = "Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill."
 authors = ["Taven <taven@outlook.in>"]
 license = "MIT"
@@ -56,9 +56,24 @@ furo = "^2022.1.2"
 jsonlines = "^3.0.0"
 prompt-toolkit = "^3.0.26"
 trueskill = "^0.4.5"
+towncrier = "^21.3.0"
 
 [tool.poetry.extras]
 docs = ["sphinx", "furo"]
+
+[tool.towncrier]
+package = "openskill"
+package_dir = "openskill"
+directory = "changes"
+filename = "CHANGELOG.rst"
+issue_format = "[#{issue}](https://github.com/OpenDebates/openskill.py/issues/{issue})"
+type = [
+    { name = "Breaking Changes",            directory = "breaking",     showcontent = true },
+    { name = "Deprecation",                 directory = "deprecation",  showcontent = true },
+    { name = "Features",                    directory = "feature",      showcontent = true },
+    { name = "Bugfixes",                    directory = "bugfix",       showcontent = true },
+    { name = "Documentation Improvements",  directory = "doc",          showcontent = true },
+]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
