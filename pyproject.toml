@@ -66,7 +66,7 @@ package = "openskill"
 package_dir = "openskill"
 directory = "changes"
 filename = "CHANGELOG.rst"
-issue_format = "[#{issue}](https://github.com/OpenDebates/openskill.py/issues/{issue})"
+issue_format = "`#{issue} <https://github.com/OpenDebates/openskill.py/issues/{issue}>`_"
 type = [
     { name = "Breaking Changes",            directory = "breaking",     showcontent = true },
     { name = "Deprecation",                 directory = "deprecation",  showcontent = true },
