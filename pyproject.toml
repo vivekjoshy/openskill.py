@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "openskill"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill."
 authors = ["Taven <taven@outlook.in>"]
 license = "MIT"
@@ -15,7 +15,7 @@ keywords = [
     "rating"
 ]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 5 - Production/Stable",
 	"Intended Audience :: Developers",
 	"License :: OSI Approved :: MIT License",
 	"Natural Language :: English",
