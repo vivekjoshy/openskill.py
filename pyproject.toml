@@ -40,7 +40,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = ">=3.9, < 3.11"
-scipy = "^1.7.3"
+scipy = "^1.8.0"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.4.0"
@@ -54,7 +54,7 @@ bump2version = "^1.0.1"
 black = "^22.1.0"
 furo = "^2022.1.2"
 jsonlines = "^3.0.0"
-prompt-toolkit = "^3.0.26"
+prompt-toolkit = "^3.0.27"
 trueskill = "^0.4.5"
 towncrier = "^21.3.0"
 
