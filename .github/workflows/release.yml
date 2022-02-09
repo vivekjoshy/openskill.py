@@ -43,6 +43,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: steps.check-version.outputs.prerelease == 'true'
+          generateReleaseNotes: true
 
       - name: Publish to PyPI
         env:
