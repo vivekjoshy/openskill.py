@@ -56,7 +56,7 @@ furo = "^2022.1.2"
 jsonlines = "^3.0.0"
 prompt-toolkit = "^3.0.27"
 trueskill = "^0.4.5"
-towncrier = "^21.3.0"
+towncrier = "^21.9.0"
 
 [tool.poetry.extras]
 docs = ["sphinx", "furo"]
