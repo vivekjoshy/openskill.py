@@ -44,7 +44,7 @@ scipy = "^1.8.0"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^4.4.0"
-pytest = "^7.0.0"
+pytest = "^7.0.1"
 pytest-cov = "^3.0.0"
 Pygments = "^2.11.2"
 isort = "^5.9.1"
