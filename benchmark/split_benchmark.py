@@ -4,6 +4,7 @@ import time
 from typing import Union
 
 import jsonlines
+import numpy as np
 import trueskill
 from prompt_toolkit import print_formatted_text as print, HTML, prompt
 from prompt_toolkit.completion import WordCompleter
@@ -326,6 +327,7 @@ with jsonlines.open("v2_jsonl_teams.jsonl") as reader:
         for line in progress_bar(valid_test_set_matches, total=len(valid_test_set_matches)):
             predict_ts_match(match=line)
 
+mean = float(np.array(list(match_count.values())).mean())
 
 print(HTML(f"Confident Matches:  <style fg='Yellow'>{confident_matches}</style>"))
 print(
@@ -363,3 +365,4 @@ print(
     )
 )
 print(HTML(f"Process Duration: <style fg='Yellow'>{ts_time}</style>"))
+print(HTML(f"Mean Matches: <style fg='Yellow'>{mean}</style>"))
