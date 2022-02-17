@@ -78,7 +78,7 @@ type = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra --strict-markers --ignore=docs/conf.py --ignore=setup.py --ignore=benchmark/benchmark.py --ignore=ci --ignore=.eggs --doctest-modules --doctest-glob=/*.rst --tb=short"
+addopts = "-ra --strict-markers --ignore=docs/conf.py --ignore=setup.py --ignore=benchmark --ignore=ci --ignore=.eggs --doctest-modules --doctest-glob=/*.rst --tb=short"
 norecursedirs = [
 	".git",
 	".tox",
