@@ -318,13 +318,17 @@ with jsonlines.open("v2_jsonl_teams.jsonl") as reader:
     # Predict OpenSkill Matches
     title = HTML(f'<style fg="Blue">Predicting OpenSkill Matches:</style>')
     with ProgressBar(title=title) as progress_bar:
-        for line in progress_bar(valid_test_set_matches, total=len(valid_test_set_matches)):
+        for line in progress_bar(
+            valid_test_set_matches, total=len(valid_test_set_matches)
+        ):
             predict_os_match(match=line)
 
     # Predict TrueSkill Matches
     title = HTML(f'<style fg="Blue">Predicting TrueSkill Matches:</style>')
     with ProgressBar(title=title) as progress_bar:
-        for line in progress_bar(valid_test_set_matches, total=len(valid_test_set_matches)):
+        for line in progress_bar(
+            valid_test_set_matches, total=len(valid_test_set_matches)
+        ):
             predict_ts_match(match=line)
 
 mean = float(np.array(list(match_count.values())).mean())
