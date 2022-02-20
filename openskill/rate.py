@@ -2,10 +2,9 @@ import itertools
 import math
 from collections import deque
 from functools import reduce
-from operator import sub
 from typing import Optional, Union, List
 
-from openskill.constants import mu as default_mu, beta
+from openskill.constants import mu as default_mu, beta, Constants
 from openskill.constants import sigma as default_sigma
 from openskill.models.plackett_luce import PlackettLuce
 from openskill.statistics import phi_major, phi_major_inverse
@@ -33,11 +32,64 @@ class Rating:
         return f"Rating(mu={self.mu}, sigma={self.sigma})"
 
     def __eq__(self, other):
-        if len(other) == 2:
-            if self.mu == other[0] and self.sigma == other[1]:
+        if isinstance(other, Rating):
+            if self.mu == other.mu and self.sigma == other.sigma:
                 return True
             else:
                 return False
+        elif isinstance(other, Union[list, tuple]):
+            if len(other) == 2:
+                for value in other:
+                    if not isinstance(value, Union[int, float]):
+                        raise ValueError(
+                            f"The {other.__class__.__name__} contains an "
+                            f"element '{value}' of type '{value.__class__.__name__}'"
+                        )
+                if self.mu == other[0] and self.sigma == other[1]:
+                    return True
+                else:
+                    return False
+            else:
+                raise ValueError(
+                    f"The '{other.__class__.__name__}' object has more than two floats."
+                )
+        else:
+            raise ValueError(
+                "You can only compare Rating objects with each other or a list of two floats."
+            )
+
+
+def ordinal(agent: Union[Rating, list, tuple], **options) -> float:
+    """
+    Convert `mu` and `sigma` into a single value for sorting purposes.
+
+    :param agent: A :class:`~openskill.rate.Rating` object or a :class:`~list` or :class:`~tuple` of :class:`~float`
+                  objects.
+    :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
+    :return: A :class:`~float` object that represents a 1 dimensional value for a rating.
+    """
+    if isinstance(agent, Union[list, tuple]):
+        if len(agent) == 2:
+            for value in agent:
+                if not isinstance(value, Union[int, float]):
+                    raise ValueError(
+                        f"The {agent.__class__.__name__} contains an "
+                        f"element '{value}' of type '{value.__class__.__name__}'"
+                    )
+            z = Constants(**options).Z
+            return agent[0] - z * agent[1]
+        else:
+            raise ValueError(
+                f"The '{agent.__class__.__name__}' object has more than two floats."
+            )
+    elif isinstance(agent, Rating):
+        # Calculate Z
+        z = Constants(**options).Z
+        return agent.mu - z * agent.sigma
+    else:
+        raise ValueError(
+            "You can only pass 'Rating' objects, two-tuples or lists to 'agent'."
+        )
 
 
 def create_rating(rating_list: List[Union[int, float]]) -> Rating:
@@ -47,7 +99,18 @@ def create_rating(rating_list: List[Union[int, float]]) -> Rating:
     :param rating_list: A list of two values where the first value is the `mu` and the second value is the `sigma`.
     :return: A :class:`~openskill.rate.Rating` object created from the list passed in.
     """
-    return Rating(mu=rating_list[0], sigma=rating_list[1])
+    if isinstance(rating_list, Rating):
+        raise TypeError("Argument is already a 'Rating' object.")
+    elif len(rating_list) == 2:
+        for value in rating_list:
+            if not isinstance(value, Union[int, float]):
+                raise ValueError(
+                    f"The {rating_list.__class__.__name__} contains an "
+                    f"element '{value}' of type '{value.__class__.__name__}'"
+                )
+        return Rating(mu=rating_list[0], sigma=rating_list[1])
+    else:
+        raise TypeError(f"Cannot accept '{rating_list.__class__.__name__}' type.")
 
 
 def team_rating(game: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
@@ -73,7 +136,7 @@ def team_rating(game: List[List[Rating]], **options) -> List[List[Union[int, flo
     return result
 
 
-def rate(teams: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
+def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     """
     Rate multiple teams consisting of one of more agents. Order of teams determines rank.
 
@@ -81,8 +144,7 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
     :param rank: A list of :class:`~int` where the lower values represent the winners.
     :param score: A list of :class:`~int` where higher values represent the winners.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
-    :return: Returns a list of lists containing `mu` and
-             `sigma` values that can be passed into :func:`~openskill.rate.create_rating`
+    :return: Returns a list of :class:`~openskill.rate.Rating` objects.
     """
     if "rank" in options:
         rank = options["rank"]
@@ -108,9 +170,22 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
     if rank and tenet:
         result = model.calculate()
         result, old_tenet = unwind(tenet, result)
-        return result
+        final_result = []
+        for item in result:
+            team = []
+            for player in item:
+                team.append(create_rating(player))
+            final_result.append(team)
+        return final_result
     else:
-        return model.calculate()
+        result = model.calculate()
+        final_result = []
+        for item in result:
+            team = []
+            for player in item:
+                team.append(create_rating(player))
+            final_result.append(team)
+        return final_result
 
 
 def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]:

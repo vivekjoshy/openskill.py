@@ -1,4 +1,4 @@
-from openskill.ordinal import ordinal
+from openskill.rate import ordinal
 from openskill.rate import (
     rate,
     Rating,
@@ -9,4 +9,4 @@ from openskill.rate import (
 )
 
 
-__version__ = "1.0.2"
+__version__ = "2.0.0"

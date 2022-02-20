@@ -19,11 +19,6 @@ def test_thurstone_mosteller_part_series():
         model=ThurstoneMostellerPart,
     )
     [[p01], [p11], [p21], [p31], [p41]] = result
-    p01 = create_rating(p01)
-    p11 = create_rating(p11)
-    p21 = create_rating(p21)
-    p31 = create_rating(p31)
-    p41 = create_rating(p41)
 
     assert p01.mu == pytest.approx(27.108980741)
     assert p01.sigma == pytest.approx(8.063357519)

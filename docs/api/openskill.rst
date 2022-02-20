@@ -20,14 +20,6 @@ openskill.constants module
    :undoc-members:
    :show-inheritance:
 
-openskill.ordinal module
-------------------------
-
-.. automodule:: openskill.ordinal
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 openskill.rate module
 ---------------------
 

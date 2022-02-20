@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "openskill"
-version = "1.0.2"
+version = "2.0.0"
 description = "Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill."
 authors = ["Taven <taven@outlook.in>"]
 license = "MIT"
@@ -39,7 +39,7 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9, < 3.11"
+python = ">=3.10, < 3.11"
 scipy = "^1.8.0"
 
 [tool.poetry.dev-dependencies]
