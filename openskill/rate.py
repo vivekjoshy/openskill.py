@@ -99,7 +99,18 @@ def create_rating(rating_list: List[Union[int, float]]) -> Rating:
     :param rating_list: A list of two values where the first value is the `mu` and the second value is the `sigma`.
     :return: A :class:`~openskill.rate.Rating` object created from the list passed in.
     """
-    return Rating(mu=rating_list[0], sigma=rating_list[1])
+    if isinstance(rating_list, Rating):
+        raise TypeError("Argument is already a 'Rating' object.")
+    elif len(rating_list) == 2:
+        for value in rating_list:
+            if not isinstance(value, Union[int, float]):
+                raise ValueError(
+                    f"The {rating_list.__class__.__name__} contains an "
+                    f"element '{value}' of type '{value.__class__.__name__}'"
+                )
+        return Rating(mu=rating_list[0], sigma=rating_list[1])
+    else:
+        raise TypeError(f"Cannot accept '{rating_list.__class__.__name__}' type.")
 
 
 def team_rating(game: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
@@ -125,7 +136,7 @@ def team_rating(game: List[List[Rating]], **options) -> List[List[Union[int, flo
     return result
 
 
-def rate(teams: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
+def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     """
     Rate multiple teams consisting of one of more agents. Order of teams determines rank.
 
@@ -133,8 +144,7 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
     :param rank: A list of :class:`~int` where the lower values represent the winners.
     :param score: A list of :class:`~int` where higher values represent the winners.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
-    :return: Returns a list of lists containing `mu` and
-             `sigma` values that can be passed into :func:`~openskill.rate.create_rating`
+    :return: Returns a list of :class:`~openskill.rate.Rating` objects.
     """
     if "rank" in options:
         rank = options["rank"]
@@ -160,9 +170,22 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Union[int, float]]]:
     if rank and tenet:
         result = model.calculate()
         result, old_tenet = unwind(tenet, result)
-        return result
+        final_result = []
+        for item in result:
+            team = []
+            for player in item:
+                team.append(create_rating(player))
+            final_result.append(team)
+        return final_result
     else:
-        return model.calculate()
+        result = model.calculate()
+        final_result = []
+        for item in result:
+            team = []
+            for player in item:
+                team.append(create_rating(player))
+            final_result.append(team)
+        return final_result
 
 
 def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]:

@@ -1,6 +1,6 @@
 import math
 from itertools import zip_longest
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from openskill.constants import Constants
 
@@ -99,7 +99,7 @@ def transpose(xs):
     return [list(map(lambda r: r[i], xs)) for i, _ in enumerate(xs[0])]
 
 
-def unwind(ranks, teams):
+def unwind(ranks, teams) -> Tuple[List, List[int]]:
     if not ranks or not teams:
         return None, None
 

@@ -18,11 +18,6 @@ def test_thurstone_mosteller_full_series():
         model=ThurstoneMostellerFull,
     )
     [[p01], [p11], [p21], [p31], [p41]] = result
-    p01 = create_rating(p01)
-    p11 = create_rating(p11)
-    p21 = create_rating(p21)
-    p31 = create_rating(p31)
-    p41 = create_rating(p41)
 
     p02 = p01
     p32 = p31
@@ -33,9 +28,6 @@ def test_thurstone_mosteller_full_series():
         model=ThurstoneMostellerFull,
     )
     [[p42], [p22], [p12]] = result
-    p42 = create_rating(p42)
-    p22 = create_rating(p22)
-    p12 = create_rating(p12)
 
     p43 = p42
     result = rate(
@@ -45,10 +37,6 @@ def test_thurstone_mosteller_full_series():
         model=ThurstoneMostellerFull,
     )
     [[p33], [p13], [p23], [p03]] = result
-    p33 = create_rating(p33)
-    p13 = create_rating(p13)
-    p23 = create_rating(p23)
-    p03 = create_rating(p03)
 
     assert p03.mu == pytest.approx(18.688153436)
     assert p03.sigma == pytest.approx(3.374349435)
