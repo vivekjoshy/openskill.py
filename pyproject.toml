@@ -39,7 +39,7 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9, < 3.11"
+python = ">=3.10, < 3.11"
 scipy = "^1.8.0"
 
 [tool.poetry.dev-dependencies]
