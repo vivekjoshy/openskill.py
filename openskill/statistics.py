@@ -9,6 +9,10 @@ def phi_major(x):
     return normal.cdf(x)
 
 
+def phi_major_inverse(x):
+    return normal.ppf(x)
+
+
 def phi_minor(x):
     return normal.pdf(x)
 
