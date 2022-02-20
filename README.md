@@ -35,13 +35,14 @@ If `a1` and `a2` are on a team, and wins against a team of `b1` and `b2`, send t
 ```python
 >>> [[x1, x2], [y1, y2]] = rate([[a1, a2], [b1, b2]])
 >>> x1, x2, y1, y2
-([28.669648436582808, 8.071520788025197], [33.83086971107981, 5.062772998705765], [43.071274808241974, 2.4166900452721256], [23.149503312339064, 6.1378606973362135])
+(Rating(mu=28.669648436582808, sigma=8.071520788025197), Rating(mu=33.83086971107981, sigma=5.062772998705765), Rating(mu=43.071274808241974, sigma=2.4166900452721256), Rating(mu=23.149503312339064, sigma=6.1378606973362135))
 ```
 
 You can also create `Rating` objects by importing `create_rating`:
 
 ```python
 >>> from openskill import create_rating
+>>> x1 = [28.669648436582808, 8.071520788025197]
 >>> x1 = create_rating(x1)
 >>> x1
 Rating(mu=28.669648436582808, sigma=8.071520788025197)
