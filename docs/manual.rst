@@ -51,7 +51,7 @@ When displaying a rating, or sorting a list of ratings, you can use
 .. code:: python
 
    >>> from openskill import ordinal
-   >>> ordinal(mu=43.07, sigma=2.42)
+   >>> ordinal([43.07, 2.42])
    35.81
 
 By default, this returns ``mu - 3 * sigma``, showing a rating for which

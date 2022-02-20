@@ -52,7 +52,7 @@ When displaying a rating, or sorting a list of ratings, you can use `ordinal`:
 
 ```python
 >>> from openskill import ordinal
->>> ordinal(mu=43.07, sigma=2.42)
+>>> ordinal([43.07, 2.42])
 35.81
 ```
 
