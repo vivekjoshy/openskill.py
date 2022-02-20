@@ -2,10 +2,9 @@ import itertools
 import math
 from collections import deque
 from functools import reduce
-from operator import sub
 from typing import Optional, Union, List
 
-from openskill.constants import mu as default_mu, beta
+from openskill.constants import mu as default_mu, beta, Constants
 from openskill.constants import sigma as default_sigma
 from openskill.models.plackett_luce import PlackettLuce
 from openskill.statistics import phi_major, phi_major_inverse
@@ -33,11 +32,64 @@ class Rating:
         return f"Rating(mu={self.mu}, sigma={self.sigma})"
 
     def __eq__(self, other):
-        if len(other) == 2:
-            if self.mu == other[0] and self.sigma == other[1]:
+        if isinstance(other, Rating):
+            if self.mu == other.mu and self.sigma == other.sigma:
                 return True
             else:
                 return False
+        elif isinstance(other, Union[list, tuple]):
+            if len(other) == 2:
+                for value in other:
+                    if not isinstance(value, Union[int, float]):
+                        raise ValueError(
+                            f"The {other.__class__.__name__} contains an "
+                            f"element '{value}' of type '{value.__class__.__name__}'"
+                        )
+                if self.mu == other[0] and self.sigma == other[1]:
+                    return True
+                else:
+                    return False
+            else:
+                raise ValueError(
+                    f"The '{other.__class__.__name__}' object has more than two floats."
+                )
+        else:
+            raise ValueError(
+                "You can only compare Rating objects with each other or a list of two floats."
+            )
+
+
+def ordinal(agent: Union[Rating, list, tuple], **options) -> float:
+    """
+    Convert `mu` and `sigma` into a single value for sorting purposes.
+
+    :param agent: A :class:`~openskill.rate.Rating` object or a :class:`~list` or :class:`~tuple` of :class:`~float`
+                  objects.
+    :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
+    :return: A :class:`~float` object that represents a 1 dimensional value for a rating.
+    """
+    if isinstance(agent, Union[list, tuple]):
+        if len(agent) == 2:
+            for value in agent:
+                if not isinstance(value, Union[int, float]):
+                    raise ValueError(
+                        f"The {agent.__class__.__name__} contains an "
+                        f"element '{value}' of type '{value.__class__.__name__}'"
+                    )
+            z = Constants(**options).Z
+            return agent[0] - z * agent[1]
+        else:
+            raise ValueError(
+                f"The '{agent.__class__.__name__}' object has more than two floats."
+            )
+    elif isinstance(agent, Rating):
+        # Calculate Z
+        z = Constants(**options).Z
+        return agent.mu - z * agent.sigma
+    else:
+        raise ValueError(
+            "You can only pass 'Rating' objects, two-tuples or lists to 'agent'."
+        )
 
 
 def create_rating(rating_list: List[Union[int, float]]) -> Rating:

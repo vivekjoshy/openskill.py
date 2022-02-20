@@ -1,4 +1,4 @@
-from openskill.ordinal import ordinal
+from openskill.rate import ordinal
 from openskill.rate import (
     rate,
     Rating,
