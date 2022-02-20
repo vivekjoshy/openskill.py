@@ -66,7 +66,7 @@ If your teams are listed in one order but your ranking is in a different order, 
 >>> a1 = b1 = c1 = d1 = Rating()
 >>> result = [[a2], [b2], [c2], [d2]] = rate([[a1], [b1], [c1], [d1]], rank=[4, 1, 3, 2])
 >>> result
-[[[20.96265504062538, 8.083731307186588]], [[27.795084971874736, 8.263160757613477]], [[24.68943500312503, 8.083731307186588]], [[26.552824984374855, 8.179213704945203]]]
+[[Rating(mu=20.96265504062538, sigma=8.083731307186588)], [Rating(mu=27.795084971874736, sigma=8.263160757613477)], [Rating(mu=24.68943500312503, sigma=8.083731307186588)], [Rating(mu=26.552824984374855, sigma=8.179213704945203)]]
 ```
 
 It's assumed that the lower ranks are better (wins), while higher ranks are worse (losses). You can provide a score instead, where lower is worse and higher is better. These can just be raw scores from the game, if you want.
