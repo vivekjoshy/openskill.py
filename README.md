@@ -94,6 +94,19 @@ You can compare two or more teams to get the probabilities of each team winning.
 1.0
 ```
 
+## Predicting Draws
+
+You can compare two or more teams to get the probabilities of the match drawing.
+
+```python
+>>> from openskill import predict_draw
+>>> a1 = Rating()
+>>> a2 = Rating(mu=33.564, sigma=1.123)
+>>> prediction = predict_draw(teams=[[a1], [a2]])
+>>> prediction
+0.09025541153402594
+```
+
 ## Choosing Models
 
 The default model is `PlackettLuce`. You can import alternate models from `openskill.models` like so:
