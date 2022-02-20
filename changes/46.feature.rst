@@ -1,1 +1,0 @@
-``create_rating`` now checks if the argument is the correct type.

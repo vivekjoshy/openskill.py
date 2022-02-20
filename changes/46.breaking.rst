@@ -1,2 +1,0 @@
-- The ``rate`` function now returns ``Rating`` objects.
-- Changes ``ordinal`` to accept both ``Rating`` objects and lists or tuples of 2 floats.
