@@ -95,11 +95,8 @@ def process_os_match(
             [[os_white_player], [os_black_player]], model=model, rank=[1, 1]
         )
 
-    white_player_ratings = [openskill.create_rating(_) for _ in white_player_result]
-    black_player_ratings = [openskill.create_rating(_) for _ in black_player_result]
-
-    os_white_players = dict(zip([white_player], white_player_ratings))
-    os_black_players = dict(zip([black_player], black_player_ratings))
+    os_white_players = dict(zip([white_player], white_player_result))
+    os_black_players = dict(zip([black_player], black_player_result))
 
     os_players.update(os_white_players)
     os_players.update(os_black_players)

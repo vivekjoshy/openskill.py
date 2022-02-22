@@ -85,11 +85,8 @@ def process_os_match(
             [list(os_red_players.values()), list(os_blue_players.values())], model=model
         )
 
-    blue_team_ratings = [openskill.create_rating(_) for _ in blue_team_result]
-    red_team_ratings = [openskill.create_rating(_) for _ in red_team_result]
-
-    os_blue_players = dict(zip(os_blue_players, blue_team_ratings))
-    os_red_players = dict(zip(os_red_players, red_team_ratings))
+    os_blue_players = dict(zip(os_blue_players, blue_team_result))
+    os_red_players = dict(zip(os_red_players, red_team_result))
 
     os_players.update(os_blue_players)
     os_players.update(os_red_players)
