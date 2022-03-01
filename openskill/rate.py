@@ -200,9 +200,10 @@ def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]
         raise ValueError(f"Expected at least two teams.")
 
     n = len(teams)
+    denom = (n * (n - 1)) / 2
 
     pairwise_probabilities = []
-    for pairwise_subset in itertools.permutations(teams, len(teams)):
+    for pairwise_subset in itertools.permutations(teams, 2):
         current_team_a_rating = team_rating([pairwise_subset[0]])
         current_team_b_rating = team_rating([pairwise_subset[1]])
         mu_a = current_team_a_rating[0][0]
@@ -216,22 +217,10 @@ def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]
             )
         )
 
-    if n > 2:
-        cache = deque(pairwise_probabilities)
-        probabilities = []
-        partial = len(pairwise_probabilities) / n
-        while len(cache) > 0:
-            aggregate = []
-            for length in range(int(partial)):
-                aggregate.append(cache.popleft())
-            aggregate_sum = sum(aggregate)
-            aggregate_multiple = n
-            for length in range(1, n - 2):
-                aggregate_multiple *= n - length
-            probabilities.append(aggregate_sum / aggregate_multiple)
-        return probabilities
-    else:
-        return pairwise_probabilities
+    return [
+        (sum(team_prob) / denom) for team_prob in itertools.zip_longest(*[iter(pairwise_probabilities)] * (n-1))
+    ]
+
 
 
 def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
@@ -255,7 +244,7 @@ def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
     )
 
     pairwise_probabilities = []
-    for pairwise_subset in itertools.permutations(teams, len(teams)):
+    for pairwise_subset in itertools.permutations(teams, 2):
         current_team_a_rating = team_rating([pairwise_subset[0]])
         current_team_b_rating = team_rating([pairwise_subset[1]])
         mu_a = current_team_a_rating[0][0]
@@ -273,10 +262,8 @@ def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
             )
         )
 
+    denom = 1
     if n > 2:
-        aggregate_multiple = n
-        for length in range(1, n):
-            aggregate_multiple *= n - length
-        return abs(sum(pairwise_probabilities)) / aggregate_multiple
-    else:
-        return abs(sum(pairwise_probabilities))
+        denom = (n * (n - 1))
+
+    return abs(sum(pairwise_probabilities)) / denom
