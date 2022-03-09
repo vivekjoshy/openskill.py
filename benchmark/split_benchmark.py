@@ -187,7 +187,7 @@ def predict_ts_match(match: dict):
         ts_blue_players[player] = ts_players[player]
 
     for player in red_team:
-        ts_red_players[player] = os_players[player]
+        ts_red_players[player] = ts_players[player]
 
     blue_win_probability = win_probability(
         list(ts_blue_players.values()), list(ts_red_players.values())
