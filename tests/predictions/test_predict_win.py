@@ -22,6 +22,7 @@ def test_predict_win():
     with pytest.raises(ValueError):
         predict_win(teams=[team_1])
 
+
 def test_predict_win_1v1():
     a1 = Rating()
     a2 = Rating(mu=32.444, sigma=5.123)
@@ -33,6 +34,7 @@ def test_predict_win_1v1():
     prob1, prob2 = predict_win(teams=[team1, team2])
     assert prob1 == pytest.approx(0.34641823958165474)
     assert prob2 == pytest.approx(0.6535817604183453)
+
 
 def test_predict_win_asymmetric():
     a1 = Rating()
@@ -46,6 +48,7 @@ def test_predict_win_asymmetric():
     assert prob2 == pytest.approx(0.41117430943389155)
     assert prob3 == pytest.approx(0.1750905983112395)
     assert prob4 == pytest.approx(0.15238349809064686)
+
 
 def test_predict_win_3p_ffa():
     a1 = Rating()
@@ -63,6 +66,7 @@ def test_predict_win_4p_ffa():
     assert p3 == pytest.approx(0.25)
     assert p4 == pytest.approx(0.25)
 
+
 def test_predict_win_4p_varying_skill():
     r1 = Rating(mu=1, sigma=0.1)
     r2 = Rating(mu=2, sigma=0.1)
@@ -74,6 +78,7 @@ def test_predict_win_4p_varying_skill():
     assert p3 == pytest.approx(0.2658057866632309)
     assert p4 == pytest.approx(0.29719488894562746)
 
+
 def test_predict_win_5p_ffa():
     a1 = Rating()
     p1, p2, p3, p4, p5 = predict_win(teams=[[a1], [a1], [a1], [a1], [a1]])
@@ -82,6 +87,7 @@ def test_predict_win_5p_ffa():
     assert p3 == pytest.approx(0.2)
     assert p4 == pytest.approx(0.2)
     assert p5 == pytest.approx(0.2)
+
 
 def test_predict_5p_impostor():
     a1 = Rating()

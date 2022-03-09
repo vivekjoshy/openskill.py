@@ -218,9 +218,11 @@ def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]
         )
 
     return [
-        (sum(team_prob) / denom) for team_prob in itertools.zip_longest(*[iter(pairwise_probabilities)] * (n-1))
+        (sum(team_prob) / denom)
+        for team_prob in itertools.zip_longest(
+            *[iter(pairwise_probabilities)] * (n - 1)
+        )
     ]
-
 
 
 def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
@@ -264,6 +266,6 @@ def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
 
     denom = 1
     if n > 2:
-        denom = (n * (n - 1))
+        denom = n * (n - 1)
 
     return abs(sum(pairwise_probabilities)) / denom
