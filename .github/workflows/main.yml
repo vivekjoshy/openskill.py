@@ -20,22 +20,17 @@ jobs:
           uses: actions/setup-python@v2
           with:
             python-version: ${{ matrix.python-version }}
-        - name: Install Poetry
-          uses: snok/install-poetry@v1
-          with:
-            virtualenvs-create: true
-            virtualenvs-in-project: true
         - name: Run Tests
           run: |
-              poetry install
-              source $VENV
-              poetry build
-              poetry run twine check dist/*
-              poetry run black --check .
-              poetry run pytest . --cov --cov-report=term-missing -vv
-              poetry run coverage report
-              poetry run coverage html
-              poetry run coverage xml --ignore-errors
+              pip install -e.[docs,tests,release]
+              python -m pip install --upgrade build
+              python -m build
+              twine check dist/*
+              black --check .
+              pytest . --cov --cov-report=term-missing -vv
+              coverage report
+              coverage html
+              coverage xml --ignore-errors
         - name: "Upload coverage to Codecov"
           uses: codecov/codecov-action@v2
           with:
