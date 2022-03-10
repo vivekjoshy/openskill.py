@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 2.1.0 (2022-03-10)
+============================
+
+Features
+--------
+
+- Faster runtime of ``predict_win`` and ``predict_draw``. (`#48 <https://github.com/OpenDebates/openskill.py/issues/48>`_)
+
+
 Openskill 2.0.0 (2022-02-20)
 ============================
 
