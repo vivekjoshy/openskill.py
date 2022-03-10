@@ -1,6 +1,6 @@
 import pytest
 
-from openskill import Rating, create_rating, rate
+from openskill import Rating, rate
 from openskill.models import BradleyTerryPart
 
 

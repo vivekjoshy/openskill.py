@@ -1,1 +1,0 @@
-Faster runtime of ``predict_win`` and ``predict_draw``.
