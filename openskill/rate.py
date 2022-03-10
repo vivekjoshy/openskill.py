@@ -191,7 +191,7 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
 def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]:
     """
     Predict how likely a match up against teams of one or more agents will go.
-    This algorithm has a time complexity of O(n!) where 'n' is the number of teams.
+    This algorithm has a time complexity of O(n!/(n - 2)!) where 'n' is the number of teams.
 
     :param teams: A list of two or more teams, where teams are lists of :class:`~openskill.rate.Rating` objects.
     :return: A list of probabilities of each team winning.
@@ -228,7 +228,7 @@ def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]
 def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
     """
     Predict how likely a match up against teams of one or more agents will draw.
-    This algorithm has a time complexity of O(n!) where 'n' is the number of teams.
+    This algorithm has a time complexity of O(n!/(n - 2)!) where 'n' is the number of teams.
 
     :param teams: A list of two or more teams, where teams are lists of :class:`~openskill.rate.Rating` objects.
     :return: A :class:`~float` that represents the probability of the teams drawings.
