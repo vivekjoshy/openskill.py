@@ -12,7 +12,7 @@ Features
 
 - ``tau`` (defaults to 0): Additive dynamics factor, which keeps a player's rating from getting stuck at a level. Normally, a player's sigma will only decrease as we gain more information about their performance. This option will put some pressure on this back up. This default will change to be sigma/100 with v3, to be more congruent with TrueSkill, but higher may make your rating system more exciting. (`#50 <https://github.com/OpenDebates/openskill.py/issues/50>`_)
 
-- ``prevent_sigma_increase`` (defaults to false): for a tau > 0, it is possible that a player could play someone with a low enough rating that even if they win, their ordinal rating will still go down slightly. If your players have no agency in matchmaking, it is not desirable to have a situation where a player goes down on the leaderboard even though they win. (`#50 <https://github.com/OpenDebates/openskill.py/issues/50>`_)
+- ``prevent_sigma_increase`` (defaults to ``False``): for a tau > 0, it is possible that a player could play someone with a low enough rating that even if they win, their ordinal rating will still go down slightly. If your players have no agency in matchmaking, it is not desirable to have a situation where a player goes down on the leaderboard even though they win. (`#50 <https://github.com/OpenDebates/openskill.py/issues/50>`_)
 
 
 Openskill 2.1.0 (2022-03-10)
