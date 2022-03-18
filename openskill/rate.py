@@ -1,3 +1,4 @@
+import copy
 import itertools
 import math
 from functools import reduce
@@ -142,9 +143,20 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     :param teams: A list of teams, where teams are lists of :class:`~openskill.rate.Rating` objects.
     :param rank: A list of :class:`~int` where the lower values represent the winners.
     :param score: A list of :class:`~int` where higher values represent the winners.
+    :param tau: A :class:`~float` that modifies the additive dynamics factor.
+    :param prevent_sigma_increase: A :class:`~bool` that prevents sigma from ever increasing.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
     :return: Returns a list of :class:`~openskill.rate.Rating` objects.
     """
+    original_teams = copy.deepcopy(teams)
+    if "tau" in options:
+        tau_squared = options["tau"] * options["tau"]
+        for team_index, team in enumerate(teams):
+            for player_index, player in enumerate(team):
+                teams[team_index][player_index].sigma = math.sqrt(
+                    player.sigma * player.sigma + tau_squared
+                )
+
     if "rank" in options:
         rank = options["rank"]
     else:
@@ -166,25 +178,39 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     else:
         model = PlackettLuce(teams, team_rating=team_rating, **options)
 
+    processed_result = []
     if rank and tenet:
         result = model.calculate()
         result, old_tenet = unwind(tenet, result)
-        final_result = []
         for item in result:
             team = []
             for player in item:
                 team.append(create_rating(player))
-            final_result.append(team)
-        return final_result
+            processed_result.append(team)
     else:
         result = model.calculate()
-        final_result = []
         for item in result:
             team = []
             for player in item:
                 team.append(create_rating(player))
-            final_result.append(team)
-        return final_result
+            processed_result.append(team)
+
+    final_result = processed_result
+
+    if options.get("tau"):
+        if options.get("prevent_sigma_increase"):
+            final_result = []
+            for team_index, team in enumerate(processed_result):
+                final_team = []
+                for player_index, player in enumerate(team):
+                    player_original = original_teams[team_index][player_index]
+                    if player.sigma <= player_original.sigma:
+                        sigma = player.sigma
+                    else:
+                        sigma = player_original.sigma
+                    final_team.append(Rating(mu=player.mu, sigma=sigma))
+                final_result.append(final_team)
+    return final_result
 
 
 def predict_win(teams: List[List[Rating]], **options) -> List[Union[int, float]]:
