@@ -37,10 +37,10 @@ class Rating:
                 return True
             else:
                 return False
-        elif isinstance(other, Union[list, tuple]):
+        elif isinstance(other, (list, tuple)):
             if len(other) == 2:
                 for value in other:
-                    if not isinstance(value, Union[int, float]):
+                    if not isinstance(value, (int, float)):
                         raise ValueError(
                             f"The {other.__class__.__name__} contains an "
                             f"element '{value}' of type '{value.__class__.__name__}'"
@@ -68,10 +68,10 @@ def ordinal(agent: Union[Rating, list, tuple], **options) -> float:
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
     :return: A :class:`~float` object that represents a 1 dimensional value for a rating.
     """
-    if isinstance(agent, Union[list, tuple]):
+    if isinstance(agent, (list, tuple)):
         if len(agent) == 2:
             for value in agent:
-                if not isinstance(value, Union[int, float]):
+                if not isinstance(value, (int, float)):
                     raise ValueError(
                         f"The {agent.__class__.__name__} contains an "
                         f"element '{value}' of type '{value.__class__.__name__}'"
@@ -103,7 +103,7 @@ def create_rating(rating_list: List[Union[int, float]]) -> Rating:
         raise TypeError("Argument is already a 'Rating' object.")
     elif len(rating_list) == 2:
         for value in rating_list:
-            if not isinstance(value, Union[int, float]):
+            if not isinstance(value, (int, float)):
                 raise ValueError(
                     f"The {rating_list.__class__.__name__} contains an "
                     f"element '{value}' of type '{value.__class__.__name__}'"
