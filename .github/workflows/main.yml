@@ -21,7 +21,7 @@ jobs:
           with:
             python-version: ${{ matrix.python-version }}
             cache: 'pip'
-        - name: Install Homebrew
+        - name: Install Homebrew Packages
           if: ${{ matrix.os == 'MacOS' }}
           run: |
               brew install openblas
