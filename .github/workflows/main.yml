@@ -30,7 +30,7 @@ jobs:
               echo "CPPFLAGS="-I/usr/local/opt/lapack/include";" >> $env:GITHUB_ENV
               echo "PKG_CONFIG_PATH="/usr/local/opt/lapack/lib/pkgconfig";" >> $env:GITHUB_ENV
         - name: Install Windows Packages
-          if: ${{ matrix.osm == 'Windows' }}
+          if: ${{ matrix.os == 'Windows' }}
           run: |
               choco install rtools --no-progress
               echo "c:\rtools40\ucrt64\bin;" >> $env:GITHUB_PATH
