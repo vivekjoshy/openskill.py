@@ -42,7 +42,7 @@ jobs:
               choco install wget -y
               wget https://github.com/scipy/scipy-ci-artifacts/raw/main/openblas_32_if.zip
               unzip openblas_32_if.zip -d c:\
-              echo "PKG_CONFIG_PATH=c:\opt\openblas\if_32\64\lib\pkgconfig;" >> $env:GITHUB_ENV
+              echo "PKG_CONFIG_PATH=c:\openblas\if_32\64\lib\pkgconfig;" >> $env:GITHUB_ENV
         - name: Run Tests
           run: |
               python -m pip install --upgrade pip
