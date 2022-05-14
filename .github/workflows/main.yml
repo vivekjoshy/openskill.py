@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [Ubuntu, MacOS, Windows]
-        python-version: ["3.7", "3.8", "3.9", "3.10", "pypy-3.7", "pypy-3.8"]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
         experimental: [false]
     defaults:
       run:
@@ -21,61 +21,6 @@ jobs:
           with:
             python-version: ${{ matrix.python-version }}
             cache: 'pip'
-        - name: Install MacOS Specific Packages
-          if: ${{ matrix.os == 'MacOS' }}
-          run: |
-              # this is taken verbatim from the numpy azure pipeline setup.
-              set -xe
-              curl -L https://github.com/MacPython/gfortran-install/raw/master/archives/gfortran-4.9.0-Mavericks.dmg -o gfortran.dmg
-              GFORTRAN_SHA256=$(shasum -a 256 gfortran.dmg)
-              KNOWN_SHA256="d2d5ca5ba8332d63bbe23a07201c4a0a5d7e09ee56f0298a96775f928c3c4b30  gfortran.dmg"
-              if [ "$GFORTRAN_SHA256" != "$KNOWN_SHA256" ]; then
-                  echo sha256 mismatch
-                  exit 1
-              fi
-              hdiutil attach -mountpoint /Volumes/gfortran gfortran.dmg
-              sudo installer -pkg /Volumes/gfortran/gfortran.pkg -target /
-              otool -L /usr/local/gfortran/lib/libgfortran.3.dylib
-
-              target=$(python ci/openblas_support.py)
-              ls -lR $target
-
-              # manually link to appropriate system paths
-              cp $target/lib/lib* /usr/local/lib/
-              cp $target/include/* /usr/local/include/
-
-              # otool -L /usr/local/lib/libopenblas*
-              echo "[openblas]" > site.cfg
-              echo "libraries = openblas" >> site.cfg
-              echo "library_dirs = /usr/local/lib" >> site.cfg
-              echo "include_dirs = /usr/local/include" >> site.cfg
-              echo "runtime_library_dirs = /usr/local/lib" >> site.cfg
-
-              brew install libmpc suitesparse swig
-              python -m pip install wheel cython pybind11
-        - name: Install Windows Packages
-          if: ${{ matrix.os == 'Windows' }}
-          run: |
-              choco install rtools --no-progress
-              echo "c:\rtools40\ucrt64\bin;" >> $env:GITHUB_PATH
-
-              # Download and install pre-built OpenBLAS library
-              # Built with mingw-w64, -ucrt -static.
-              # https://github.com/matthew-brett/openblas-libs/blob/ucrt-build/build_openblas.ps1
-              choco install unzip -y
-              choco install wget -y
-              wget https://github.com/scipy/scipy-ci-artifacts/raw/main/openblas_32_if.zip
-              unzip openblas_32_if.zip
-              echo "PKG_CONFIG_PATH=c:\opt\openblas\if_32\64\lib\pkgconfig;" >> $env:GITHUB_ENV
-              mv opt c:\
-
-              $scipy_path = "${env:installed_path}\scipy"
-              $libs_path = "${scipy_path}\.libs"
-              mkdir ${libs_path}
-              $ob_path = (pkg-config --variable libdir openblas) -replace "lib", "bin"
-              cp $ob_path/*.dll $libs_path
-              # Write _distributor_init.py to scipy dir to load .libs DLLs.
-              & python ci\openblas_support.py --write-init $scipy_path
         - name: Run Tests
           run: |
               python -m pip install --upgrade pip
