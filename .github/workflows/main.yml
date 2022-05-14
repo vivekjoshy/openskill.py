@@ -4,7 +4,6 @@ jobs:
   tests:
     name: ${{ matrix.os }} / ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
@@ -43,6 +42,7 @@ jobs:
               coverage report
               coverage html
               coverage xml --ignore-errors
+          continue-on-error: ${{ matrix.experimental }}
         - name: "Upload coverage to Codecov"
           uses: codecov/codecov-action@v2
           with:
