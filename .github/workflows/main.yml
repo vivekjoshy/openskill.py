@@ -45,6 +45,5 @@ jobs:
           continue-on-error: ${{ matrix.experimental }}
         - name: "Upload coverage to Codecov"
           uses: codecov/codecov-action@v2
-          continue-on-error: ${{ matrix.experimental }}
           with:
             fail_ci_if_error: ${{ !matrix.experimental }}
