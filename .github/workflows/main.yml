@@ -52,7 +52,7 @@ jobs:
               echo "runtime_library_dirs = /usr/local/lib" >> site.cfg
 
               brew install libmpc suitesparse swig
-              python -m pip install wheel cython pybind11 mpmath gmpy2
+              python -m pip install wheel cython pybind11
         - name: Install Windows Packages
           if: ${{ matrix.os == 'Windows' }}
           run: |
