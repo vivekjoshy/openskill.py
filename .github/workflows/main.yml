@@ -68,6 +68,14 @@ jobs:
               unzip openblas_32_if.zip
               echo "PKG_CONFIG_PATH=c:\opt\openblas\if_32\64\lib\pkgconfig;" >> $env:GITHUB_ENV
               mv opt c:\
+
+              $scipy_path = "${env:installed_path}\scipy"
+              $libs_path = "${scipy_path}\.libs"
+              mkdir ${libs_path}
+              $ob_path = (pkg-config --variable libdir openblas) -replace "lib", "bin"
+              cp $ob_path/*.dll $libs_path
+              # Write _distributor_init.py to scipy dir to load .libs DLLs.
+              & python ci\openblas_support.py --write-init $scipy_path
         - name: Run Tests
           run: |
               python -m pip install --upgrade pip
