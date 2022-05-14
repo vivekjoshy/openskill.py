@@ -24,6 +24,7 @@ jobs:
         - name: Install Homebrew Packages
           if: ${{ matrix.os == 'MacOS' }}
           run: |
+              brew remove openblas
               brew install openblas
               brew install lapack
               echo "LDFLAGS=-L/usr/local/opt/lapack/lib;" >> $env:GITHUB_ENV
@@ -46,7 +47,7 @@ jobs:
               choco install unzip -y
               choco install wget -y
               wget https://github.com/scipy/scipy-ci-artifacts/raw/main/openblas_32_if.zip
-              unzip openblas_32_if.zip -d "c:\"
+              unzip -d c:\ openblas_32_if.zip
               echo "PKG_CONFIG_PATH=c:\opt\openblas\if_32\64\lib\pkgconfig;" >> $env:GITHUB_ENV
         - name: Run Tests
           run: |
