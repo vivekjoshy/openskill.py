@@ -29,6 +29,11 @@ jobs:
               echo "LDFLAGS=-L/usr/local/opt/lapack/lib;" >> $env:GITHUB_ENV
               echo "CPPFLAGS=-I/usr/local/opt/lapack/include;" >> $env:GITHUB_ENV
               echo "PKG_CONFIG_PATH=/usr/local/opt/lapack/lib/pkgconfig;" >> $env:GITHUB_ENV
+              echo "[openblas]" > site.cfg
+              echo "libraries = openblas" >> site.cfg
+              echo "library_dirs = /usr/local/opt/openblas/lib" >> site.cfg
+              echo "include_dirs = /usr/local/opt/openblas/include" >> site.cfg
+              echo "runtime_library_dirs = /usr/local/opt/openblas/lib" >> site.cfg
         - name: Install Windows Packages
           if: ${{ matrix.os == 'Windows' }}
           run: |
@@ -41,7 +46,7 @@ jobs:
               choco install unzip -y
               choco install wget -y
               wget https://github.com/scipy/scipy-ci-artifacts/raw/main/openblas_32_if.zip
-              unzip openblas_32_if.zip -d c:\
+              unzip openblas_32_if.zip -d "c:\"
               echo "PKG_CONFIG_PATH=c:\opt\openblas\if_32\64\lib\pkgconfig;" >> $env:GITHUB_ENV
         - name: Run Tests
           run: |
