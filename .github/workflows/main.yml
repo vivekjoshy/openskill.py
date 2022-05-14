@@ -24,17 +24,21 @@ jobs:
         - name: Install Homebrew Packages
           if: ${{ matrix.os == 'MacOS' }}
           run: |
-              brew uninstall --ignore-dependencies openblas
-              brew install openblas
-              brew install lapack
-              echo "LDFLAGS=-L/usr/local/opt/lapack/lib;" >> $env:GITHUB_ENV
-              echo "CPPFLAGS=-I/usr/local/opt/lapack/include;" >> $env:GITHUB_ENV
-              echo "PKG_CONFIG_PATH=/usr/local/opt/lapack/lib/pkgconfig;" >> $env:GITHUB_ENV
+              # this is taken verbatim from the numpy azure pipeline setup.
+              set -xe
+              target=$(python ci/openblas_support.py)
+              ls -lR $target
+
+              # manually link to appropriate system paths
+              cp $target/lib/lib* /usr/local/lib/
+              cp $target/include/* /usr/local/include/
+
+              # otool -L /usr/local/lib/libopenblas*
               echo "[openblas]" > site.cfg
               echo "libraries = openblas" >> site.cfg
-              echo "library_dirs = /usr/local/opt/openblas/lib" >> site.cfg
-              echo "include_dirs = /usr/local/opt/openblas/include" >> site.cfg
-              echo "runtime_library_dirs = /usr/local/opt/openblas/lib" >> site.cfg
+              echo "library_dirs = /usr/local/lib" >> site.cfg
+              echo "include_dirs = /usr/local/include" >> site.cfg
+              echo "runtime_library_dirs = /usr/local/lib" >> site.cfg
         - name: Install Windows Packages
           if: ${{ matrix.os == 'Windows' }}
           run: |
