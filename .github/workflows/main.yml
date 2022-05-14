@@ -24,7 +24,7 @@ jobs:
         - name: Install Homebrew Packages
           if: ${{ matrix.os == 'MacOS' }}
           run: |
-              brew remove openblas
+              brew uninstall --ignore-dependencies openblas
               brew install openblas
               brew install lapack
               echo "LDFLAGS=-L/usr/local/opt/lapack/lib;" >> $env:GITHUB_ENV
