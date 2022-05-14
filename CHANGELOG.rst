@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 2.3.0 (2022-05-14)
+============================
+
+Features
+--------
+
+- Add support for python 3.7+ (`#52 <https://github.com/OpenDebates/openskill.py/issues/52>`_)
+
+
 Openskill 2.2.0 (2022-03-18)
 ============================
 
