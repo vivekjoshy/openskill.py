@@ -4,6 +4,22 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 2.4.0 (2022-06-08)
+============================
+
+Features
+--------
+
+- Add more comparison magic methods to the ``Rating`` object.
+
+
+Documentation Improvements
+--------------------------
+
+- Add documentation about advanced usage.
+- Add documentation about future update to the default value of ``tau``.
+
+
 Openskill 2.3.0 (2022-05-14)
 ============================
 
