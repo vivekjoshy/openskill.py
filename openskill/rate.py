@@ -58,6 +58,114 @@ class Rating:
                 "You can only compare Rating objects with each other or a list of two floats."
             )
 
+    def __lt__(self, other):
+        if isinstance(other, Rating):
+            if ordinal(self) < ordinal(other):
+                return True
+            else:
+                return False
+        elif isinstance(other, (list, tuple)):
+            if len(other) == 2:
+                for value in other:
+                    if not isinstance(value, (int, float)):
+                        raise ValueError(
+                            f"The {other.__class__.__name__} contains an "
+                            f"element '{value}' of type '{value.__class__.__name__}'"
+                        )
+                if ordinal(self) < ordinal([other[0], other[1]]):
+                    return True
+                else:
+                    return False
+            else:
+                raise ValueError(
+                    f"The '{other.__class__.__name__}' object has more than two floats."
+                )
+        else:
+            raise ValueError(
+                "You can only compare Rating objects with each other or a list of two floats."
+            )
+
+    def __gt__(self, other):
+        if isinstance(other, Rating):
+            if ordinal(self) > ordinal(other):
+                return True
+            else:
+                return False
+        elif isinstance(other, (list, tuple)):
+            if len(other) == 2:
+                for value in other:
+                    if not isinstance(value, (int, float)):
+                        raise ValueError(
+                            f"The {other.__class__.__name__} contains an "
+                            f"element '{value}' of type '{value.__class__.__name__}'"
+                        )
+                if ordinal(self) > ordinal([other[0], other[1]]):
+                    return True
+                else:
+                    return False
+            else:
+                raise ValueError(
+                    f"The '{other.__class__.__name__}' object has more than two floats."
+                )
+        else:
+            raise ValueError(
+                "You can only compare Rating objects with each other or a list of two floats."
+            )
+
+    def __le__(self, other):
+        if isinstance(other, Rating):
+            if ordinal(self) <= ordinal(other):
+                return True
+            else:
+                return False
+        elif isinstance(other, (list, tuple)):
+            if len(other) == 2:
+                for value in other:
+                    if not isinstance(value, (int, float)):
+                        raise ValueError(
+                            f"The {other.__class__.__name__} contains an "
+                            f"element '{value}' of type '{value.__class__.__name__}'"
+                        )
+                if ordinal(self) <= ordinal([other[0], other[1]]):
+                    return True
+                else:
+                    return False
+            else:
+                raise ValueError(
+                    f"The '{other.__class__.__name__}' object has more than two floats."
+                )
+        else:
+            raise ValueError(
+                "You can only compare Rating objects with each other or a list of two floats."
+            )
+
+    def __ge__(self, other):
+        if isinstance(other, Rating):
+            if ordinal(self) >= ordinal(other):
+                return True
+            else:
+                return False
+        elif isinstance(other, (list, tuple)):
+            if len(other) == 2:
+                for value in other:
+                    if not isinstance(value, (int, float)):
+                        raise ValueError(
+                            f"The {other.__class__.__name__} contains an "
+                            f"element '{value}' of type '{value.__class__.__name__}'"
+                        )
+                if ordinal(self) >= ordinal([other[0], other[1]]):
+                    return True
+                else:
+                    return False
+            else:
+                raise ValueError(
+                    f"The '{other.__class__.__name__}' object has more than two floats."
+                )
+        else:
+            raise ValueError(
+                "You can only compare Rating objects with each other or a list of two floats."
+            )
+
 
 def ordinal(agent: Union[Rating, list, tuple], **options) -> float:
     """
@@ -147,6 +255,9 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     :param prevent_sigma_increase: A :class:`~bool` that prevents sigma from ever increasing.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
     :return: Returns a list of :class:`~openskill.rate.Rating` objects.
+
+    .. note::
+       ``tau`` will default to ``25/300`` in the next major version update.
     """
     original_teams = copy.deepcopy(teams)
     if "tau" in options:

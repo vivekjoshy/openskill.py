@@ -18,6 +18,7 @@ Contents
    Contribution Guidelines <contributing>
    Installation <installation>
    User Manual <manual>
+   Advanced Usage <advanced>
    Module Reference <api/modules>
 
 

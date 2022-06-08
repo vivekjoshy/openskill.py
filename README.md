@@ -135,6 +135,9 @@ The default model is `PlackettLuce`. You can import alternate models from `opens
 - Full pairing should have more accurate ratings over partial pairing, however in high k games (like a 100+ person marathon race), Bradley-Terry and Thurstone-Mosteller models need to do a calculation of joint probability which involves is a k-1 dimensional integration, which is computationally expensive. Use partial pairing in this case, where players only change based on their neighbors.
 - Plackett-Luce (**default**) is a generalized Bradley-Terry model for k ≥ 3 teams. It scales best.
 
+## Advanced Usage
+You can learn more about how to configure this library to suit your custom needs in the [project documentation](https://openskillpy.readthedocs.io/en/stable/advanced.html).
+
 
 ## Implementations in other Languages
 - [Javascript](https://github.com/philihp/openskill.js)
