@@ -17,7 +17,12 @@ def score(q, i) -> float:
 
 def rankings(teams, rank: Optional[List[int]] = None):
     if rank:
-        team_scores = [rank[i] or i for i, _ in enumerate(teams)]
+        team_scores = []
+        for i, _ in enumerate(teams):
+            if isinstance(rank[i], int):
+                team_scores.append(rank[i])
+            else:
+                team_scores.append(i)
     else:
         team_scores = [i for i, _ in enumerate(teams)]
 
