@@ -8,6 +8,7 @@ def test_rating():
     assert Rating(mu=32.124, sigma=1.421) == Rating(mu=32.124, sigma=1.421)
     assert Rating(mu=32.124, sigma=1.421) != Rating()
     assert Rating(mu=32.124, sigma=1.421) != [23.84, 3.443]
+    assert Rating(mu=32.124, sigma=1.421) == [32.124, 1.421]
 
     assert Rating() <= Rating()
     assert Rating() >= Rating()
