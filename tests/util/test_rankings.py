@@ -15,6 +15,7 @@ def test_rankings():
     assert rankings([], []) == []
     assert rankings([a], [a]) == [0]
     assert rankings([a, b, c, d], None) == [0, 1, 2, 3]
+    assert rankings([[a], [b]], [0, 0]) == [0, 0]
     assert rankings([a, b, c, d], [1, 2, 3, 4]) == [0, 1, 2, 3]
     assert rankings([a, b, c, d], [1, 1, 3, 4]) == [0, 0, 2, 3]
     assert rankings([a, b, c, d], [1, 2, 3, 3]) == [0, 1, 2, 2]
