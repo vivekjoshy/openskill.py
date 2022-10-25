@@ -17,10 +17,10 @@ jobs:
         id: tag
         run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
 
-      - name: Set Up Python 3.10
+      - name: Set Up Python 3.11
         uses: actions/setup-python@v2
         with:
-          python-version: "3.10"
+          python-version: "3.11"
           cache: 'pip'
 
       - name: Upgrade Dependencies

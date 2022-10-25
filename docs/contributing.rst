@@ -20,7 +20,7 @@ You will need to install towncrier and openskill.py from source before making ch
 
 .. code::
 
-    poetry install
+    pip install -e .[release]
 
 For every pull request made to this project, there should be a short explanation of the change under changes/ with the following format: ``{pull_request_number}.{type}.rst``,
 
