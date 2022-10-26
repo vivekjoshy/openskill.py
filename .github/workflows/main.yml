@@ -48,6 +48,6 @@ jobs:
               coverage xml --ignore-errors
           continue-on-error: ${{ matrix.experimental }}
         - name: "Upload coverage to Codecov"
-          uses: codecov/codecov-action@v2
+          uses: codecov/codecov-action@v3
           with:
             fail_ci_if_error: ${{ !matrix.experimental }}
