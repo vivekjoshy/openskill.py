@@ -4,6 +4,21 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 2.5.0 (2022-10-26)
+============================
+
+Features
+--------
+
+- Support Python 3.11.0 Officially (`#56 <https://github.com/OpenDebates/openskill.py/issues/56>`_)
+
+
+Bugfixes
+--------
+
+- Fixes issue where equal ranks below zero don't draw (`#54 <https://github.com/OpenDebates/openskill.py/issues/54>`_)
+
+
 Openskill 2.4.0 (2022-06-08)
 ============================
 

@@ -1,1 +1,0 @@
-Fixes issue where equal ranks below zero don't draw
