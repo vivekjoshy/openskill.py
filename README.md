@@ -143,5 +143,5 @@ You can learn more about how to configure this library to suit your custom needs
 - [Javascript](https://github.com/philihp/openskill.js)
 - [Elixir](https://github.com/philihp/openskill.ex)
 - [Kotlin](https://github.com/brezinajn/openskill.kt)
-- [Lua](https://github.com/Vaschex/openskill.lua)
+- [Lua](https://github.com/bstummer/openskill.lua)
 

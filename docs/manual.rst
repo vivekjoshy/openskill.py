@@ -176,4 +176,4 @@ Implementations in other Languages
 .. _Javascript: https://github.com/philihp/openskill.js
 .. _Elixir: https://github.com/philihp/openskill.ex
 .. _Kotlin: https://github.com/brezinajn/openskill.kt
-.. _Lua: https://github.com/Vaschex/openskill.lua
+.. _Lua: https://github.com/bstummer/openskill.lua
