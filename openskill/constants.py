@@ -2,14 +2,14 @@ def z(**options) -> float:
     if "z" in options:
         return options["z"]
     else:
-        return 3
+        return 3.0
 
 
 def mu(**options) -> float:
     if "mu" in options:
         return options["mu"]
     else:
-        return 25
+        return 25.0
 
 
 def sigma(**options) -> float:

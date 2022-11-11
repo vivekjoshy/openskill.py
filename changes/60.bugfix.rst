@@ -1,0 +1,1 @@
+Allow setting ``mu`` and ``sigma`` to 0 for ``Rating`` objects.

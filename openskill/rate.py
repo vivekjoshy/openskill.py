@@ -25,8 +25,15 @@ class Rating:
         self, mu: Optional[float] = None, sigma: Optional[float] = None, **options
     ):
         # Calculate Mu and Sigma
-        self.mu = mu if mu else default_mu(**options)
-        self.sigma = sigma if sigma else default_sigma(**options)
+        if isinstance(mu, (float, int)):
+            self.mu = mu
+        else:
+            self.mu = default_mu(**options)
+
+        if isinstance(sigma, (float, int)):
+            self.sigma = sigma
+        else:
+            self.sigma = default_sigma(**options)
 
     def __repr__(self):
         return f"Rating(mu={self.mu}, sigma={self.sigma})"

@@ -20,7 +20,7 @@ pip install openskill
 >>> from openskill import Rating, rate
 >>> a1 = Rating()
 >>> a1
-Rating(mu=25, sigma=8.333333333333334)
+Rating(mu=25.0, sigma=8.333333333333334)
 >>> a2 = Rating(mu=32.444, sigma=5.123)
 >>> a2
 Rating(mu=32.444, sigma=5.123)
