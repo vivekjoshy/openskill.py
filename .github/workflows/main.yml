@@ -12,13 +12,13 @@ jobs:
         experimental: [false]
         include:
           - os: Ubuntu
-            python-version: "3.11-dev"
+            python-version: "3.12-dev"
             experimental: true
           - os: MacOS
-            python-version: "3.11-dev"
+            python-version: "3.12-dev"
             experimental: true
           - os: Windows
-            python-version: "3.11-dev"
+            python-version: "3.12-dev"
             experimental: true
     defaults:
       run:
