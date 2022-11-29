@@ -263,9 +263,6 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     :param prevent_sigma_increase: A :class:`~bool` that prevents sigma from ever increasing.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
     :return: Returns a list of :class:`~openskill.rate.Rating` objects.
-
-    .. note::
-       ``tau`` will default to ``25/300`` in the next major version update.
     """
     constants = Constants(**options)
     tau = constants.TAU
