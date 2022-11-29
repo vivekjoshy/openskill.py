@@ -1,4 +1,4 @@
-from openskill import Rating, rate, predict_win
+from openskill import Rating, predict_win, rate
 
 x, y = Rating(), Rating()
 

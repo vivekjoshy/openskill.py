@@ -1,6 +1,6 @@
 import pytest
 
-from openskill.constants import z, mu, sigma, epsilon, beta, beta_squared
+from openskill.constants import beta, beta_squared, epsilon, mu, sigma, tau, z
 
 
 def test_constants():
@@ -21,3 +21,6 @@ def test_constants():
 
     assert beta_squared(beta_squared=16.2) == 16.2
     assert beta_squared() == pytest.approx(17.361111111111114)
+
+    assert tau(tau=0.3) == 0.3
+    assert tau() == pytest.approx(0.08333333)

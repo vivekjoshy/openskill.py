@@ -6,18 +6,20 @@ from typing import Union
 import numpy as np
 import pandas
 import trueskill
-from prompt_toolkit import print_formatted_text as print, HTML, prompt
+from prompt_toolkit import HTML
+from prompt_toolkit import print_formatted_text as print
+from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.shortcuts import ProgressBar
 from sklearn.model_selection import train_test_split
 
 import openskill
 from openskill.models import (
-    ThurstoneMostellerPart,
-    ThurstoneMostellerFull,
     BradleyTerryFull,
     BradleyTerryPart,
     PlackettLuce,
+    ThurstoneMostellerFull,
+    ThurstoneMostellerPart,
 )
 
 # Stores
