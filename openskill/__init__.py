@@ -8,4 +8,4 @@ from openskill.rate import (
     team_rating,
 )
 
-__version__ = "2.5.1"
+__version__ = "3.0.0"

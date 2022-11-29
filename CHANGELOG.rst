@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 3.0.0 (2022-11-30)
+============================
+
+Breaking Changes
+----------------
+
+- Modify default ``tau`` value to ``25/300`` #61 (`#61 <https://github.com/OpenDebates/openskill.py/issues/61>`_)
+
+
 Openskill 2.5.1 (2022-11-11)
 ============================
 

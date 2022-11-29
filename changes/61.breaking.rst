@@ -1,1 +1,0 @@
-Modify default ``tau`` value to ``25/300`` #61
