@@ -1,6 +1,6 @@
 import pytest
 
-from openskill import ordinal, Rating
+from openskill import Rating, ordinal
 
 
 def test_ordinal():

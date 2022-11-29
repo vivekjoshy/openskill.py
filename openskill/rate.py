@@ -2,13 +2,14 @@ import copy
 import itertools
 import math
 from functools import reduce
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
-from openskill.constants import mu as default_mu, beta, Constants
+from openskill.constants import Constants, beta
+from openskill.constants import mu as default_mu
 from openskill.constants import sigma as default_sigma
 from openskill.models.plackett_luce import PlackettLuce
 from openskill.statistics import phi_major, phi_major_inverse
-from openskill.util import unwind, rankings
+from openskill.util import rankings, unwind
 
 
 class Rating:
@@ -262,13 +263,12 @@ def rate(teams: List[List[Rating]], **options) -> List[List[Rating]]:
     :param prevent_sigma_increase: A :class:`~bool` that prevents sigma from ever increasing.
     :param options: Pass in a set of custom values for constants defined in the Weng-Lin paper.
     :return: Returns a list of :class:`~openskill.rate.Rating` objects.
-
-    .. note::
-       ``tau`` will default to ``25/300`` in the next major version update.
     """
+    constants = Constants(**options)
+    tau = constants.TAU
     original_teams = copy.deepcopy(teams)
     if "tau" in options:
-        tau_squared = options["tau"] * options["tau"]
+        tau_squared = tau * tau
         for team_index, team in enumerate(teams):
             for player_index, player in enumerate(team):
                 teams[team_index][player_index].sigma = math.sqrt(

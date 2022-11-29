@@ -1,11 +1,7 @@
 import math
 from abc import ABC, abstractmethod
 from collections import UserString
-from collections.abc import (
-    Mapping,
-    Set,
-    Sequence,
-)
+from collections.abc import Mapping, Sequence, Set
 from decimal import Decimal
 from numbers import Real
 from typing import List

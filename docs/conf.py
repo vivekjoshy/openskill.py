@@ -48,8 +48,9 @@ except FileNotFoundError:
     pass
 
 try:
-    import sphinx
     from distutils.version import LooseVersion
+
+    import sphinx
 
     cmd_line_template = (
         "sphinx-apidoc --implicit-namespaces -f -o {outputdir} {moduledir}"

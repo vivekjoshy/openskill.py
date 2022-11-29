@@ -40,9 +40,17 @@ def beta_squared(**options) -> float:
         return beta(**options) ** 2
 
 
+def tau(**options) -> float:
+    if "tau" in options:
+        return options["tau"]
+    else:
+        return mu(**options) / 300
+
+
 class Constants:
     def __init__(self, **options):
         self.EPSILON: float = epsilon(**options)
         self.TWO_BETA_SQUARED: float = 2 * beta_squared(**options)
         self.BETA_SQUARED: float = beta_squared(**options)
         self.Z: float = z(**options)
+        self.TAU: float = tau(**options)
