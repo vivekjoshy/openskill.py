@@ -53,6 +53,15 @@
         "research",
         "data"
       ]
+    },
+    {
+      "login": "martinazapletalova",
+      "name": "Martina Zapletalová",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91736322?v=4",
+      "profile": "https://github.com/martinazapletalova",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "commitConvention": "angular"
