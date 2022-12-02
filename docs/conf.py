@@ -81,6 +81,8 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
+    "sphinxext.opengraph",
+    "myst_parser",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -103,6 +105,22 @@ html_theme = "furo"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+html_theme_options = {
+    "light_logo": "logo-light.gif",
+    "dark_logo": "logo.gif",
+    "source_repository": "https://github.com/OpenDebates/openskill.py/",
+    "source_branch": "main",
+    "source_directory": "docs/",
+}
+html_title = "OpenSkill for Python"
+
+# OGP Config
+ogp_site_url = "https://openskillpy.readthedocs.io/en/stable/"
+ogp_site_name = "OpenSkill for Python"
+ogp_image = "https://i.imgur.com/tSTFzZY.gif"
+ogp_description_length = 300
+ogp_type = "website"
+ogp_enable_meta_description = True
 
 python_version = ".".join(map(str, sys.version_info[0:2]))
 intersphinx_mapping = {

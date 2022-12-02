@@ -1,0 +1,16 @@
+{
+  "projectName": "openskill.py",
+  "projectOwner": "daegontaven",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": ["CONTRIBUTORS.md"],
+  "imageSize": 100,
+  "commit": false,
+  "contributorsPerLine": 7,
+  "contributorsSortAlphabetically": false,
+  "badgeTemplate": "![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=Contributors)",
+  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
+  "linkToUsage": true,
+  "skipCi": true,
+  "contributors": []
+}

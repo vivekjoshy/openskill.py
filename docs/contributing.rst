@@ -46,3 +46,8 @@ You are also responsible for writing tests(where applicable) if you are contribu
 accept the PR until you write a test for that area of code. Tests ensure long term stability.
 
 Also note that there are CI checks in place. If any automated tests fail, please rework and resubmit your PR.
+
+Credit Yourself
+---------------
+
+Remember to follow this `guide <https://allcontributors.org/docs/en/bot/usage>`_ to add yourself to the list of `contributors <contributors>`_.

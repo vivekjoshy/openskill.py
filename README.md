@@ -2,7 +2,7 @@
 ![](https://i.imgur.com/tSTFzZY.gif)
 
 
-[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill) [![Documentation Status](https://readthedocs.org/projects/openskillpy/badge/?version=latest)](https://openskillpy.readthedocs.io/en/latest/?badge=latest) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill)
+[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill) [![Documentation Status](https://readthedocs.org/projects/openskillpy/badge/?version=latest)](https://openskillpy.readthedocs.io/en/latest/?badge=latest) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=contributors)
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/openskill/badges/version.svg)](https://anaconda.org/conda-forge/openskill)
 
