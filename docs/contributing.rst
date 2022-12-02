@@ -50,4 +50,4 @@ Also note that there are CI checks in place. If any automated tests fail, please
 Credit Yourself
 ---------------
 
-Remember to follow this `guide <https://allcontributors.org/docs/en/bot/usage>`_ to add yourself to the list of :ref:`contributors <contributors>`_.
+Remember to follow this `guide <https://allcontributors.org/docs/en/bot/usage>`_ to add yourself to the list of :ref:`contributors <contributors>`.
