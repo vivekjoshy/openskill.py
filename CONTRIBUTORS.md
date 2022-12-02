@@ -11,6 +11,7 @@
       <td align="center"><a href="https://philihp.com/"><img src="https://avatars.githubusercontent.com/u/1247668?v=4?s=100" width="100px;" alt="‮Philihp Busby"/><br /><sub><b>‮Philihp Busby</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/commits?author=philihp" title="Code">💻</a> <a href="https://github.com/OpenDebates/openskill.py/commits?author=philihp" title="Tests">⚠️</a> <a href="#research-philihp" title="Research">🔬</a> <a href="#data-philihp" title="Data">🔣</a></td>
       <td align="center"><a href="https://github.com/martinazapletalova"><img src="https://avatars.githubusercontent.com/u/91736322?v=4?s=100" width="100px;" alt="Martina Zapletalová"/><br /><sub><b>Martina Zapletalová</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/issues?q=author%3Amartinazapletalova" title="Bug reports">🐛</a></td>
       <td align="center"><a href="https://erotemic.wordpress.com/"><img src="https://avatars.githubusercontent.com/u/3186211?v=4?s=100" width="100px;" alt="Jon Crall"/><br /><sub><b>Jon Crall</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/commits?author=Erotemic" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/bstummer"><img src="https://avatars.githubusercontent.com/u/52933850?v=4?s=100" width="100px;" alt="bstummer"/><br /><sub><b>bstummer</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/commits?author=bstummer" title="Documentation">📖</a></td>
     </tr>
   </tbody>
   <tfoot>
