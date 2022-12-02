@@ -61,6 +61,24 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "Erotemic",
+      "name": "Jon Crall",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3186211?v=4",
+      "profile": "https://erotemic.wordpress.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bstummer",
+      "name": "bstummer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52933850?v=4",
+      "profile": "https://github.com/bstummer",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "commitConvention": "angular"
