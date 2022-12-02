@@ -7,6 +7,7 @@
   <tbody>
     <tr>
       <td align="center"><a href="https://taven.me"><img src="https://avatars.githubusercontent.com/u/8206808?v=4" width="100px;" alt=""/><br /><sub><b>Taven</b></sub></a></td>
+      <td align="center"><a href="https://github.com/CalColson"><img src="https://avatars.githubusercontent.com/u/14209384?v=4" width="100px;" alt=""/><br /><sub><b>Calvin P. Colson</b></sub></a></td>
     </tr>
   </tbody>
   <tfoot>
