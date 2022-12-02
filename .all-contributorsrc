@@ -1,9 +1,11 @@
 {
   "projectName": "openskill.py",
-  "projectOwner": "daegontaven",
+  "projectOwner": "OpenDebates",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": ["CONTRIBUTORS.md"],
+  "files": [
+    "CONTRIBUTORS.md"
+  ],
   "imageSize": 100,
   "commit": false,
   "contributorsPerLine": 7,
@@ -12,5 +14,16 @@
   "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
   "linkToUsage": true,
   "skipCi": true,
-  "contributors": []
+  "contributors": [
+    {
+      "login": "Erotemic",
+      "name": "Jon Crall",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3186211?v=4",
+      "profile": "https://erotemic.wordpress.com/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "commitConvention": "angular"
 }
