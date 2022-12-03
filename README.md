@@ -2,7 +2,7 @@
 ![](https://i.imgur.com/tSTFzZY.gif)
 
 
-[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill) [![Documentation Status](https://readthedocs.org/projects/openskillpy/badge/?version=latest)](https://openskillpy.readthedocs.io/en/latest/?badge=latest) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=contributors)
+[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill) [![Documentation Status](https://readthedocs.org/projects/openskillpy/badge/?version=latest)](https://openskill.me/en/latest/?badge=latest) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=contributors)
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/openskill/badges/version.svg)](https://anaconda.org/conda-forge/openskill)
 
@@ -136,7 +136,7 @@ The default model is `PlackettLuce`. You can import alternate models from `opens
 - Plackett-Luce (**default**) is a generalized Bradley-Terry model for k ≥ 3 teams. It scales best.
 
 ## Advanced Usage
-You can learn more about how to configure this library to suit your custom needs in the [project documentation](https://openskillpy.readthedocs.io/en/stable/advanced.html).
+You can learn more about how to configure this library to suit your custom needs in the [project documentation](https://openskill.me/en/stable/advanced.html).
 
 
 ## Implementations in other Languages
