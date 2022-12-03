@@ -1,0 +1,1 @@
+Add more details to the documentation, fixes broken links and point a custom domain name to the docs.

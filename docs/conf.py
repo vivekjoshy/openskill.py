@@ -115,7 +115,7 @@ html_theme_options = {
 html_title = "OpenSkill for Python"
 
 # OGP Config
-ogp_site_url = "https://openskillpy.readthedocs.io/en/stable/"
+ogp_site_url = "https://openskill.me/en/stable/"
 ogp_site_name = "OpenSkill for Python"
 ogp_image = "https://i.imgur.com/tSTFzZY.gif"
 ogp_description_length = 300
