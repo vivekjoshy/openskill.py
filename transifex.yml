@@ -3,6 +3,7 @@ git:
   - filter_type: dir
     file_format: PO
     source_file_dir: locale/
+    source_file_extension: '.po'
     source_language: en
     translation_files_expression: 'docs/locale/<lang>//LC_MESSAGES/'
 settings:
