@@ -1,0 +1,1 @@
+ Predict ranks and their odds of entire match outcome.
