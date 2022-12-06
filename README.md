@@ -6,9 +6,9 @@
 
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/openskill/badges/version.svg)](https://anaconda.org/conda-forge/openskill)
 
-Python implementation of Weng-Lin Bayesian ranking, a better, license-free alternative to TrueSkill
+A faster and open license multi-team, multiplayer rating system comparable to TrueSkill.
 
-This is a port of the amazing [openskill.js](https://github.com/philihp/openskill.js) package.
+This is a port of the amazing [openskill.js](https://github.com/philihp/openskill.js) package and some of it's models are based on this wonderful [paper](https://jmlr.org/papers/v12/weng11a.html).
 
 ## Installation
 ```shell

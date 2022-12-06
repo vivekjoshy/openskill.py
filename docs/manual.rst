@@ -1,9 +1,8 @@
 .. image:: https://i.imgur.com/tSTFzZY.gif
 
-Python implementation of Weng-Lin Bayesian ranking, a better,
-license-free alternative to TrueSkill
+A faster and open license multi-team, multiplayer rating system comparable to TrueSkill.
 
-This is a port of the amazing `openskill.js`_ package.
+This is a port of the amazing `openskill.js`_ package and some of it's models are based on this wonderful `paper`_.
 
 Usage
 -----
@@ -192,6 +191,7 @@ Implementations in other Languages
 
 
 .. _openskill.js: https://github.com/philihp/openskill.js
+.. _paper: https://jmlr.org/papers/v12/weng11a.html
 .. _99.7%: https://en.wikipedia.org/wiki/68%E2%80%9395%E2%80%9399.7_rule
 .. _Javascript: https://github.com/philihp/openskill.js
 .. _Elixir: https://github.com/philihp/openskill.ex
