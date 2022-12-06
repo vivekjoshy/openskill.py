@@ -1,0 +1,9 @@
+git:
+  filters:
+  - filter_type: dir
+    file_format: PO
+    source_file_dir: locale/
+    source_language: en
+    translation_files_expression: 'docs/locale/<lang>//LC_MESSAGES/'
+settings:
+    pr_branch_name: tx_translations_<br_unique_id>
