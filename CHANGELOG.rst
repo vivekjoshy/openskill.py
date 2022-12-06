@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 3.2.0 (2022-12-06)
+============================
+
+Features
+--------
+
+- Predict ranks and their odds of entire match outcome. (`#74 <https://github.com/OpenDebates/openskill.py/issues/74>`_)
+
+
 Openskill 3.1.0 (2022-12-03)
 ============================
 
