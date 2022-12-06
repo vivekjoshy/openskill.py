@@ -123,7 +123,7 @@ ogp_type = "website"
 ogp_enable_meta_description = True
 
 # Internationalization
-locale_dirs = ['locale/']
+locale_dirs = ["locale/"]
 gettext_compact = False
 
 python_version = ".".join(map(str, sys.version_info[0:2]))
