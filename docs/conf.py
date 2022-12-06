@@ -123,7 +123,6 @@ ogp_type = "website"
 ogp_enable_meta_description = True
 
 # Internationalization
-language = None
 locale_dirs = ['locale/']
 gettext_compact = False
 
