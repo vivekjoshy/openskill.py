@@ -3,6 +3,7 @@ from openskill.rate import (
     create_rating,
     ordinal,
     predict_draw,
+    predict_rank,
     predict_win,
     rate,
     team_rating,

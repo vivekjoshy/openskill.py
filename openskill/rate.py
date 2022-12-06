@@ -2,7 +2,9 @@ import copy
 import itertools
 import math
 from functools import reduce
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
+
+from scipy.stats import rankdata
 
 from openskill.constants import Constants, beta
 from openskill.constants import mu as default_mu
@@ -412,3 +414,55 @@ def predict_draw(teams: List[List[Rating]], **options) -> Union[int, float]:
         denom = n * (n - 1)
 
     return abs(sum(pairwise_probabilities)) / denom
+
+
+def predict_rank(
+    teams: List[List[Rating]], **options
+) -> List[Tuple[int, Union[int, float]]]:
+    """
+    Predict the shape of a match outcome.
+    This algorithm has a time complexity of O(n!/(n - 2)!) where 'n' is the number of teams.
+
+    :param teams: A list of two or more teams, where teams are lists of :class:`~openskill.rate.Rating` objects.
+    :return: A list of team ranks with their probabilities.
+    """
+    if len(teams) < 2:
+        raise ValueError(f"Expected at least two teams.")
+
+    n = len(teams)
+    total_player_count = sum([len(_) for _ in teams])
+    denom = (n * (n - 1)) / 2
+    draw_probability = 1 / n
+    draw_margin = (
+        math.sqrt(total_player_count)
+        * beta(**options)
+        * phi_major_inverse((1 + draw_probability) / 2)
+    )
+
+    pairwise_probabilities = []
+    for pairwise_subset in itertools.permutations(teams, 2):
+        current_team_a_rating = team_rating([pairwise_subset[0]])
+        current_team_b_rating = team_rating([pairwise_subset[1]])
+        mu_a = current_team_a_rating[0][0]
+        sigma_a = current_team_a_rating[0][1]
+        mu_b = current_team_b_rating[0][0]
+        sigma_b = current_team_b_rating[0][1]
+        pairwise_probabilities.append(
+            phi_major(
+                (mu_a - mu_b - draw_margin)
+                / math.sqrt(n * beta(**options) ** 2 + sigma_a**2 + sigma_b**2)
+            )
+        )
+    win_probability = [
+        (sum(team_prob) / denom)
+        for team_prob in itertools.zip_longest(
+            *[iter(pairwise_probabilities)] * (n - 1)
+        )
+    ]
+
+    ranked_probability = [abs(_) for _ in win_probability]
+    ranks = list(rankdata(ranked_probability, method="min"))
+    max_ordinal = max(ranks)
+    ranks = [abs(_ - max_ordinal) + 1 for _ in ranks]
+    predictions = list(zip(ranks, ranked_probability))
+    return predictions

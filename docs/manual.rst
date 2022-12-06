@@ -119,6 +119,26 @@ You can compare two or more teams to get the probabilities of the match drawing.
    0.09025541153402594
 
 
+Predicting Ranks
+----------------
+
+.. code:: python
+
+   >>> from openskill import predict_rank, predict_draw
+   >>> a1 = a2 = a3 = Rating(mu=34, sigma=0.25)
+   >>> b1 = b2 = b3 = Rating(mu=32, sigma=0.5)
+   >>> c1 = c2 = c3 = Rating(mu=30, sigma=1)
+   >>> team_1, team_2, team_3 = [a1, a2, a3], [b1, b2, b3], [c1, c2, c3]
+   >>> draw_probability = predict_draw(teams=[team_1, team_2, team_3])
+   >>> draw_probability
+   0.3295385074666581
+   >>> rank_probability = predict_rank(teams=[team_1, team_2, team_3])
+   >>> rank_probability
+   [(1, 0.4450361350569973), (2, 0.19655022513040032), (3, 0.028875132345944337)]
+   >>> sum([y for x, y in rank_probability]) + draw_probability
+   1.0
+
+
 Choosing Models
 ---------------
 
