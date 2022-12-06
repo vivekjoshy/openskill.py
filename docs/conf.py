@@ -122,6 +122,11 @@ ogp_description_length = 300
 ogp_type = "website"
 ogp_enable_meta_description = True
 
+# Internationalization
+language = None
+locale_dirs = ['locale/']
+gettext_compact = False
+
 python_version = ".".join(map(str, sys.version_info[0:2]))
 intersphinx_mapping = {
     "sphinx": ("http://www.sphinx-doc.org/en/stable", None),

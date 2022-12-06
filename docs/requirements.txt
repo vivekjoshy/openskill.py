@@ -2,3 +2,4 @@ Sphinx
 furo
 myst-parser
 sphinxext-opengraph
+sphinx-intl
