@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 3.3.0 (2022-12-06)
+============================
+
+Documentation Improvements
+--------------------------
+
+- Improve SEO of documentation.
+
+
 Openskill 3.2.0 (2022-12-06)
 ============================
 

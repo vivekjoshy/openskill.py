@@ -1,3 +1,7 @@
+:og:description: Experimental and advanced features for OpenSkill like time decay and additive time dynamics factor.
+:og:image: https://i.imgur.com/tSTFzZY.gif
+:og:image:alt: Logo of OpenSkill for Python
+
 ==============
 Advanced Guide
 ==============

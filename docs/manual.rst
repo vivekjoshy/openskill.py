@@ -1,3 +1,7 @@
+:og:description: A faster and open license multi-team, multiplayer rating system comparable to TrueSkill.
+:og:image: https://i.imgur.com/tSTFzZY.gif
+:og:image:alt: Logo of OpenSkill for Python
+
 .. image:: https://i.imgur.com/tSTFzZY.gif
 
 A faster and open license multi-team, multiplayer rating system comparable to TrueSkill.
