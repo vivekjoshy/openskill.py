@@ -31,7 +31,7 @@ jobs:
           make gettext
 
     - name: Crowdin Action
-      uses: docker://crowdin/github-action:1.5.1
+      uses: crowdin/github-action@1.5.1
       with:
         upload_sources: false
         upload_translations: false
