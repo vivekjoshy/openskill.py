@@ -3,12 +3,12 @@ api_token_env: CROWDIN_PERSONAL_TOKEN
 preserve_hierarchy: true
 files: [
   {
-    "source" : "/openskill/docs/_build/gettext/*.pot",
+    "source" : "docs/_build/gettext/*.pot",
     "translation" : "/openskill/docs/locale/%locale_with_underscore%/LC_MESSAGES/%file_name%.po",
     "target" : "/%original_file_name%"
   },
   {
-    "source" : "/openskill/docs/_build/gettext/**/*.pot",
+    "source" : "docs/_build/gettext/**/*.pot",
     "translation" : "/openskill/docs/locale/%locale_with_underscore%/LC_MESSAGES/**/%file_name%.po",
     "target" : "/**/%original_file_name%"
   },
