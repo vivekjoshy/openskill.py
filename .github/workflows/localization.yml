@@ -36,7 +36,6 @@ jobs:
         upload_translations: false
         download_translations: true
         skip_untranslated_strings: true
-        skip_untranslated_files: true
         export_only_approved: true
         push_translations: true
         commit_message: 'New Crowdin translations by Github Action'
