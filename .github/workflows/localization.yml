@@ -60,7 +60,7 @@ jobs:
         pull_request_base_branch_name: 'main'
         pull_request_labels: 'translations'
         pull_request_assignees: 'crowdin-bot'
-        pull_request_reviewers: 'crowdin-reviewer'
+        pull_request_reviewers: 'daegontaven'
 
         gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
         gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
