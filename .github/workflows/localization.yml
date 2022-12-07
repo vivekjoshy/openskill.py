@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  synchronize-with-crowdin:
+    name: "Synchronize Crowdin Localizations"
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install .[docs]
 
-    - name: Make Docs
+    - name: Make Localization for Docs
       working-directory: ./docs
       run: |
           make gettext
