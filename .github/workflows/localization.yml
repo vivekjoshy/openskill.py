@@ -25,6 +25,7 @@ jobs:
         python -m pip install .[docs]
 
     - name: Make Docs
+      working-directory: ./docs
       run: |
           make gettext
 
