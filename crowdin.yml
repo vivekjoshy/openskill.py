@@ -5,11 +5,9 @@ files: [
   {
     "source" : "docs/_build/gettext/*.pot",
     "translation" : "docs/locale/%locale_with_underscore%/LC_MESSAGES/%file_name%.po",
-    "target" : "/%original_file_name%"
   },
   {
     "source" : "docs/_build/gettext/**/*.pot",
     "translation" : "docs/locale/%locale_with_underscore%/LC_MESSAGES/**/%file_name%.po",
-    "target" : "/**/%original_file_name%"
   },
 ]
