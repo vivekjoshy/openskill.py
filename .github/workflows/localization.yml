@@ -35,10 +35,23 @@ jobs:
       with:
         upload_translations: false
         download_translations: true
+
         skip_untranslated_strings: true
         export_only_approved: true
         push_translations: true
         commit_message: 'New Crowdin translations by Github Action'
+
+        create_pull_request: true
+        localization_branch_name: l10n_crowdin_translations
+        pull_request_title: 'New Crowdin translations'
+        pull_request_body: 'New Crowdin pull request with translations'
+        pull_request_base_branch_name: 'main'
+        pull_request_labels: 'translations'
+        pull_request_assignees: 'crowdin-bot'
+        pull_request_reviewers: 'crowdin-reviewer'
+
+        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
