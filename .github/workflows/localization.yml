@@ -62,5 +62,3 @@ jobs:
         pull_request_assignees: 'crowdin-bot'
         pull_request_reviewers: 'daegontaven'
 
-        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-        gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
