@@ -1,5 +1,14 @@
 project_id_env: CROWDIN_PROJECT_ID
 api_token_env: CROWDIN_PERSONAL_TOKEN
-files:
-  - source: docs/locale/en/LC_MESSAGES/**/*.po
-    translation: docs/locale/%two_letters_code%/**/%file_name%.po
+files: [
+  {
+    "source" : "docs/gettext/*.po",
+    "translation" : "docs/locale/%locale_with_underscore%/LC_MESSAGES/%file_name%.po",
+    "target" : "/%original_file_name%"
+  },
+  {
+    "source" : "docs/gettext/**/*.pot",
+    "translation" : "docs/locale/%locale_with_underscore%/LC_MESSAGES/**/%file_name%.po",
+    "target" : "/**/%original_file_name%"
+  },
+]
