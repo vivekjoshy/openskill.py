@@ -33,9 +33,11 @@ jobs:
     - name: Crowdin Action
       uses: crowdin/github-action@1.5.1
       with:
-        debug_mode: true
         upload_translations: false
         download_translations: true
+        export_only_approved: true
+        push_translations: true
+        commit_message: 'New Crowdin translations by Github Action'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}

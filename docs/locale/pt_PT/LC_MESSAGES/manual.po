@@ -1,33 +1,28 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021 - 2022, Taven
-# This file is distributed under the same license as the openskill.py
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: openskill.py \n"
+"Project-Id-Version: openskill\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-06 19:50+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-12-07 12:43\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: openskill\n"
+"X-Crowdin-Project-ID: 554293\n"
+"X-Crowdin-Language: pt-PT\n"
+"X-Crowdin-File: /docs/_build/gettext/manual.pot\n"
+"X-Crowdin-File-ID: 85\n"
+"Language: pt_PT\n"
 
 #: ../../manual.rst:7
-msgid ""
-"A faster and open license multi-team, multiplayer rating system "
-"comparable to TrueSkill."
+msgid "A faster and open license multi-team, multiplayer rating system comparable to TrueSkill."
 msgstr ""
 
 #: ../../manual.rst:9
-msgid ""
-"This is a port of the amazing `openskill.js`_ package and some of it's "
-"models are based on this wonderful `paper`_."
+msgid "This is a port of the amazing `openskill.js`_ package and some of it's models are based on this wonderful `paper`_."
 msgstr ""
 
 #: ../../manual.rst:12
@@ -35,9 +30,7 @@ msgid "Usage"
 msgstr ""
 
 #: ../../manual.rst:30
-msgid ""
-"If ``a1`` and ``a2`` are on a team, and wins against a team of ``b1`` and"
-" ``b2``, send this into rate:"
+msgid "If ``a1`` and ``a2`` are on a team, and wins against a team of ``b1`` and ``b2``, send this into rate:"
 msgstr ""
 
 #: ../../manual.rst:39
@@ -49,17 +42,11 @@ msgid "Ranks"
 msgstr ""
 
 #: ../../manual.rst:52
-msgid ""
-"When displaying a rating, or sorting a list of ratings, you can use "
-"``ordinal``:"
+msgid "When displaying a rating, or sorting a list of ratings, you can use ``ordinal``:"
 msgstr ""
 
 #: ../../manual.rst:61
-msgid ""
-"By default, this returns ``mu - 3 * sigma``, showing a rating for which "
-"there's a `99.7%`_ likelihood the player's true rating is higher, so with"
-" early games, a player's ordinal rating will usually go up and could go "
-"up even if that player loses."
+msgid "By default, this returns ``mu - 3 * sigma``, showing a rating for which there's a `99.7%`_ likelihood the player's true rating is higher, so with early games, a player's ordinal rating will usually go up and could go up even if that player loses."
 msgstr ""
 
 #: ../../manual.rst:67
@@ -67,17 +54,11 @@ msgid "Artificial Ranks"
 msgstr ""
 
 #: ../../manual.rst:69
-msgid ""
-"If your teams are listed in one order but your ranking is in a different "
-"order, for convenience you can specify a ranks option, such as:"
+msgid "If your teams are listed in one order but your ranking is in a different order, for convenience you can specify a ranks option, such as:"
 msgstr ""
 
 #: ../../manual.rst:79
-msgid ""
-"It's assumed that the lower ranks are better (wins), while higher ranks "
-"are worse (losses). You can provide a score instead, where lower is worse"
-" and higher is better. These can just be raw scores from the game, if you"
-" want."
+msgid "It's assumed that the lower ranks are better (wins), while higher ranks are worse (losses). You can provide a score instead, where lower is worse and higher is better. These can just be raw scores from the game, if you want."
 msgstr ""
 
 #: ../../manual.rst:84
@@ -89,9 +70,7 @@ msgid "Predicting Winners"
 msgstr ""
 
 #: ../../manual.rst:96
-msgid ""
-"You can compare two or more teams to get the probabilities of each team "
-"winning."
+msgid "You can compare two or more teams to get the probabilities of each team winning."
 msgstr ""
 
 #: ../../manual.rst:111
@@ -99,9 +78,7 @@ msgid "Predicting Draws"
 msgstr ""
 
 #: ../../manual.rst:113
-msgid ""
-"You can compare two or more teams to get the probabilities of the match "
-"drawing."
+msgid "You can compare two or more teams to get the probabilities of the match drawing."
 msgstr ""
 
 #: ../../manual.rst:126
@@ -113,9 +90,7 @@ msgid "Choosing Models"
 msgstr ""
 
 #: ../../manual.rst:148
-msgid ""
-"The default model is ``PlackettLuce``. You can import alternate models "
-"from ``openskill.models`` like so:"
+msgid "The default model is ``PlackettLuce``. You can import alternate models from ``openskill.models`` like so:"
 msgstr ""
 
 #: ../../manual.rst:159
@@ -147,35 +122,19 @@ msgid "Which Model Do I Want?"
 msgstr ""
 
 #: ../../manual.rst:170
-msgid ""
-"Bradley-Terry rating models follow a logistic distribution over a "
-"player's skill, similar to Glicko."
+msgid "Bradley-Terry rating models follow a logistic distribution over a player's skill, similar to Glicko."
 msgstr ""
 
 #: ../../manual.rst:172
-msgid ""
-"Thurstone-Mosteller rating models follow a gaussian distribution, similar"
-" to TrueSkill. Gaussian CDF/PDF functions differ in implementation from "
-"system to system (they're all just chebyshev approximations anyway). The "
-"accuracy of this model isn't usually as great either, but tuning this "
-"with an alternative gamma function can improve the accuracy if you really"
-" want to get into it."
+msgid "Thurstone-Mosteller rating models follow a gaussian distribution, similar to TrueSkill. Gaussian CDF/PDF functions differ in implementation from system to system (they're all just chebyshev approximations anyway). The accuracy of this model isn't usually as great either, but tuning this with an alternative gamma function can improve the accuracy if you really want to get into it."
 msgstr ""
 
 #: ../../manual.rst:178
-msgid ""
-"Full pairing should have more accurate ratings over partial pairing, "
-"however in high k games (like a 100+ person marathon race), Bradley-Terry"
-" and Thurstone-Mosteller models need to do a calculation of joint "
-"probability which involves is a k-1 dimensional integration, which is "
-"computationally expensive. Use partial pairing in this case, where "
-"players only change based on their neighbors."
+msgid "Full pairing should have more accurate ratings over partial pairing, however in high k games (like a 100+ person marathon race), Bradley-Terry and Thurstone-Mosteller models need to do a calculation of joint probability which involves is a k-1 dimensional integration, which is computationally expensive. Use partial pairing in this case, where players only change based on their neighbors."
 msgstr ""
 
 #: ../../manual.rst:184
-msgid ""
-"Plackett-Luce (**default**) is a generalized Bradley-Terry model for k ≥ "
-"3 teams. It scales best."
+msgid "Plackett-Luce (**default**) is a generalized Bradley-Terry model for k ≥ 3 teams. It scales best."
 msgstr ""
 
 #: ../../manual.rst:188

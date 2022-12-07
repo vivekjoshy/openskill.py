@@ -1,22 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021 - 2022, Taven
-# This file is distributed under the same license as the openskill.py
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: openskill.py \n"
+"Project-Id-Version: openskill\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-06 19:50+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-12-07 12:43\n"
+"Last-Translator: \n"
+"Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"X-Crowdin-Project: openskill\n"
+"X-Crowdin-Project-ID: 554293\n"
+"X-Crowdin-Language: uk\n"
+"X-Crowdin-File: /docs/_build/gettext/installation.pot\n"
+"X-Crowdin-File-ID: 87\n"
+"Language: uk_UA\n"
 
 #: ../../installation.rst:5
 msgid "Installing the Library"
@@ -30,7 +29,8 @@ msgstr ""
 msgid "For production use, please install from pip."
 msgstr ""
 
-#: ../../installation.rst:16 ../../installation.rst:44
+#: ../../installation.rst:16
+#: ../../installation.rst:44
 msgid "Then verify it is working by running this command:"
 msgstr ""
 
@@ -43,16 +43,10 @@ msgid "Installing from source"
 msgstr ""
 
 #: ../../installation.rst:28
-msgid ""
-"openskill.py is very easy to install from source. First clone the latest "
-"development version from the master branch."
+msgid "openskill.py is very easy to install from source. First clone the latest development version from the master branch."
 msgstr ""
 
 #: ../../installation.rst:36
-msgid ""
-"Create a `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. You "
-"should now see your terminal change to show your are you now using a "
-"virtual environment. Let's install the package dependencies now. This may"
-" take a while depending on your machine."
+msgid "Create a `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. You should now see your terminal change to show your are you now using a virtual environment. Let's install the package dependencies now. This may take a while depending on your machine."
 msgstr ""
 
