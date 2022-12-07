@@ -33,6 +33,7 @@ jobs:
     - name: Crowdin Action
       uses: crowdin/github-action@1.5.1
       with:
+        debug_mode: true
         upload_translations: false
         download_translations: true
       env:
