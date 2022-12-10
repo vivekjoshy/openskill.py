@@ -1,4 +1,4 @@
-:og:description: openskill.py is an n-player, n-team skill rating system with the ability to predict match outcomes (like win and draw) with upto 90% accuracy given enough data.
+:og:description: Multiplayer rating system. Better than Elo.
 :og:image: https://i.imgur.com/tSTFzZY.gif
 :og:image:alt: OpenSkill for Python
 
@@ -9,7 +9,13 @@
 openskill.py
 ============
 
-This is the documentation of **openskill** for python. It is an n-player, n-team skill rating system with the ability to predict match outcomes (like win and draw) with upto 90% accuracy given enough data.
+Multiplayer rating system. Better than Elo.
+
+
+.. image:: https://i.imgur.com/tSTFzZY.gif
+
+
+It is an n-player, n-team skill rating system with the ability to predict match outcomes (like win and draw) with upto 90% accuracy given enough data.
 
 Contents
 ========

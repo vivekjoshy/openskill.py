@@ -112,11 +112,11 @@ html_theme_options = {
     "source_branch": "main",
     "source_directory": "docs/",
 }
-html_title = "OpenSkill for Python"
+html_title = "OpenSkill - Multiplayer rating system. Better than Elo."
 
 # OGP Config
 ogp_site_url = "https://openskill.me/en/stable/"
-ogp_site_name = "OpenSkill for Python"
+ogp_site_name = "OpenSkill - Multiplayer rating system. Better than Elo."
 ogp_image = "https://i.imgur.com/tSTFzZY.gif"
 ogp_description_length = 300
 ogp_type = "website"

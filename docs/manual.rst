@@ -4,6 +4,7 @@
 
 .. image:: https://i.imgur.com/tSTFzZY.gif
 
+
 A faster and open license multi-team, multiplayer rating system comparable to TrueSkill.
 
 This is a port of the amazing `openskill.js`_ package and some of it's models are based on this wonderful `paper`_.
@@ -124,6 +125,8 @@ You can compare two or more teams to get the probabilities of the match drawing.
 
 Predicting Ranks
 ----------------
+
+Sometimes you want to know what the likelihood is someone will place at a particular rank. You can use this library to predict those odds.
 
 .. code:: python
 
