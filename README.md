@@ -1,16 +1,16 @@
-<p style="text-align: center">
+<p align="center" style="text-align: center">
   <img src="https://i.imgur.com/tSTFzZY.gif"
        width="100%"
        alt="Logo of OpenSkill for Python - Multiplayer rating system. Better than Elo."/>
 </p>
 
-<p style="text-align: center">
+<p align="center" style="text-align: center">
     <a href="https://openskill.me">Multiplayer rating system. Better than Elo.</a>
 </p>
 
-<p style="text-align: center">OpenSkill is a faster and open license multi-team, multiplayer rating system comparable to TrueSkill.</p>
+<p align="center" style="text-align: center">OpenSkill is a faster and open license multi-team, multiplayer rating system comparable to TrueSkill.</p>
 
-<p style="text-align: center">
+<p align="center" style="text-align: center">
     <a href="https://stand-with-ukraine.pp.ua">
         <img
             src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"
@@ -19,7 +19,7 @@
     </a>
 </p>
 
-<p style="text-align: center">
+<p align="center" style="text-align: center">
     <a
         href="https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml">
             <img
