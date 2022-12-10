@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openskill\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-06 19:50+0530\n"
-"PO-Revision-Date: 2022-12-07 13:05\n"
+"POT-Creation-Date: 2022-12-07 13:11+0000\n"
+"PO-Revision-Date: 2022-12-07 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Danish\n"
 "MIME-Version: 1.0\n"
@@ -29,11 +29,11 @@ msgstr ""
 msgid "openskill.models.bradley\\_terry\\_full module"
 msgstr ""
 
-#: ../../../openskill/models/bradley_terry_full.py:docstring of openskill.models.bradley_terry_full.BradleyTerryFull:1
-#: ../../../openskill/models/bradley_terry_part.py:docstring of openskill.models.bradley_terry_part.BradleyTerryPart:1
-#: ../../../openskill/models/plackett_luce.py:docstring of openskill.models.plackett_luce.PlackettLuce:1
-#: ../../../openskill/models/thurstone_mosteller_full.py:docstring of openskill.models.thurstone_mosteller_full.ThurstoneMostellerFull:1
-#: ../../../openskill/models/thurstone_mosteller_part.py:docstring of openskill.models.thurstone_mosteller_part.ThurstoneMostellerPart:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/models/bradley_terry_full.py:docstring of openskill.models.bradley_terry_full.BradleyTerryFull:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/models/bradley_terry_part.py:docstring of openskill.models.bradley_terry_part.BradleyTerryPart:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/models/plackett_luce.py:docstring of openskill.models.plackett_luce.PlackettLuce:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/models/thurstone_mosteller_full.py:docstring of openskill.models.thurstone_mosteller_full.ThurstoneMostellerFull:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/models/thurstone_mosteller_part.py:docstring of openskill.models.thurstone_mosteller_part.ThurstoneMostellerPart:1
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
