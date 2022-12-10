@@ -6,6 +6,8 @@ on:
 
 jobs:
   crowdin:
+    strategy:
+      max-parallel: 1
     name: "Synchronize Crowdin Localizations"
     runs-on: ubuntu-latest
 
