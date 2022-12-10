@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openskill\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-06 19:50+0530\n"
-"PO-Revision-Date: 2022-12-07 13:05\n"
+"POT-Creation-Date: 2022-12-07 13:11+0000\n"
+"PO-Revision-Date: 2022-12-10 19:20\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -33,8 +33,8 @@ msgstr ""
 msgid "openskill.constants module"
 msgstr ""
 
-#: ../../../openskill/constants.py:docstring of openskill.constants.Constants:1
-#: ../../../openskill/rate.py:docstring of openskill.rate.Rating:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/constants.py:docstring of openskill.constants.Constants:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.Rating:1
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
@@ -42,134 +42,134 @@ msgstr ""
 msgid "openskill.rate module"
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.Rating:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.Rating:1
 msgid "The storehouse of the skill and confidence the system has in an agent. Stores the `mu` and `sigma` values of an agent."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.Rating:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.create_rating:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.ordinal:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_draw:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_rank:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_win:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.team_rating:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.Rating:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.create_rating:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.ordinal:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_draw:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_rank:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_win:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.team_rating:0
 msgid "Parameters"
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.Rating:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.Rating:4
 msgid "The mean skill of the agent."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.Rating:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.Rating:5
 msgid "How confident the system is the skill of an agent."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.Rating:6
-#: ../../../openskill/rate.py:docstring of openskill.rate.ordinal:5
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:8
-#: ../../../openskill/rate.py:docstring of openskill.rate.team_rating:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.Rating:6
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.ordinal:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:8
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.team_rating:4
 msgid "Pass in a set of custom values for constants defined in the Weng-Lin paper."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.create_rating:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.create_rating:1
 msgid "Create a :class:`~openskill.rate.Rating` object from a list of `mu` and `sigma` values."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.create_rating:3
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.create_rating:3
 msgid "A list of two values where the first value is the `mu` and the second value is the `sigma`."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.create_rating:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.ordinal:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_draw:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_rank:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_win:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:0
-#: ../../../openskill/rate.py:docstring of openskill.rate.team_rating:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.create_rating:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.ordinal:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_draw:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_rank:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_win:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:0
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.team_rating:0
 msgid "Returns"
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.create_rating:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.create_rating:4
 msgid "A :class:`~openskill.rate.Rating` object created from the list passed in."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.ordinal:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.ordinal:1
 msgid "Convert `mu` and `sigma` into a single value for sorting purposes."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.ordinal:3
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.ordinal:3
 msgid "A :class:`~openskill.rate.Rating` object or a :class:`~list` or :class:`~tuple` of :class:`~float` objects."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.ordinal:6
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.ordinal:6
 msgid "A :class:`~float` object that represents a 1 dimensional value for a rating."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_draw:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_draw:1
 msgid "Predict how likely a match up against teams of one or more agents will draw. This algorithm has a time complexity of O(n!/(n - 2)!) where 'n' is the number of teams."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_draw:4
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_rank:4
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_win:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_draw:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_rank:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_win:4
 msgid "A list of two or more teams, where teams are lists of :class:`~openskill.rate.Rating` objects."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_draw:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_draw:5
 msgid "A :class:`~float` that represents the probability of the teams drawings."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_rank:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_rank:1
 msgid "Predict the shape of a match outcome. This algorithm has a time complexity of O(n!/(n - 2)!) where 'n' is the number of teams."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_rank:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_rank:5
 msgid "A list of team ranks with their probabilities."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_win:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_win:1
 msgid "Predict how likely a match up against teams of one or more agents will go. This algorithm has a time complexity of O(n!/(n - 2)!) where 'n' is the number of teams."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.predict_win:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.predict_win:5
 msgid "A list of probabilities of each team winning."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:1
 msgid "Rate multiple teams consisting of one of more agents. Order of teams determines rank."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:3
-#: ../../../openskill/rate.py:docstring of openskill.rate.team_rating:3
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:3
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.team_rating:3
 msgid "A list of teams, where teams are lists of :class:`~openskill.rate.Rating` objects."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:4
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:4
 msgid "A list of :class:`~int` where the lower values represent the winners."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:5
 msgid "A list of :class:`~int` where higher values represent the winners."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:6
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:6
 msgid "A :class:`~float` that modifies the additive dynamics factor."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:7
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:7
 msgid "A :class:`~bool` that prevents sigma from ever increasing."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.rate:9
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.rate:9
 msgid "Returns a list of :class:`~openskill.rate.Rating` objects."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.team_rating:1
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.team_rating:1
 msgid "Get the whole rating of a list of teams."
 msgstr ""
 
-#: ../../../openskill/rate.py:docstring of openskill.rate.team_rating:5
+#: ../../../../../../../../opt/hostedtoolcache/Python/3.11.0/x64/lib/python3.11/site-packages/openskill/rate.py:docstring of openskill.rate.team_rating:5
 msgid "Returns a list of lists containing `mu`, `sigma`, the `team` object and the current rank of the team."
 msgstr ""
 
