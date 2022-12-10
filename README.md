@@ -1,14 +1,62 @@
-[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-![](https://i.imgur.com/tSTFzZY.gif)
+<p style="text-align: center">
+  <img src="https://i.imgur.com/tSTFzZY.gif"
+       width="100%"
+       alt="Logo of OpenSkill for Python - Multiplayer rating system. Better than Elo."/>
+</p>
+
+<p style="text-align: center">
+    <a href="https://openskill.me">Multiplayer rating system. Better than Elo.</a>
+</p>
+
+<p style="text-align: center">OpenSkill is a faster and open license multi-team, multiplayer rating system comparable to TrueSkill.</p>
+
+<p style="text-align: center">
+    <a href="https://stand-with-ukraine.pp.ua">
+        <img
+            src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"
+            alt="Stand With Ukraine"
+        />
+    </a>
+</p>
+
+<p style="text-align: center">
+    <a
+        href="https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml">
+            <img
+                src="https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg"
+                alt="Tests"
+    />
+    </a>
+    <a
+        href="https://codecov.io/gh/OpenDebates/openskill.py">
+            <img
+                src="https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi"
+                alt="codecov" />
+    </a>
+    <img src="https://img.shields.io/pypi/dm/openskill"
+        alt="PyPI - Downloads"
+    />
+    <a
+        href="https://openskill.me/en/latest/?badge=latest">
+            <img
+                src="https://readthedocs.org/projects/openskillpy/badge/?version=latest"
+                    alt="Documentation Status"
+            />
+    </a>
+    <img
+        src="https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=contributors"
+    />
+</p>
 
 
-[![Tests](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg)](https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi)](https://codecov.io/gh/OpenDebates/openskill.py) ![PyPI - Downloads](https://img.shields.io/pypi/dm/openskill) [![Documentation Status](https://readthedocs.org/projects/openskillpy/badge/?version=latest)](https://openskill.me/en/latest/?badge=latest) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=contributors)
 
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/openskill/badges/version.svg)](https://anaconda.org/conda-forge/openskill)
+## Description
 
-A faster and open license multi-team, multiplayer rating system comparable to TrueSkill.
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/openskill) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/openskill)
 
-This is a port of the amazing [openskill.js](https://github.com/philihp/openskill.js) package and some of it's models are based on this wonderful [paper](https://jmlr.org/papers/v12/weng11a.html).
+
+This is a port of the amazing [openskill.js](https://github.com/philihp/openskill.js) package and some of it's models are based on this wonderful [paper](https://jmlr.org/papers/v12/weng11a.html). Designed for complex n-team, n-player matchups and ready out of the box with 5 different models and functions to suit your needs whether it be building video game leaderboards, matchmaking players or predicting how well a sports team will do.
+
 
 ## Installation
 ```shell
