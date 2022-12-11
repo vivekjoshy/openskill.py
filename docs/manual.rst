@@ -140,7 +140,7 @@ Sometimes you want to know what the likelihood is someone will place at a partic
    0.329538507466658
    >>> rank_probability = predict_rank(teams=[team_1, team_2, team_3])
    >>> rank_probability
-   [(1, 0.4450361350569973), (2, 0.19655022513040032), (3, 0.028875132345944337)]
+   [(1, 0.4450361350569973), (2, 0.19655022513040035), (3, 0.02887513234594437)]
    >>> sum([y for x, y in rank_probability]) + draw_probability
    1.0
 

@@ -42,7 +42,7 @@ jobs:
               python -m build
               twine check dist/*
               black --check .
-              pytest . --cov --cov-report=term-missing -vv
+              pytest . --cov --cov-report=term-missing -vv --doctest-glob="*.py"
               coverage report
               coverage html
               coverage xml --ignore-errors
