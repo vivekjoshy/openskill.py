@@ -7,7 +7,7 @@ from openskill.rate import predict_draw, predict_rank
 def test_predict_rank():
     a1 = Rating(mu=34, sigma=0.25)
     a2 = Rating(mu=32, sigma=0.25)
-    a3 = Rating(mu=34, sigma=0.25)
+    a3 = Rating(mu=30, sigma=0.25)
 
     b1 = Rating(mu=24, sigma=0.5)
     b2 = Rating(mu=22, sigma=0.5)
@@ -20,6 +20,11 @@ def test_predict_rank():
     ranks = predict_rank(teams=[team_1, team_2, team_3])
     total_rank_probability = sum([y for x, y in ranks])
     draw_probability = predict_draw(teams=[team_1, team_2, team_3])
+    assert total_rank_probability + draw_probability == pytest.approx(1)
+
+    ranks = predict_rank(teams=[team_1, team_1, team_1])
+    total_rank_probability = sum([y for x, y in ranks])
+    draw_probability = predict_draw(teams=[team_1, team_1, team_1])
     assert total_rank_probability + draw_probability == pytest.approx(1)
 
     with pytest.raises(ValueError):
