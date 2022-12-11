@@ -31,6 +31,7 @@ python_files = [
 	"*_test.py",
 	"tests.py"
 ]
+doctest_optionflags = "NUMBER"
 
 [build-system]
 requires = ["wheel", "setuptools"]
