@@ -4,6 +4,28 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 4.0.0 (2022-12-11)
+============================
+
+Breaking Changes
+----------------
+
+- Drop support for Python 3.7 (`#80 <https://github.com/OpenDebates/openskill.py/issues/80>`_)
+
+
+Features
+--------
+
+- Add support for PyPy 3.8 and 3.9 (`#80 <https://github.com/OpenDebates/openskill.py/issues/80>`_)
+- Drop scipy as dependency (`#80 <https://github.com/OpenDebates/openskill.py/issues/80>`_)
+
+
+Documentation Improvements
+--------------------------
+
+- Improve SEO of Documentation (`#80 <https://github.com/OpenDebates/openskill.py/issues/80>`_)
+
+
 Openskill 3.3.0 (2022-12-06)
 ============================
 
