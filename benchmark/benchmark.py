@@ -1,11 +1,9 @@
-from processors import Draw, Rank, Win
 from prompt_toolkit import HTML
 from prompt_toolkit import print_formatted_text as print
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import ValidationError, Validator
 
-from benchmark.processors import Competition
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,
@@ -13,6 +11,7 @@ from openskill.models import (
     ThurstoneMostellerFull,
     ThurstoneMostellerPart,
 )
+from processors import Draw, Rank, Win
 
 
 class NumberValidator(Validator):

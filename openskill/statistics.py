@@ -1,8 +1,7 @@
 import sys
+from statistics import NormalDist
 
-import scipy.stats
-
-normal = scipy.stats.norm(0, 1)
+normal = NormalDist()
 
 
 def phi_major(x):
@@ -10,7 +9,7 @@ def phi_major(x):
 
 
 def phi_major_inverse(x):
-    return normal.ppf(x)
+    return normal.inv_cdf(x)
 
 
 def phi_minor(x):
