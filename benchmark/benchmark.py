@@ -5,7 +5,6 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import ValidationError, Validator
 
-from benchmark.processors import Competition
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,

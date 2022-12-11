@@ -119,3 +119,25 @@ def unwind(ranks, teams) -> Tuple[List, List[int]]:
         return [x for x, _ in sorted_list], [x for _, x in sorted_list]
 
     return sorter(teams) if isinstance(teams, list) else sorter
+
+
+def rank_simple(vector):
+    return sorted(range(len(vector)), key=vector.__getitem__)
+
+
+def rank_minimum(a):
+    n = len(a)
+    i_vec = rank_simple(a)
+    s_vec = [a[rank] for rank in i_vec]
+    sum_ranks = 0
+    duplicate_count = 0
+    new_array = [0] * n
+    for i in range(n):
+        sum_ranks += i
+        duplicate_count += 1
+        if i == n - 1 or s_vec[i] != s_vec[i + 1]:
+            for j in range(i - duplicate_count + 1, i + 1):
+                new_array[i_vec[j]] = i + 1 - duplicate_count + 1
+            sum_ranks = 0
+            duplicate_count = 0
+    return new_array

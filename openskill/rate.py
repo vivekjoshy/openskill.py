@@ -4,14 +4,12 @@ import math
 from functools import reduce
 from typing import List, Optional, Tuple, Union
 
-from scipy.stats import rankdata
-
 from openskill.constants import Constants, beta
 from openskill.constants import mu as default_mu
 from openskill.constants import sigma as default_sigma
 from openskill.models.plackett_luce import PlackettLuce
 from openskill.statistics import phi_major, phi_major_inverse
-from openskill.util import rankings, unwind
+from openskill.util import rank_minimum, rankings, unwind
 
 
 class Rating:
@@ -461,7 +459,7 @@ def predict_rank(
     ]
 
     ranked_probability = [abs(_) for _ in win_probability]
-    ranks = list(rankdata(ranked_probability, method="min"))
+    ranks = list(rank_minimum(ranked_probability))
     max_ordinal = max(ranks)
     ranks = [abs(_ - max_ordinal) + 1 for _ in ranks]
     predictions = list(zip(ranks, ranked_probability))
