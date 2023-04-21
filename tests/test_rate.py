@@ -2,7 +2,6 @@ from openskill import Rating, rate
 
 
 def test_rate():
-
     # Accepts a tau term
     a = Rating(sigma=3)
     b = Rating(sigma=3)

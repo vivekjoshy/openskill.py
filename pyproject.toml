@@ -33,6 +33,78 @@ python_files = [
 ]
 doctest_optionflags = "NUMBER"
 
+[project]
+name = "openskill"
+authors = [
+    {name = "Taven", email = "taven@opendebates.net"},
+]
+maintainers = [
+  {name = "Taven", email = "taven@opendebates.net"}
+]
+description = "A faster, open-license alternative to Microsoft TrueSkill"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["ranking", "trueskill", "bayesian", "statistics", "rating"]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy"
+]
+dynamic = ["version"]
+
+
+[project.optional-dependencies]
+docs = [
+    "Sphinx>=6.1.3",
+    "furo>=2023.3.27",
+    "Pygments>=2.15.1",
+    "myst-parser>=1.0.0",
+    "sphinxext-opengraph>=0.8.2",
+    "sphinx-intl>=2.1.0"
+]
+tests = [
+    "pytest>=7.3.1",
+    "pytest-cov>=4.0.0"
+]
+release = [
+    "isort>=5.12.0",
+    "twine>=4.0.2",
+    "codecov>=2.1.13",
+    "bump2version>=1.0.1",
+    "black>=23.3.0",
+    "towncrier>=22.12.0",
+    "build>=0.10.0"
+]
+benchmarks = [
+    "jsonlines>=3.1.0",
+    "prompt-toolkit>=3.0.38",
+    "trueskill>=0.4.5",
+    "scikit-learn>=1.2.2",
+    "pandas>=2.0.0"
+]
+
+[project.urls]
+Documentation = "https://openskill.me/en/stable"
+Changelog = "https://github.com/OpenDebates/openskill.py/blob/main/CHANGELOG.rst"
+Funding = "https://github.com/sponsors/OpenDebates"
+Source = "https://github.com/OpenDebates/openskill.py"
+Tracker = "https://github.com/OpenDebates/openskill.py/issues"
+
+[tool.setuptools]
+packages = ["openskill"]
+
+[tool.setuptools.dynamic]
+version = {attr = "openskill.__version__"}
+
 [build-system]
 requires = ["wheel", "setuptools"]
 build-backend = "setuptools.build_meta"
