@@ -1,4 +1,4 @@
 from setuptools import setup
 
-# Metadata defined in setup.cfg
+# Metadata defined in pyproject.toml
 setup()

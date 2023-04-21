@@ -29,7 +29,6 @@ print(f"X has a {x_percent * 100: 0.2f}% chance of winning over Y\n")
 
 # Decay Rating - Assume 365 Days Passed
 for match in range(365):
-
     # Only player X's rating has decayed.
     if (x.mu < 25 + 3 * 25 / 3) or (x.mu > 25 - 3 * 25 / 3):
         x.mu /= mu_precision
