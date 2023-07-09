@@ -33,6 +33,9 @@ python_files = [
 ]
 doctest_optionflags = "NUMBER"
 
+[tool.isort]
+profile = "black"
+
 [project]
 name = "openskill"
 authors = [
@@ -72,6 +75,7 @@ docs = [
     "sphinx-intl>=2.1.0"
 ]
 tests = [
+    "tox>=4.6.4",
     "pytest>=7.3.1",
     "pytest-cov>=4.0.0"
 ]
@@ -79,6 +83,7 @@ release = [
     "isort>=5.12.0",
     "twine>=4.0.2",
     "codecov>=2.1.13",
+    "coverage>=7.2.7",
     "bump2version>=1.0.1",
     "black>=23.3.0",
     "towncrier>=22.12.0",
