@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openskill\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-06 19:50+0530\n"
-"PO-Revision-Date: 2022-12-10 20:03\n"
+"PO-Revision-Date: 2023-07-09 23:47\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -19,57 +19,57 @@ msgstr ""
 
 #: ../../index.rst:17
 msgid "License"
-msgstr ""
+msgstr "License"
 
 #: ../../index.rst:17
 msgid "Contributors"
-msgstr ""
+msgstr "Contributors"
 
 #: ../../index.rst:17
 msgid "Contribution Guidelines"
-msgstr ""
+msgstr "Contribution Guidelines"
 
 #: ../../index.rst:17
 msgid "Installation"
-msgstr ""
+msgstr "Installation"
 
 #: ../../index.rst:17
 msgid "User Manual"
-msgstr ""
+msgstr "User Manual"
 
 #: ../../index.rst:17
 msgid "Advanced Usage"
-msgstr ""
+msgstr "Advanced Usage"
 
 #: ../../index.rst:17
 msgid "Module Reference"
-msgstr ""
+msgstr "Module Reference"
 
 #: ../../index.rst:10
 msgid "openskill.py"
-msgstr ""
+msgstr "openskill.py"
 
 #: ../../index.rst:12
 msgid "This is the documentation of **openskill** for python. It is an n-player, n-team skill rating system with the ability to predict match outcomes (like win and draw) with upto 90% accuracy given enough data."
-msgstr ""
+msgstr "This is the documentation of **openskill** for python. It is an n-player, n-team skill rating system with the ability to predict match outcomes (like win and draw) with upto 90% accuracy given enough data."
 
 #: ../../index.rst:15
 msgid "Contents"
-msgstr ""
+msgstr "Contents"
 
 #: ../../index.rst:30
 msgid "Indices and tables"
-msgstr ""
+msgstr "Indices and tables"
 
 #: ../../index.rst:32
 msgid ":ref:`genindex`"
-msgstr ""
+msgstr ":ref:`genindex`"
 
 #: ../../index.rst:33
 msgid ":ref:`modindex`"
-msgstr ""
+msgstr ":ref:`modindex`"
 
 #: ../../index.rst:34
 msgid ":ref:`search`"
-msgstr ""
+msgstr ":ref:`search`"
 
