@@ -36,6 +36,10 @@ doctest_optionflags = "NUMBER"
 [tool.isort]
 profile = "black"
 
+[tool.mypy]
+python_version = "3.8"
+strict = true
+
 [project]
 name = "openskill"
 authors = [
