@@ -25,12 +25,15 @@ jobs:
         include:
           - os: Ubuntu
             python-version: "3.12-dev"
+            architecture: ["x86", "x64"]
             experimental: true
           - os: MacOS
             python-version: "3.12-dev"
+            architecture: ["x86", "x64"]
             experimental: true
           - os: Windows
             python-version: "3.12-dev"
+            architecture: ["x86", "x64"]
             experimental: true
     defaults:
       run:
