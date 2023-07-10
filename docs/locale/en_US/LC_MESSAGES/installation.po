@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openskill\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-06 19:50+0530\n"
-"PO-Revision-Date: 2022-12-10 20:03\n"
+"PO-Revision-Date: 2023-07-09 23:47\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -19,34 +19,34 @@ msgstr ""
 
 #: ../../installation.rst:5
 msgid "Installing the Library"
-msgstr ""
+msgstr "Installing the Library"
 
 #: ../../installation.rst:8
 msgid "For Users"
-msgstr ""
+msgstr "For Users"
 
 #: ../../installation.rst:10
 msgid "For production use, please install from pip."
-msgstr ""
+msgstr "For production use, please install from pip."
 
 #: ../../installation.rst:16
 #: ../../installation.rst:44
 msgid "Then verify it is working by running this command:"
-msgstr ""
+msgstr "Then verify it is working by running this command:"
 
 #: ../../installation.rst:23
 msgid "For Developers"
-msgstr ""
+msgstr "For Developers"
 
 #: ../../installation.rst:26
 msgid "Installing from source"
-msgstr ""
+msgstr "Installing from source"
 
 #: ../../installation.rst:28
 msgid "openskill.py is very easy to install from source. First clone the latest development version from the master branch."
-msgstr ""
+msgstr "openskill.py is very easy to install from source. First clone the latest development version from the master branch."
 
 #: ../../installation.rst:36
 msgid "Create a `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. You should now see your terminal change to show your are you now using a virtual environment. Let's install the package dependencies now. This may take a while depending on your machine."
-msgstr ""
+msgstr "Create a `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. You should now see your terminal change to show your are you now using a virtual environment. Let's install the package dependencies now. This may take a while depending on your machine."
 
