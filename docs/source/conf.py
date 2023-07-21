@@ -65,6 +65,10 @@ html_theme_options = {
 }
 html_css_files = [
     "custom.css",
+    "https://cdn.jsdelivr.net/npm/@docsearch/css@3&"
+]
+html_js_files = [
+    'custom.js',
 ]
 html_context = {
     "source_type": "github|gitlab",
