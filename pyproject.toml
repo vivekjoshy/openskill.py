@@ -49,7 +49,7 @@ authors = [
 maintainers = [
   {name = "Vivek Joshy", email = "vivek@opendebates.net"}
 ]
-description = "Multiplayer "
+description = "Multiplayer Rating System. No Friction."
 readme = "README.md"
 requires-python = "~=3.8"
 keywords = ["ranking", "trueskill", "statistics", "rating", "math", "rank"]
