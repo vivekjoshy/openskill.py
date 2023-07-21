@@ -40,6 +40,15 @@
         "test",
         "review"
       ]
+    },
+    {
+      "login": "CalColson",
+      "name": "Calvin P. Colson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14209384?v=4",
+      "profile": "https://github.com/CalColson",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
