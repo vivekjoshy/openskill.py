@@ -114,7 +114,7 @@ benchmarks = [
 ]
 
 [tool.pdm.build]
-includes = ["openskill/", "py.typed", "LICENSE", "README.md", "CHANGELOG.rst"]
+includes = ["openskill/", "openskill/py.typed", "LICENSE", "README.md", "CHANGELOG.rst"]
 is-purelib = true
 
 [build-system]
