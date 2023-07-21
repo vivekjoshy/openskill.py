@@ -1,70 +1,33 @@
 {
-    "projectName": "openskill.py",
-    "projectOwner": "OpenDebates",
-    "repoType": "github",
-    "repoHost": "https://github.com",
-    "files": ["CONTRIBUTORS.md"],
-    "imageSize": 100,
-    "commit": false,
-    "contributorsPerLine": 7,
-    "contributorsSortAlphabetically": false,
-    "badgeTemplate": "![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=Contributors)",
-    "linkToUsage": true,
-    "skipCi": true,
-    "contributors": [
-        {
-            "login": "vivekjoshy",
-            "name": "Vivek Joshy",
-            "avatar_url": "https://avatars.githubusercontent.com/u/8206808?v=4",
-            "profile": "https://github.com/vivekjoshy",
-            "contributions": [
-                "code",
-                "test",
-                "review",
-                "research",
-                "projectManagement",
-                "question",
-                "maintenance",
-                "doc",
-                "design",
-                "data",
-            ],
-        },
-        {
-            "login": "CalColson",
-            "name": "Calvin P. Colson",
-            "avatar_url": "https://avatars.githubusercontent.com/u/14209384?v=4",
-            "profile": "https://github.com/CalColson",
-            "contributions": ["doc"],
-        },
-        {
-            "login": "philihp",
-            "name": "Philihp Busby",
-            "avatar_url": "https://avatars.githubusercontent.com/u/1247668?v=4",
-            "profile": "https://philihp.com/",
-            "contributions": ["code", "test", "research", "data"],
-        },
-        {
-            "login": "martinazapletalova",
-            "name": "Martina Zapletalová",
-            "avatar_url": "https://avatars.githubusercontent.com/u/91736322?v=4",
-            "profile": "https://github.com/martinazapletalova",
-            "contributions": ["bug"],
-        },
-        {
-            "login": "Erotemic",
-            "name": "Jon Crall",
-            "avatar_url": "https://avatars.githubusercontent.com/u/3186211?v=4",
-            "profile": "https://erotemic.wordpress.com/",
-            "contributions": ["code"],
-        },
-        {
-            "login": "bstummer",
-            "name": "bstummer",
-            "avatar_url": "https://avatars.githubusercontent.com/u/52933850?v=4",
-            "profile": "https://github.com/bstummer",
-            "contributions": ["doc"],
-        },
-    ],
-    "commitConvention": "angular",
+  "projectName": "openskill.py",
+  "projectOwner": "OpenDebates",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "CONTRIBUTORS.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "vivekjoshy",
+      "name": "Vivek Joshy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8206808?v=4",
+      "profile": "https://taven.me/",
+      "contributions": [
+        "code",
+        "doc",
+        "data",
+        "design",
+        "financial",
+        "maintenance",
+        "research",
+        "test",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": true
 }
