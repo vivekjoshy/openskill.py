@@ -67,6 +67,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bstummer",
+      "name": "bstummer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52933850?v=4",
+      "profile": "https://github.com/bstummer",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
