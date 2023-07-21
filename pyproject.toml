@@ -78,7 +78,7 @@ Tracker = "https://github.com/OpenDebates/openskill.py/issues"
 [tool.pdm.dev-dependencies]
 docs = [
     "sphinx~=7.0",
-    "shibuya~=2023.3",
+    "shibuya~=2023.7",
     "pygments~=2.15",
     "myst-parser~=2.0",
     "sphinx-intl~=2.1",

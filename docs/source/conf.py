@@ -65,10 +65,6 @@ html_theme_options = {
 }
 html_css_files = [
     "custom.css",
-    "https://cdn.jsdelivr.net/npm/@docsearch/css@3&"
-]
-html_js_files = [
-    'custom.js',
 ]
 html_context = {
     "source_type": "github|gitlab",
@@ -120,6 +116,7 @@ ogp_type = "website"
 ogp_enable_meta_description = True
 
 # -- Options for Favicon output ---------------------------------------------
+html_favicon = "_static/favicon.ico"
 favicons = [
     {"href": "logo.svg"},
     {"href": "favicon-16x16.png"},
