@@ -130,3 +130,6 @@ dmypy.json
 
 # IDEA Folder
 .idea/
+
+# PDM
+/.pdm-build/

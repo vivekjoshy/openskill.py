@@ -4,6 +4,29 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 5.0.0 (2023-07-21)
+============================
+
+Breaking Changes
+----------------
+
+- All top level functions are now methods that must be called from model once it's been initialized. (`#101 <https://github.com/OpenDebates/openskill.py/issues/101>`_)
+
+
+Features
+--------
+
+- Add PEP-517 and PEP-518 compliance. (`#82 <https://github.com/OpenDebates/openskill.py/issues/82>`_)
+- Everything is strictly type hinted to let you use your IDE's autocomplete features. (`#101 <https://github.com/OpenDebates/openskill.py/issues/101>`_)
+
+
+Documentation Improvements
+--------------------------
+
+- All functions, methods and classes have docstrings now. There are also LaTeX equations in
+  docstrings when necessary. (`#101 <https://github.com/OpenDebates/openskill.py/issues/101>`_)
+
+
 Openskill 4.0.0 (2022-12-11)
 ============================
 

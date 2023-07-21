@@ -3,7 +3,6 @@ import math
 import time
 from typing import Union
 
-import jsonlines
 import numpy as np
 import pandas
 import trueskill
@@ -184,10 +183,16 @@ class Draw:
             2,
         )
         print(
-            HTML(f"Accuracy: <style fg='Yellow'>" f"{openskill_accuracy}%" f"</style>")
+            HTML(
+                f"Accuracy: <style fg='Yellow'>"
+                f"{openskill_accuracy: .2f}%"
+                f"</style>"
+            )
         )
         print(
-            HTML(f"Process Duration: <style fg='Yellow'>{self.openskill_time}</style>")
+            HTML(
+                f"Process Duration: <style fg='Yellow'>{self.openskill_time: .2f}</style>"
+            )
         )
         print("-" * 40)
         print(
@@ -213,12 +218,29 @@ class Draw:
             2,
         )
         print(
-            HTML(f"Accuracy: <style fg='Yellow'>" f"{trueskill_accuracy}%" f"</style>")
+            HTML(
+                f"Accuracy: <style fg='Yellow'>"
+                f"{trueskill_accuracy: .2f}%"
+                f"</style>"
+            )
         )
         print(
-            HTML(f"Process Duration: <style fg='Yellow'>{self.trueskill_time}</style>")
+            HTML(
+                f"Process Duration: <style fg='Yellow'>{self.trueskill_time: .2f}</style>"
+            )
         )
-        print(HTML(f"Mean Matches: <style fg='Yellow'>{mean}</style>"))
+        print("-" * 40)
+        print(HTML(f"Mean Matches: <style fg='Yellow'>{mean: .2f}</style>"))
+        speedup = (
+            (self.trueskill_time - self.openskill_time) / self.openskill_time
+        ) * 100
+        print(HTML(f"Speedup (%): <style fg='Yellow'>{speedup: .2f}</style>"))
+        accuracy_bump = (
+            (openskill_accuracy - trueskill_accuracy) / trueskill_accuracy
+        ) * 100
+        print(
+            HTML(f"Accuracy Bump (%): <style fg='Yellow'>{accuracy_bump: .2f}</style>")
+        )
 
     def consistent(self, match):
         if match["white_result"] == "win" and match["black_result"] == "checkmated":
@@ -271,20 +293,23 @@ class Draw:
         white_player: dict = match["white_username"]
         black_player: dict = match["black_username"]
 
-        os_white_player = openskill.Rating()
-        os_black_player = openskill.Rating()
+        m = self.model()
+        r = m.rating
+
+        os_white_player = r()
+        os_black_player = r()
 
         if result_status == "win":
-            white_player_result, black_player_result = openskill.rate(
-                [[os_white_player], [os_black_player]], model=self.model
+            white_player_result, black_player_result = m.rate(
+                [[os_white_player], [os_black_player]]
             )
         elif result_status == "loss":
-            black_player_result, white_player_result = openskill.rate(
-                [[os_black_player], [os_white_player]], model=self.model
+            black_player_result, white_player_result = m.rate(
+                [[os_black_player], [os_white_player]]
             )
         else:
-            white_player_result, black_player_result = openskill.rate(
-                [[os_white_player], [os_black_player]], model=self.model, rank=[1, 1]
+            white_player_result, black_player_result = m.rate(
+                [[os_white_player], [os_black_player]], ranks=[1, 1]
             )
 
         os_white_players = dict(zip([white_player], white_player_result))
@@ -330,13 +355,13 @@ class Draw:
         os_white_player = self.openskill_players[white_player]
         os_black_player = self.openskill_players[black_player]
 
-        white_win_probability, black_win_probability = openskill.predict_win(
+        m = self.model()
+
+        white_win_probability, black_win_probability = m.predict_win(
             [[os_white_player], [os_black_player]]
         )
 
-        draw_probability = openskill.predict_draw(
-            [[os_white_player], [os_black_player]]
-        )
+        draw_probability = m.predict_draw([[os_white_player], [os_black_player]])
 
         if draw_probability > (white_win_probability + black_win_probability):
             current_status = True

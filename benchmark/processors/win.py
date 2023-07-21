@@ -168,10 +168,16 @@ class Win:
             2,
         )
         print(
-            HTML(f"Accuracy: <style fg='Yellow'>" f"{openskill_accuracy}%" f"</style>")
+            HTML(
+                f"Accuracy: <style fg='Yellow'>"
+                f"{openskill_accuracy: .2f}%"
+                f"</style>"
+            )
         )
         print(
-            HTML(f"Process Duration: <style fg='Yellow'>{self.openskill_time}</style>")
+            HTML(
+                f"Process Duration: <style fg='Yellow'>{self.openskill_time: .2f}</style>"
+            )
         )
         print("-" * 40)
         print(
@@ -197,12 +203,29 @@ class Win:
             2,
         )
         print(
-            HTML(f"Accuracy: <style fg='Yellow'>" f"{trueskill_accuracy}%" f"</style>")
+            HTML(
+                f"Accuracy: <style fg='Yellow'>"
+                f"{trueskill_accuracy: .2f}%"
+                f"</style>"
+            )
         )
         print(
-            HTML(f"Process Duration: <style fg='Yellow'>{self.trueskill_time}</style>")
+            HTML(
+                f"Process Duration: <style fg='Yellow'>{self.trueskill_time: .2f}</style>"
+            )
         )
-        print(HTML(f"Mean Matches: <style fg='Yellow'>{mean}</style>"))
+        print(HTML(f"Mean Matches: <style fg='Yellow'>{mean: .2f}</style>"))
+        print("-" * 40)
+        speedup = (
+            (self.trueskill_time - self.openskill_time) / self.openskill_time
+        ) * 100
+        print(HTML(f"Speedup (%): <style fg='Yellow'>{speedup: .2f}</style>"))
+        accuracy_bump = (
+            (openskill_accuracy - trueskill_accuracy) / trueskill_accuracy
+        ) * 100
+        print(
+            HTML(f"Accuracy Bump (%): <style fg='Yellow'>{accuracy_bump: .2f}</style>")
+        )
 
     def consistent(self, match):
         result = match.get("result")
@@ -274,21 +297,22 @@ class Win:
         os_blue_players = {}
         os_red_players = {}
 
+        m = self.model()
+        r = m.rating
+
         for player in blue_team:
-            os_blue_players[player] = openskill.Rating()
+            os_blue_players[player] = r()
 
         for player in red_team:
-            os_red_players[player] = openskill.Rating()
+            os_red_players[player] = r()
 
         if won:
-            blue_team_result, red_team_result = openskill.rate(
+            blue_team_result, red_team_result = m.rate(
                 [list(os_blue_players.values()), list(os_red_players.values())],
-                model=self.model,
             )
         else:
-            red_team_result, blue_team_result = openskill.rate(
+            red_team_result, blue_team_result = m.rate(
                 [list(os_red_players.values()), list(os_blue_players.values())],
-                model=self.model,
             )
 
         os_blue_players = dict(zip(os_blue_players, blue_team_result))
@@ -346,7 +370,9 @@ class Win:
         for player in red_team:
             os_red_players[player] = self.openskill_players[player]
 
-        blue_win_probability, red_win_probability = openskill.predict_win(
+        m = self.model()
+
+        blue_win_probability, red_win_probability = m.predict_win(
             [list(os_blue_players.values()), list(os_red_players.values())]
         )
         if (blue_win_probability > red_win_probability) == won:

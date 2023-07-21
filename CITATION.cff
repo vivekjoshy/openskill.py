@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: 'OpenSkill: Multiplayer Rating System. No Friction.'
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Vivek
+    family-names: Joshy
+    email: vivek@opendebates.net
+    orcid: 'https://orcid.org/0000-0003-2443-8827'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.7806692
+    description: Zenodo
+repository-code: 'https://github.com/OpenDebates/openskill.py'
+url: 'https://openskill.me'
+abstract: >-
+  A faster and open license asymmetric multi-team,
+  multiplayer rating system comparable to TrueSkill.
+keywords:
+  - elo
+  - rating
+  - python
+  - ranking
+  - trueskill
+  - statistics
+  - matchmaking
+  - multiplayer
+license: MIT
