@@ -1,5 +1,40 @@
-from openskill.models.bradley_terry_full import BradleyTerryFull
-from openskill.models.bradley_terry_part import BradleyTerryPart
-from openskill.models.plackett_luce import PlackettLuce
-from openskill.models.thurstone_mosteller_full import ThurstoneMostellerFull
-from openskill.models.thurstone_mosteller_part import ThurstoneMostellerPart
+"""
+All objects specific to each model.
+"""
+
+from typing import List
+
+from openskill.models.weng_lin import (
+    BradleyTerryFull,
+    BradleyTerryFullRating,
+    BradleyTerryPart,
+    BradleyTerryPartRating,
+    PlackettLuce,
+    PlackettLuceRating,
+    ThurstoneMostellerFull,
+    ThurstoneMostellerFullRating,
+    ThurstoneMostellerPart,
+    ThurstoneMostellerPartRating,
+)
+
+__all__: List[str] = [
+    "BradleyTerryFull",
+    "BradleyTerryFullRating",
+    "BradleyTerryPart",
+    "BradleyTerryPartRating",
+    "PlackettLuce",
+    "PlackettLuceRating",
+    "ThurstoneMostellerFull",
+    "ThurstoneMostellerFullRating",
+    "ThurstoneMostellerPart",
+    "ThurstoneMostellerPartRating",
+    "MODELS",
+]
+
+MODELS = [
+    PlackettLuce,
+    BradleyTerryFull,
+    BradleyTerryPart,
+    ThurstoneMostellerFull,
+    ThurstoneMostellerPart,
+]
