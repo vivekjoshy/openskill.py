@@ -18,9 +18,10 @@ OpenSkill is a faster and open license asymmetric multi-team, multiplayer rating
    :caption: Contents:
 
    License </license.rst>
+   Installation </installation.rst>
    User Manual </manual.rst>
-   Contributors </contributors.rst>
-   Contribution Guidelines </contributing.rst>
+   Contributors <contributors>
+   Contribution Guidelines <contributing>
    Canonical API </internals.rst>
    References </references.rst>
 

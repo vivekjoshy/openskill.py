@@ -1,4 +1,4 @@
-.. _contributors:
+.. contributors_
 
-.. include:: ../CONTRIBUTORS.md
+.. include:: ../../CONTRIBUTORS.md
    :parser: myst_parser.sphinx_

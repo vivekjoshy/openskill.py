@@ -33,6 +33,7 @@ extensions: List[str] = [
     "sphinx_favicon",
     "sphinxext.opengraph",
     "sphinx_copybutton",
+    "myst_parser",
 ]
 
 templates_path: List[str] = ["_templates"]

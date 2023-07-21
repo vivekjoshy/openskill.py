@@ -285,7 +285,7 @@ A much higher draw probability! So keep in mind that the more teams you have, th
 you should account for that in your matchmaking service.
 
 Predicting Ranks
-----------------
+~~~~~~~~~~~~~~~~
 
 We can go even more fine grained and predict the ranks of the teams. This is useful if you want to match the lowest
 ranked teams with the highest ranked teams allowing you to quickly eliminate weaker players from quickly from a tournament.

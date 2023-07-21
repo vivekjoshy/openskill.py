@@ -1,8 +1,6 @@
-.. _license:
-
 =======
 License
 =======
 
-.. literalinclude:: ../LICENSE
+.. literalinclude:: ../../LICENSE
    :language: text

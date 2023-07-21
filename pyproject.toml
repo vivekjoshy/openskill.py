@@ -42,14 +42,14 @@ strict = true
 
 [project]
 name = "openskill"
-version = "4.0.0"
+version = "5.0.0"
 authors = [
     {name = "Vivek Joshy", email = "vivek@opendebates.net"},
 ]
 maintainers = [
   {name = "Vivek Joshy", email = "vivek@opendebates.net"}
 ]
-description = "Unleashed and Superior to TrueSkill"
+description = "Multiplayer "
 readme = "README.md"
 requires-python = "~=3.8"
 keywords = ["ranking", "trueskill", "statistics", "rating", "math", "rank"]
