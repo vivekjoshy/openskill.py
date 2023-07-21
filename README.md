@@ -42,7 +42,7 @@
             />
     </a>
     <img
-        src="https://img.shields.io/github/all-contributors/OpenDebates/openskill.py?label=contributors"
+        src="https://img.shields.io/github/all-contributors/OpenDebates/openskill.py/main"
     />
 </p>
 
