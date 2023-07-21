@@ -26,6 +26,20 @@
         "test",
         "review"
       ]
+    },
+    {
+      "login": "philihp",
+      "name": "‮Philihp Busby",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1247668?v=4",
+      "profile": "https://philihp.com/",
+      "contributions": [
+        "code",
+        "doc",
+        "data",
+        "research",
+        "test",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
