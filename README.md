@@ -52,7 +52,7 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/openskill) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/openskill)
 
-![Discord](https://img.shields.io/discord/1127581396345556994?logo=discord)
+[![Discord](https://img.shields.io/discord/1127581396345556994?logo=discord&label=Official%20Discord%20Server&color=%235865F2&link=https%3A%2F%2Fdiscord.com%2Finvite%2F4JNDeHMYkM)](https://discord.com/invite/4JNDeHMYkM)
 
 Here are *some*, but not all, of the reasons you should drop TrueSkill
 and bury Elo once and for all:
