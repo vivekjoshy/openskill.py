@@ -12,6 +12,9 @@ authors:
   - name: Vivek Joshy
     orcid: 0000-0003-2443-8827
     affiliation: 1
+affiliations:
+ - name: Independent Researcher, India
+   index: 1
 date: 21 July 2023
 bibliography: paper.bib
 ---
