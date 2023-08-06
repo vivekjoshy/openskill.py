@@ -1,94 +1,49 @@
-# Citizen Code of Conduct
+# Code of Conduct - Open Debates Project
 
-## 1. Purpose
+The Open Debates Project is an open-source project that aims to develop mathematical models for the digital verification of argument soundness. To foster a positive and inclusive community, we have established this Code of Conduct, which applies to all projects within the scope of the Open Debates Project. All participants are expected to adhere to these guidelines in order to maintain a friendly and respectful environment.
 
-A primary goal of OpenSkill Python is to be inclusive to the largest number of contributors, with the most varied and diverse backgrounds possible. As such, we are committed to providing a friendly, safe and welcoming environment for all, regardless of gender, sexual orientation, ability, ethnicity, socioeconomic status, and religion (or lack thereof).
+## Reporting Grievances
 
-This code of conduct outlines our expectations for all those who participate in our community, as well as the consequences for unacceptable behavior.
+If you have any grievances related to any project within the Open Debates Project, such as accusations or concerns about inappropriate behavior, please address them in a private manner. The appropriate channel for reporting grievances is by contacting the Steering Council or the Benevolent Dictator for Life (BDFL) privately. 
 
-We invite all those who participate in OpenSkill Python to help us create safe and positive experiences for everyone.
+Please do not publicize details of your grievances until after an investigation has concluded. Publicizing grievances prematurely will result in voiding impeachments and the barring of accused members from the community. Additionally, it is important to provide evidence to support any claims of inappropriate behavior to ensure fair and objective evaluations.
 
-## 2. Open [Source/Culture/Tech] Citizenship
+You can contact the BDFL via email at vivek@opendebates.net for reporting any grievances.
 
-A supplemental goal of this Code of Conduct is to increase open [source/culture/tech] citizenship by encouraging participants to recognize and strengthen the relationships between our actions and their effects on our community.
+## Compliance with Laws
 
-Communities mirror the societies in which they exist and positive action is essential to counteract the many forms of inequality and abuses of power that exist in society.
+All participants in any project within the Open Debates Project are expected to comply with the laws of their respective countries while engaging in these projects. Violations of legal obligations will not be tolerated.
 
-If you see someone who is making an extra effort to ensure our community is welcoming, friendly, and encourages all participants to contribute to the fullest extent, we want to know.
+## Appropriateness in Communication
 
-## 3. Expected Behavior
+To ensure a professional and inclusive atmosphere, it is essential that all communication within the projects adheres to certain standards:
 
-The following behaviors are expected and requested of all community members:
+1. **Inappropriate Content**: Do not portray or send inappropriate content in any public channels or areas of the projects. This includes but is not limited to offensive language, explicit material, or discriminatory content.
 
- * Participate in an authentic and active way. In doing so, you contribute to the health and longevity of this community.
- * Exercise consideration and respect in your speech and actions.
- * Attempt collaboration before conflict.
- * Refrain from demeaning, discriminatory, or harassing behavior and speech.
- * Be mindful of your surroundings and of your fellow participants. Alert community leaders if you notice a dangerous situation, someone in distress, or violations of this Code of Conduct, even if they seem inconsequential.
- * Remember that community event venues may be shared with members of the public; please be respectful to all patrons of these locations.
+2. **Politics**: Political content should not be discussed in public venues within the projects. Our focus is solely on the development and advancement of mathematical models for argument verification.
 
-## 4. Unacceptable Behavior
+## Active Participation
 
-The following behaviors are considered harassment and are unacceptable within our community:
+We encourage all participants to contribute actively and genuinely to the projects within the Open Debates Project in order to promote their health and longevity. Here are some guidelines for active participation:
 
- * Violence, threats of violence or violent language directed against another person.
- * Sexist, racist, homophobic, transphobic, ableist or otherwise discriminatory jokes and language.
- * Posting or displaying sexually explicit or violent material.
- * Posting or threatening to post other people's personally identifying information ("doxing").
- * Personal insults, particularly those related to gender, sexual orientation, race, religion, or disability.
- * Inappropriate photography or recording.
- * Inappropriate physical contact. You should have someone's consent before touching them.
- * Unwelcome sexual attention. This includes, sexualized comments or jokes; inappropriate touching, groping, and unwelcomed sexual advances.
- * Deliberate intimidation, stalking or following (online or in person).
- * Advocating for, or encouraging, any of the above behavior.
- * Sustained disruption of community events, including talks and presentations.
+1. **Consideration and Respect**: Exercise consideration and respect in your speech and actions towards other participants. Treat everyone with professionalism and courtesy.
 
-## 5. Weapons Policy
+2. **Collaboration over Conflict**: Whenever possible, attempt collaboration and seek common ground to resolve conflicts or disagreements instead of resorting to confrontational behavior.
 
-No weapons will be allowed at OpenSkill Python events, community spaces, or in other spaces covered by the scope of this Code of Conduct. Weapons include but are not limited to guns, explosives (including fireworks), and large knives such as those used for hunting or display, as well as any other item used for the purpose of causing injury or harm to others. Anyone seen in possession of one of these items will be asked to leave immediately, and will only be allowed to return without the weapon. Community members are further expected to comply with all state and local laws on this matter.
+3. **Demeaning, Discriminatory, or Harassing Behavior**: Refrain from engaging in any form of demeaning, discriminatory, or harassing behavior or speech. Treat others with kindness, empathy, and professionalism.
 
-## 6. Consequences of Unacceptable Behavior
+4. **Awareness of Surroundings**: Be mindful of your surroundings and fellow participants. If you notice a dangerous situation, someone in distress, or violations of this Code of Conduct, please alert the community leaders promptly, even if the situation seems inconsequential.
 
-Unacceptable behavior from any community member, including sponsors and those with decision-making authority, will not be tolerated.
+5. **Respect Public Event Venues**: During community events or gatherings related to the Open Debates Project, remember that event venues may be shared with members of the public. Please be respectful to all patrons of these locations during project-related activities.
 
-Anyone asked to stop unacceptable behavior is expected to comply immediately.
+## Amendments
 
-If a community member engages in unacceptable behavior, the community organizers may take any action they deem appropriate, up to and including a temporary ban or permanent expulsion from the community without warning (and without refund in the case of a paid event).
+This Code of Conduct may be amended from time to time by consensus of the Steering Council. Any proposed amendments must be made in writing and shared with the project's community for review and feedback. The final decision on amendments will be made by the Steering Council after considering the input received.
 
-## 7. Reporting Guidelines
+All participants in any project within the Open Debates Project are expected to follow the updated Code of Conduct once amendments have been approved and implemented.
 
-If you are subject to or witness unacceptable behavior, or have any other concerns, please notify a community organizer as soon as possible. taven@opendebates.net.
+By following these guidelines, we can create a positive and inclusive environment where all participants in projects within the Open Debates Project can thrive intellectually and socially.
 
-[Reporting guidelines](https://wiki.opendebates.net/en/grievances)
+Thank you for your contribution to the Open Debates Project!
 
-Additionally, community organizers are available to help community members engage with local law enforcement or to otherwise help those experiencing unacceptable behavior feel safe. In the context of in-person events, organizers will also provide escorts as desired by the person experiencing distress.
-
-## 8. Addressing Grievances
-
-If you feel you have been falsely or unfairly accused of violating this Code of Conduct, you should notify Open Debates Project with a concise description of your grievance. Your grievance will be handled in accordance with our existing governing policies. [Policy](https://wiki.opendebates.net/en/grievances)
-
-We will investigate any claims made in the report thoroughly and sufficient evidence is required for us to take action. We will not disclose any information that is sensitive and may damage the reputation of any community members
-
-## 9. Scope
-
-We expect all community participants (contributors, paid or otherwise; sponsors; and other guests) to abide by this Code of Conduct in all community venues--online and in-person--as well as in all one-on-one communications pertaining to community business.
-
-This code of conduct and its related procedures also applies to unacceptable behavior occurring outside the scope of community activities when such behavior has the potential to adversely affect the safety and well-being of community members.
-
-## 10. Contact info
-
-taven@opendebates.net
-
-## 11. License and attribution
-
-The Citizen Code of Conduct is distributed by [Stumptown Syndicate](http://stumptownsyndicate.org) under a [Creative Commons Attribution-ShareAlike license](http://creativecommons.org/licenses/by-sa/3.0/).
-
-Portions of text derived from the [Django Code of Conduct](https://www.djangoproject.com/conduct/) and the [Geek Feminism Anti-Harassment Policy](http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy).
-
-_Revision 2.3. Posted 6 March 2017._
-
-_Revision 2.2. Posted 4 February 2016._
-
-_Revision 2.1. Posted 23 June 2014._
-
-_Revision 2.0, adopted by the [Stumptown Syndicate](http://stumptownsyndicate.org) board on 10 January 2013. Posted 17 March 2013._
+*(Last updated: August 08, 2023)*
