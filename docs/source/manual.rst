@@ -51,7 +51,7 @@ The Basics
 
 First we have to initialize the mode we want to use. We will use the :py:class:`.PlackettLuce` model for this example.
 The :py:class:`.PlackettLuce` model is generally a good choice if you're not expecting large matches with lots of players and teams.
-On the whole, the all 5 models have the same capabilities, but some are more accurate and some are faster than others. It's up to
+On the whole, all the 5 models have the same capabilities, but some are more accurate and some are faster than others. It's up to
 you to test out what works for you.
 
 Let's start the example by importing the model from the package. All models live

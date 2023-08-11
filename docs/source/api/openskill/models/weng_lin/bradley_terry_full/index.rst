@@ -39,7 +39,7 @@ Classes
 
    :param mu: Represents the initial belief about the skill of
               a player before any matches have been played. Known
-              mostly as the mean of the Guassian prior distribution.
+              mostly as the mean of the Gaussian prior distribution.
 
               *Represented by:* :math:`\mu`
 
@@ -89,7 +89,7 @@ Classes
          A_q = |\{s: r(s) = r(q)\}|, q = 1,...,k
 
       :param team_ratings: The whole rating of a list of teams in a game.
-      :return: A list of Decimals.
+      :return: A list of integers.
 
 
    .. py:method:: _c(team_ratings)
@@ -123,7 +123,7 @@ Classes
       :return: A list of ranks for each team in the game.
 
 
-   .. py:method:: _calculate_team_ratings(game, ranks = None)
+   .. py:method:: _calculate_team_ratings(game, ranks = None, scores = None)
 
       Get the team ratings of a game.
 
@@ -131,6 +131,8 @@ Classes
                    :class:`BradleyTerryFullRating` objects.
 
       :param ranks: A list of ranks for each team in the game.
+
+      :param scores: A list of scores for each team in the game.
 
       :return: A list of :class:`BradleyTerryFullTeamRating` objects.
 
@@ -160,7 +162,7 @@ Classes
 
       :param c: The square root of the collective team sigma.
 
-      :return: A list of Decimals.
+      :return: A list of integers.
 
 
    .. py:method:: create_rating(rating, name = None)
@@ -217,11 +219,12 @@ Classes
       :param teams: A list of teams where each team is a list of
                     :class:`BradleyTerryFullRating` objects.
 
-      :param ranks: A list of Decimals where the lower values
+      :param ranks: A list of integers where the lower values
                     represent winners.
 
-      :param scores: A list of Decimals where higher values
-                    represent winners.
+      :param scores: A list of integers where higher values
+                    represent winners. Will be used to incorporate
+                    margin of victory into the model.
 
       :param tau: Additive dynamics parameter that prevents sigma from
                   getting too small to increase rating change volatility.
@@ -233,7 +236,7 @@ Classes
               :class:`BradleyTerryFullRating` objects.
 
 
-   .. py:method:: rating(mu = None, sigma = None, name = None)
+   .. py:method:: rating(mu = None, sigma = None, weight = 1.0, name = None)
 
       Returns a new rating object with your default parameters. The given
       parameters can be overriden from the defaults provided by the main
@@ -241,7 +244,7 @@ Classes
 
       :param mu: Represents the initial belief about the skill of
                  a player before any matches have been played. Known
-                 mostly as the mean of the Guassian prior distribution.
+                 mostly as the mean of the Gaussian prior distribution.
 
                  *Represented by:* :math:`\mu`
 
@@ -251,13 +254,16 @@ Classes
                     where :math:`z` is an integer that represents the
                     variance of the skill of a player.
 
+      :param weight: The weight of the player. This is used to determine
+                     the contribution of the player to the team's score.
+
       :param name: Optional name for the player.
 
       :return: :class:`BradleyTerryFullRating` object
 
 
 
-.. py:class:: BradleyTerryFullRating(mu, sigma, name = None)
+.. py:class:: BradleyTerryFullRating(mu, sigma, weight = 1.0, name = None)
 
 
    Bradley-Terry Full Pairing player rating data.
@@ -266,7 +272,7 @@ Classes
 
    :param mu: Represents the initial belief about the skill of
               a player before any matches have been played. Known
-              mostly as the mean of the Guassian prior distribution.
+              mostly as the mean of the Gaussian prior distribution.
 
               *Represented by:* :math:`\mu`
 
@@ -275,6 +281,9 @@ Classes
                  *Represented by:* :math:`\sigma = \frac{\mu}{z}`
                  where :math:`z` is an integer that represents the
                  variance of the skill of a player.
+
+   :param weight: The weight of the player. This is used to determine
+                  the contribution of the player to the team's score.
 
    :param name: Optional name for the player.
 

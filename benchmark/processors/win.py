@@ -11,7 +11,6 @@ from prompt_toolkit import print_formatted_text as print
 from prompt_toolkit.shortcuts import ProgressBar
 from sklearn.model_selection import train_test_split
 
-import openskill
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,
@@ -35,6 +34,7 @@ class Win:
         self,
         path,
         seed: int,
+        minimum_matches: int,
         model: Union[
             BradleyTerryFull,
             BradleyTerryPart,
@@ -45,11 +45,13 @@ class Win:
     ):
         self.data = list(jsonlines.open(path).iter())
         self.seed = seed
+        self.minimum_matches = minimum_matches
         self.model = model
 
         # Counters
         self.match_count = {}
-        self.confident_matches = 0
+        self.available_matches = 0
+        self.valid_matches = 0
         self.openskill_correct_predictions = 0
         self.openskill_incorrect_predictions = 0
         self.trueskill_correct_predictions = 0
@@ -120,6 +122,7 @@ class Win:
             for match in progress_bar(self.test_set, total=len(self.test_set)):
                 if self.valid_test(match=match):
                     self.verified_test_set.append(match)
+                    self.valid_matches += 1
 
         # Predict OpenSkill Matches
         title = HTML(f'<style fg="Blue">Predicting OpenSkill Matches:</style>')
@@ -142,9 +145,10 @@ class Win:
         print("-" * 40)
         print(
             HTML(
-                f"Confident Matches:  <style fg='Yellow'>{self.confident_matches}</style>"
+                f"Available Matches:  <style fg='Yellow'>{self.available_matches}</style>"
             )
         )
+        print(HTML(f"Valid Matches:  <style fg='Yellow'>{self.valid_matches}</style>"))
         print(
             HTML(
                 f"Predictions Made with OpenSkill's <style fg='Green'><u>{self.model.__name__}</u></style> Model:"
@@ -276,14 +280,14 @@ class Win:
         red_team: dict = teams.get("red")
 
         for player in blue_team:
-            if self.match_count[player] < 2:
+            if self.match_count[player] < self.minimum_matches:
                 return False
 
         for player in red_team:
-            if self.match_count[player] < 2:
+            if self.match_count[player] < self.minimum_matches:
                 return False
 
-        self.confident_matches += 1
+        self.available_matches += 1
         return True
 
     def process_openskill(self, match):
@@ -309,10 +313,12 @@ class Win:
         if won:
             blue_team_result, red_team_result = m.rate(
                 [list(os_blue_players.values()), list(os_red_players.values())],
+                ranks=[0, 1],
             )
         else:
             red_team_result, blue_team_result = m.rate(
                 [list(os_red_players.values()), list(os_blue_players.values())],
+                ranks=[0, 1],
             )
 
         os_blue_players = dict(zip(os_blue_players, blue_team_result))

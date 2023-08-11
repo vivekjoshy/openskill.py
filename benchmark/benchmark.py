@@ -1,4 +1,3 @@
-from processors import Draw, Rank, Win
 from prompt_toolkit import HTML
 from prompt_toolkit import print_formatted_text as print
 from prompt_toolkit import prompt
@@ -12,6 +11,7 @@ from openskill.models import (
     ThurstoneMostellerFull,
     ThurstoneMostellerPart,
 )
+from processors import Draw, Rank, Win
 
 
 class NumberValidator(Validator):
@@ -48,6 +48,13 @@ input_model = prompt("Enter Model: ", completer=model_completer)
 input_benchmark_type = prompt(
     "Benchmark Processor: ", completer=benchmark_types_completer
 )
+minimum_matches = int(
+    prompt("Minimum Matches Per Player: ", validator=NumberValidator())
+)
+if minimum_matches < 1:
+    print(HTML("<style fg='Red'>Invalid Match Count</style>"))
+    quit()
+
 input_seed = int(prompt("Enter Random Seed: ", validator=NumberValidator()))
 
 model = None
@@ -59,15 +66,30 @@ else:
 
 if input_benchmark_type in benchmark_type_names.keys() and model:
     if input_benchmark_type == "Win":
-        win_processor = Win(path="data/overwatch.jsonl", seed=input_seed, model=model)
+        win_processor = Win(
+            path="data/overwatch.jsonl",
+            seed=input_seed,
+            minimum_matches=minimum_matches,
+            model=model,
+        )
         win_processor.process()
         win_processor.print_result()
     elif input_benchmark_type == "Draw":
-        draw_processor = Draw(path="data/chess.csv", seed=input_seed, model=model)
+        draw_processor = Draw(
+            path="data/chess.csv",
+            seed=input_seed,
+            minimum_matches=minimum_matches,
+            model=model,
+        )
         draw_processor.process()
         draw_processor.print_result()
     elif input_benchmark_type == "Rank":
-        rank_processor = Rank(path="data/overwatch.jsonl", seed=input_seed, model=model)
+        rank_processor = Rank(
+            path="data/overwatch.jsonl",
+            seed=input_seed,
+            minimum_matches=minimum_matches,
+            model=model,
+        )
         rank_processor.process()
         rank_processor.print_result()
 else:

@@ -63,9 +63,6 @@ html_theme_options = {
     "light_logo": "_static/text_logo_light.svg",
     "dark_logo": "_static/text_logo_dark.svg",
 }
-html_css_files = [
-    "custom.css",
-]
 html_context = {
     "source_type": "github|gitlab",
     "source_user": "OpenDebates",
@@ -74,11 +71,11 @@ html_context = {
 
 html_copy_source = False
 html_show_sourcelink = False
+template_path = ["_templates"]
 
 # -- Options for AutoDoc output ---------------------------------------------'
 autodoc_typehints = "description"
 autodoc_preserve_defaults = True
-
 
 # -- Options for AutoAPI output ---------------------------------------------
 autoapi_root = "api"
@@ -106,7 +103,6 @@ bibtex_default_style = "alpha"
 # -- Options for MathJax output ---------------------------------------------
 mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 
-
 # -- Options for OpenGraph output ---------------------------------------------
 ogp_site_url = "https://openskill.me/en/stable/"
 ogp_site_name = "OpenSkill - Multiplayer Rating System. No Friction."
@@ -130,3 +126,18 @@ favicons = [
         "href": "site.webmanifest",
     },
 ]
+
+
+# -- Custom CSS and JS -------------------------------------------------------
+
+
+def setup(app):
+    # CSS
+    app.add_css_file(
+        "https://cdn.jsdelivr.net/npm/@docsearch/css@3", type="text/css; charset=utf-8"
+    )
+    app.add_css_file("css/custom.css")
+
+    # JavaScript
+    app.add_js_file("https://cdn.jsdelivr.net/npm/@docsearch/js@3")
+    app.add_js_file("js/custom.js")

@@ -6,8 +6,7 @@ import pathlib
 from statistics import NormalDist
 from typing import Any, Dict, List
 
-from openskill.models import MODELS, BradleyTerryFull, BradleyTerryPart, PlackettLuce
-from openskill.models.weng_lin.thurstone_mosteller_full import ThurstoneMostellerFull
+from openskill.models import MODELS
 
 # Normal Distribution
 mu_normal = NormalDist(mu=25.0, sigma=25.0 / 3.0)
