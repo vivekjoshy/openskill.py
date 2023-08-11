@@ -1,0 +1,1 @@
+Integrates Algolia Docsearch to Sphinx Docs
