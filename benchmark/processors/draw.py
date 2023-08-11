@@ -9,9 +9,9 @@ import trueskill
 from prompt_toolkit import HTML
 from prompt_toolkit import print_formatted_text as print
 from prompt_toolkit.shortcuts import ProgressBar
+from prompt_toolkit.styles import Style
 from sklearn.model_selection import train_test_split
 
-import openskill
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,
@@ -46,6 +46,7 @@ class Draw:
         self,
         path,
         seed: int,
+        minimum_matches: int,
         model: Union[
             BradleyTerryFull,
             BradleyTerryPart,
@@ -60,11 +61,13 @@ class Draw:
         for match_index, row in df.iterrows():
             self.data.append(row)
         self.seed = seed
+        self.minimum_matches = minimum_matches
         self.model = model
 
         # Counters
         self.match_count = {}
-        self.confident_matches = 0
+        self.available_matches = 0
+        self.valid_matches = 0
         self.openskill_correct_predictions = 0
         self.openskill_incorrect_predictions = 0
         self.trueskill_correct_predictions = 0
@@ -87,15 +90,24 @@ class Draw:
         self.trueskill_time = None
 
     def process(self):
+        style = Style.from_dict(
+            {
+                "label": "bg:#ffff00 #000000",
+                "percentage": "bg:#ffff00 #000000",
+                "current": "#448844",
+                "bar": "",
+            }
+        )
+
         title = HTML(f'<style fg="Red">Counting Matches</style>')
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             for match in progress_bar(self.data, total=len(self.data)):
                 if self.consistent(match=match):
                     self.count(match=match)
 
         # Check if data has sufficient history.
         title = HTML(f'<style fg="Red">Verifying History</style>')
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             for match in progress_bar(self.data, total=len(self.data)):
                 if self.consistent(match=match):
                     if self.has_sufficient_history(match=match):
@@ -111,7 +123,7 @@ class Draw:
         title = HTML(
             f'Updating OpenSkill Ratings with <style fg="Green">{self.model.__name__}</style> Model:'
         )
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             os_process_time_start = time.time()
             for match in progress_bar(self.training_set, total=len(self.training_set)):
                 self.process_openskill(match=match)
@@ -122,7 +134,7 @@ class Draw:
         title = HTML(
             f'Updating Ratings with <style fg="Green">TrueSkill</style> Model:'
         )
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             ts_process_time_start = time.time()
             for match in progress_bar(self.training_set, total=len(self.training_set)):
                 self.process_trueskill(match=match)
@@ -131,14 +143,15 @@ class Draw:
 
         # Process Test Set
         title = HTML(f'<style fg="Red">Processing Test Set</style>')
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             for match in progress_bar(self.test_set, total=len(self.test_set)):
                 if self.valid_test(match=match):
                     self.verified_test_set.append(match)
+                    self.valid_matches += 1
 
         # Predict OpenSkill Matches
         title = HTML(f'<style fg="Blue">Predicting OpenSkill Matches:</style>')
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             for match in progress_bar(
                 self.verified_test_set, total=len(self.verified_test_set)
             ):
@@ -146,7 +159,7 @@ class Draw:
 
         # Predict TrueSkill Matches
         title = HTML(f'<style fg="Blue">Predicting TrueSkill Matches:</style>')
-        with ProgressBar(title=title) as progress_bar:
+        with ProgressBar(title=title, style=style) as progress_bar:
             for match in progress_bar(
                 self.verified_test_set, total=len(self.verified_test_set)
             ):
@@ -157,9 +170,10 @@ class Draw:
         print("-" * 40)
         print(
             HTML(
-                f"Confident Matches:  <style fg='Yellow'>{self.confident_matches}</style>"
+                f"Available Matches:  <style fg='Yellow'>{self.available_matches}</style>"
             )
         )
+        print(HTML(f"Valid Matches:  <style fg='Yellow'>{self.valid_matches}</style>"))
         print(
             HTML(
                 f"Predictions Made with OpenSkill's <style fg='Green'><u>{self.model.__name__}</u></style> Model:"
@@ -278,13 +292,13 @@ class Draw:
         white_player: dict = match["white_username"]
         black_player: dict = match["black_username"]
 
-        if self.match_count[white_player] < 2:
+        if self.match_count[white_player] < self.minimum_matches:
             return False
 
-        if self.match_count[black_player] < 2:
+        if self.match_count[black_player] < self.minimum_matches:
             return False
 
-        self.confident_matches += 1
+        self.available_matches += 1
         return True
 
     def process_openskill(self, match):
