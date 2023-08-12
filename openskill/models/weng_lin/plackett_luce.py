@@ -738,17 +738,11 @@ class PlackettLuce:
         # 2 Player Case
         if n == 2:
             total_player_count = len(teams[0]) + len(teams[1])
-            draw_probability = 1 / total_player_count
             teams_ratings = self._calculate_team_ratings(teams)
             a = teams_ratings[0]
             b = teams_ratings[1]
-            draw_margin = (
-                math.sqrt(total_player_count)
-                * self.beta
-                * phi_major_inverse((1 + draw_probability) / 2)
-            )
             result = phi_major(
-                (a.mu - b.mu - draw_margin)
+                (a.mu - b.mu)
                 / math.sqrt(
                     total_player_count * self.beta**2
                     + a.sigma_squared
