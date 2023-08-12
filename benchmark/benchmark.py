@@ -92,7 +92,7 @@ if input_benchmark_type in benchmark_type_names.keys() and model:
         )
         rank_processor.process()
         rank_processor.print_result()
-    elif input_benchmark_type == "Weights":
+    elif input_benchmark_type == "Large":
         large_processor = Large(
             path="data/pubg.csv",
             seed=input_seed,
