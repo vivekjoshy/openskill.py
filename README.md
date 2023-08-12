@@ -1,8 +1,8 @@
 <p align="center" style="text-align: center">
-  <picture>
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/7yAVFkZ.png">
   <source media="(prefers-color-scheme: light)" srcset="https://i.imgur.com/UvrkUF3.png">
-  <img alt="Multiplayer Rating System. No Friction." src="https://i.imgur.com/7yAVFkZ.png">
+  <img alt="Multiplayer Rating System. No Friction." src="https://i.imgur.com/QJUy18S.png">
 </picture>
 </p>
 

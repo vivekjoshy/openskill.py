@@ -42,7 +42,7 @@ strict = true
 
 [project]
 name = "openskill"
-version = "5.0.0"
+version = "5.0.1"
 authors = [
     {name = "Vivek Joshy", email = "vivek@opendebates.net"},
 ]
@@ -64,6 +64,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy"
 ]
