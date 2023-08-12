@@ -1,3 +1,4 @@
+from processors import Draw, Large, Rank, Win
 from prompt_toolkit import HTML
 from prompt_toolkit import print_formatted_text as print
 from prompt_toolkit import prompt
@@ -11,7 +12,6 @@ from openskill.models import (
     ThurstoneMostellerFull,
     ThurstoneMostellerPart,
 )
-from processors import Draw, Rank, Win
 
 
 class NumberValidator(Validator):
@@ -39,7 +39,7 @@ models = [
 model_names = {m.__name__: m for m in models}
 model_completer = WordCompleter(list(model_names.keys()))
 
-benchmark_types = [Win, Draw, Rank]
+benchmark_types = [Win, Draw, Rank, Large]
 benchmark_type_names = {_.__name__: _ for _ in benchmark_types}
 benchmark_types_completer = WordCompleter(list(benchmark_type_names.keys()))
 
@@ -92,6 +92,15 @@ if input_benchmark_type in benchmark_type_names.keys() and model:
         )
         rank_processor.process()
         rank_processor.print_result()
-else:
-    print(HTML("<style fg='Red'>Processor Not Found</style>"))
-    quit()
+    elif input_benchmark_type == "Large":
+        large_processor = Large(
+            path="data/pubg.csv",
+            seed=input_seed,
+            minimum_matches=minimum_matches,
+            model=model,
+        )
+        large_processor.process()
+        large_processor.print_result()
+    else:
+        print(HTML("<style fg='Red'>Processor Not Found</style>"))
+        quit()

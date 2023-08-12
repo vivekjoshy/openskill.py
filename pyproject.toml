@@ -106,7 +106,10 @@ release = [
     "bump2version~=1.0",
 ]
 benchmarks = [
+    "rbo~=0.1",
+    "rich~=13.5.2",
     "pandas~=2.0",
+    "polars~=0.18",
     "trueskill~=0.4",
     "jsonlines~=3.1",
     "scikit-learn~=1.3",
