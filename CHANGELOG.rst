@@ -4,6 +4,21 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 5.0.1 (2023-08-12)
+============================
+
+Bugfixes
+--------
+
+- Fixes philihp/openskill.js#453 (`#106 <https://github.com/OpenDebates/openskill.py/issues/106>`_)
+
+
+Documentation Improvements
+--------------------------
+
+- Integrates Algolia Docsearch to Sphinx Docs (`#105 <https://github.com/OpenDebates/openskill.py/issues/105>`_)
+
+
 Openskill 5.0.0 (2023-07-21)
 ============================
 
