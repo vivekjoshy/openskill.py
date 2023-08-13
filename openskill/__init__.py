@@ -5,7 +5,7 @@ __all__: List[str] = []
 
 
 # Metadata
-__version__ = "5.0.1"
+__version__ = "5.0.2"
 __author__ = "Vivek Joshy"
 __email__ = "vivek@opendebates.net"
 __copyright__ = "Copyright 2023, Vivek Joshy"

@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 5.0.1 (2023-08-13)
+============================
+
+Documentation Improvements
+--------------------------
+
+- Improve SEO of Documentation (`#107 <https://github.com/OpenDebates/openskill.py/issues/107>`_)
+
+
 Openskill 5.0.1 (2023-08-12)
 ============================
 
