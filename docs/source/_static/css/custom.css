@@ -26,6 +26,9 @@ html.dark {
     0 -4px 8px 0 rgba(0, 0, 0, 0.2);
   --docsearch-logo-color: rgb(255, 255, 255);
   --docsearch-muted-color: rgb(127, 132, 151);
+
+  /* NB SPHINX */
+  --dataframe-tr: #0a0a0a
 }
 
 html.light {
@@ -72,4 +75,16 @@ html.light {
   --docsearch-footer-background: #fff;
   --docsearch-footer-shadow: 0 -1px 0 0 rgb(224, 227, 232),
     0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+
+  --dataframe-tr: #f5f5f5;
+}
+
+
+/* NB Sphinx */
+.jp-RenderedHTMLCommon tbody, div.rendered_html tbody {
+    color: var(--sy-c-text);
+}
+
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd), div.rendered_html tbody tr:nth-child(odd) {
+    background: var(--dataframe-tr) !important;
 }

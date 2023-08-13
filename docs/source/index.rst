@@ -1,16 +1,16 @@
 .. meta::
-   :description: A faster and open license asymmetric multi-team, multiplayer rating system comparable to TrueSkill.
+   :description: This advanced rating system is faster, accurate, and flexible with an open license. It supports multiple teams, factions, and predicts outcomes. Elevate your gaming experience with OpenSkill - the superior alternative to TrueSkill.
 
 
-:description: A faster and open license asymmetric multi-team, multiplayer rating system comparable to TrueSkill.
+:description: This advanced rating system is faster, accurate, and flexible with an open license. It supports multiple teams, factions, and predicts outcomes. Elevate your gaming experience with OpenSkill - the superior alternative to TrueSkill.
 
 
 .. image:: /_static/banner_agnostic.png
-    :alt: OpenSkill
+    :alt: OpenSkill - Multiplayer Rating System. No Friction.
     :align: center
 
 
-OpenSkill is a faster and open license asymmetric multi-team, multiplayer rating system comparable to TrueSkill.
+This advanced rating system is faster, accurate, and flexible with an open license. It supports multiple teams, factions, and predicts outcomes. Elevate your gaming experience with OpenSkill - the superior alternative to TrueSkill.
 
 
 .. toctree::
@@ -20,6 +20,8 @@ OpenSkill is a faster and open license asymmetric multi-team, multiplayer rating
    License </license.rst>
    Installation </installation.rst>
    User Manual </manual.rst>
+   Ordinals Explained <ordinal>
+   FAQ </faq.rst>
    Contributors <contributors>
    Contribution Guidelines <contributing>
    Canonical API </internals.rst>

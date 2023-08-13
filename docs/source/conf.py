@@ -34,6 +34,7 @@ extensions: List[str] = [
     "sphinxext.opengraph",
     "sphinx_copybutton",
     "myst_parser",
+    "nbsphinx"
 ]
 
 templates_path: List[str] = ["_templates"]
@@ -51,7 +52,7 @@ html_title = "OpenSkill: Multiplayer Rating System. No Friction."
 html_theme = "shibuya"
 html_static_path = ["_static"]
 html_theme_options = {
-    "dark_code": True,
+    "dark_code": False,
     "github_url": "https://github.com/OpenDebates/openskill.py",
     "discord_url": "https://discord.gg/4JNDeHMYkM",
     "light_css_variables": {

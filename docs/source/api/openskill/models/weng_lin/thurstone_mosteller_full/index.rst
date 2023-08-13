@@ -90,7 +90,7 @@ Classes
          A_q = |\{s: r(s) = r(q)\}|, q = 1,...,k
 
       :param team_ratings: The whole rating of a list of teams in a game.
-      :return: A list of integers.
+      :return: A list of Decimals.
 
 
    .. py:method:: _c(team_ratings)
@@ -161,7 +161,7 @@ Classes
 
       :param c: The square root of the collective team sigma.
 
-      :return: A list of integers.
+      :return: A list of Decimals.
 
 
    .. py:method:: create_rating(rating, name = None)
@@ -218,10 +218,10 @@ Classes
       :param teams: A list of teams where each team is a list of
                     :class:`ThurstoneMostellerFullRating` objects.
 
-      :param ranks: A list of integers where the lower values
+      :param ranks: A list of Decimals where the lower values
                     represent winners.
 
-      :param scores: A list of integers where higher values
+      :param scores: A list of Decimals where higher values
                     represent winners.
 
       :param tau: Additive dynamics parameter that prevents sigma from
