@@ -89,7 +89,7 @@ Classes
          A_q = |\{s: r(s) = r(q)\}|, q = 1,...,k
 
       :param team_ratings: The whole rating of a list of teams in a game.
-      :return: A list of integers.
+      :return: A list of Decimals.
 
 
    .. py:method:: _c(team_ratings)
@@ -123,7 +123,7 @@ Classes
       :return: A list of ranks for each team in the game.
 
 
-   .. py:method:: _calculate_team_ratings(game, ranks = None, scores = None)
+   .. py:method:: _calculate_team_ratings(game, ranks = None)
 
       Get the team ratings of a game.
 
@@ -131,8 +131,6 @@ Classes
                    :class:`BradleyTerryPartRating` objects.
 
       :param ranks: A list of ranks for each team in the game.
-
-      :param scores: A list of scores for each team in the game.
 
       :return: A list of :class:`BradleyTerryPartTeamRating` objects.
 
@@ -162,7 +160,7 @@ Classes
 
       :param c: The square root of the collective team sigma.
 
-      :return: A list of integers.
+      :return: A list of Decimals.
 
 
    .. py:method:: create_rating(rating, name = None)
@@ -219,10 +217,10 @@ Classes
       :param teams: A list of teams where each team is a list of
                     :class:`BradleyTerryPartRating` objects.
 
-      :param ranks: A list of integers where the lower values
+      :param ranks: A list of Decimals where the lower values
                     represent winners.
 
-      :param scores: A list of integers where higher values
+      :param scores: A list of Decimals where higher values
                     represent winners.
 
       :param tau: Additive dynamics parameter that prevents sigma from

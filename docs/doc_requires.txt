@@ -1,6 +1,8 @@
 sphinx~=7.0
-shibuya~=2023.3
+nbsphinx~=0.9
 pygments~=2.15
+shibuya~=2023.3
+ipykernel~=6.25
 myst_parser~=2.0  # Must Be Underscore, not Hyphen
 sphinx-intl~=2.1
 sphinx_favicon~=1.0
