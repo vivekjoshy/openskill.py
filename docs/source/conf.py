@@ -34,7 +34,7 @@ extensions: List[str] = [
     "sphinxext.opengraph",
     "sphinx_copybutton",
     "myst_parser",
-    "nbsphinx"
+    "nbsphinx",
 ]
 
 templates_path: List[str] = ["_templates"]
