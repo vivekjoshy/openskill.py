@@ -83,6 +83,11 @@ class ThurstoneMostellerFullRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
+    def __deepcopy__(self, memodict={}):
+        tmf = ThurstoneMostellerFullRating(self.mu, self.sigma, self.name)
+        tmf.id = self.id
+        return tmf
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, ThurstoneMostellerFullRating):
             if self.mu == other.mu and self.sigma == other.sigma:

@@ -80,6 +80,11 @@ class BradleyTerryPartRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
+    def __deepcopy__(self, memodict={}):
+        blp = BradleyTerryPartRating(self.mu, self.sigma, self.name)
+        blp.id = self.id
+        return blp
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, BradleyTerryPartRating):
             if self.mu == other.mu and self.sigma == other.sigma:
