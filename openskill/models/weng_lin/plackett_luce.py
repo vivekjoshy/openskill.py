@@ -4,6 +4,7 @@ Specific classes and functions for the Plackett-Luce model.
 """
 import copy
 import itertools
+import marshal
 import math
 import uuid
 from functools import reduce
@@ -73,6 +74,11 @@ class PlackettLuceRating:
 
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
+
+    def __deepcopy__(self, memodict={}):
+        plr = PlackettLuceRating(self.mu, self.sigma, self.name)
+        plr.id = self.id
+        return plr
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, PlackettLuceRating):
