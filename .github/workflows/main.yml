@@ -47,6 +47,7 @@ jobs:
         - name: "Upload Coverage to Codecov"
           uses: codecov/codecov-action@v3
           with:
+            token: ${{ secrets.CODECOV_TOKEN }}
             fail_ci_if_error: ${{ !matrix.experimental }}
   cpython-unstable:
     if:
@@ -86,6 +87,7 @@ jobs:
         - name: "Upload Coverage to Codecov"
           uses: codecov/codecov-action@v3
           with:
+            token: ${{ secrets.CODECOV_TOKEN }}
             fail_ci_if_error: ${{ !matrix.experimental }}
   pypy:
     if:
@@ -125,4 +127,5 @@ jobs:
         - name: "Upload Coverage to Codecov"
           uses: codecov/codecov-action@v3
           with:
+            token: ${{ secrets.CODECOV_TOKEN }}
             fail_ci_if_error: ${{ !matrix.experimental }}
