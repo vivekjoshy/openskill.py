@@ -80,7 +80,7 @@ class BradleyTerryPartRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
-    def __deepcopy__(self, memodict={}):
+    def __deepcopy__(self, memodict: Dict[Any, Any] = {}) -> "BradleyTerryPartRating":
         blp = BradleyTerryPartRating(self.mu, self.sigma, self.name)
         blp.id = self.id
         return blp
@@ -374,7 +374,11 @@ class BradleyTerryPart:
 
         :return: :class:`BradleyTerryPartRating` object
         """
-        return self.BradleyTerryPartRating(mu or self.mu, sigma or self.sigma, name)
+        return self.BradleyTerryPartRating(
+            mu if mu is not None else self.mu,
+            sigma if sigma is not None else self.sigma,
+            name,
+        )
 
     @staticmethod
     def create_rating(
