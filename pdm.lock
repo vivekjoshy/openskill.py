@@ -321,12 +321,12 @@ files = [
 
 [[package]]
 name = "chardet"
-version = "5.1.0"
+version = "5.2.0"
 requires_python = ">=3.7"
 summary = "Universal encoding detector for Python 3"
 files = [
-    {file = "chardet-5.1.0-py3-none-any.whl", hash = "sha256:362777fb014af596ad31334fde1e8c327dfdb076e1960d1694662d46a6917ab9"},
-    {file = "chardet-5.1.0.tar.gz", hash = "sha256:0d62712b956bc154f85fb0a266e2a3c5913c2967e00348701b32411d6def31e5"},
+    {file = "chardet-5.2.0-py3-none-any.whl", hash = "sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970"},
+    {file = "chardet-5.2.0.tar.gz", hash = "sha256:1b3b6ff479a8c414bc3fa2c0852995695c4a026dcd6d0633b2dd092ca39c1cf7"},
 ]
 
 [[package]]
@@ -1839,16 +1839,16 @@ files = [
 
 [[package]]
 name = "polars"
-version = "0.18.13"
+version = "0.18.15"
 requires_python = ">=3.8"
 summary = "Blazingly fast DataFrame library"
 files = [
-    {file = "polars-0.18.13-cp38-abi3-macosx_10_7_x86_64.whl", hash = "sha256:d71167aea2968d7f354f2553a56369684b66dca48efb7dc0963fee7041bfc267"},
-    {file = "polars-0.18.13-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:eaa55c2bfab114718f9605d3149d58d7f92f95533da1e23559994b7a12f9b3b2"},
-    {file = "polars-0.18.13-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:543d136666b8be18f679587b48bdc45b4541f332a9050f0ee90449cbf3d01a35"},
-    {file = "polars-0.18.13-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d052e18686c8a9b9a68c8360ad90e53886990460dc65aeb8f72d4c54859d398f"},
-    {file = "polars-0.18.13-cp38-abi3-win_amd64.whl", hash = "sha256:4b340a193144b2f5276b9c3c538784da80d9aca28ad5f27b7c183cdc292876bc"},
-    {file = "polars-0.18.13.tar.gz", hash = "sha256:b00d1c7700969c47f3202c5be54d074d99df51acb51943dc4b60cdcf759940fd"},
+    {file = "polars-0.18.15-cp38-abi3-macosx_10_7_x86_64.whl", hash = "sha256:f7a4e4108efd2ab728249f792c89d2e7baffd65e0d6cd9f09b6c395363e3fbea"},
+    {file = "polars-0.18.15-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:7dee57ecc6f6151f1f9b960f6baa5032ba5e967d3a0dc0cda830be20745be58c"},
+    {file = "polars-0.18.15-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2c713610c7c144f41987092e2ab2372937933fbdc494a65c08eea251af91b60f"},
+    {file = "polars-0.18.15-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c48d248891cfe62ee58f852dabf54c6bd85d4fc83b3b61b759534be0d3b6ec81"},
+    {file = "polars-0.18.15-cp38-abi3-win_amd64.whl", hash = "sha256:a2f1e3ad546b98601d06340606e90a8788c35e064b4d82d27301069ce744086e"},
+    {file = "polars-0.18.15.tar.gz", hash = "sha256:0c483fc1cfb25d07443c0d51eff9a18b94ccdbf6b252212767524412667ca870"},
 ]
 
 [[package]]
@@ -2823,24 +2823,24 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.8.0"
-requires_python = ">=3.7"
+version = "4.10.0"
+requires_python = ">=3.8"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
     "cachetools>=5.3.1",
-    "chardet>=5.1",
+    "chardet>=5.2",
     "colorama>=0.4.6",
     "filelock>=3.12.2",
     "packaging>=23.1",
-    "platformdirs>=3.9.1",
+    "platformdirs>=3.10",
     "pluggy>=1.2",
     "pyproject-api>=1.5.3",
     "tomli>=2.0.1; python_version < \"3.11\"",
-    "virtualenv>=20.24.1",
+    "virtualenv>=20.24.3",
 ]
 files = [
-    {file = "tox-4.8.0-py3-none-any.whl", hash = "sha256:4991305a56983d750a0d848a34242be290452aa88d248f1bf976e4036ee8b213"},
-    {file = "tox-4.8.0.tar.gz", hash = "sha256:2adacf435b12ccf10b9dfa9975d8ec0afd7cbae44d300463140d2117b968037b"},
+    {file = "tox-4.10.0-py3-none-any.whl", hash = "sha256:e4a1b1438955a6da548d69a52350054350cf6a126658c20943261c48ed6d4c92"},
+    {file = "tox-4.10.0.tar.gz", hash = "sha256:e041b2165375be690aca0ec4d96360c6906451380520e4665bf274f66112be35"},
 ]
 
 [[package]]
@@ -2931,7 +2931,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "20.24.2"
+version = "20.24.3"
 requires_python = ">=3.7"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2940,8 +2940,8 @@ dependencies = [
     "platformdirs<4,>=3.9.1",
 ]
 files = [
-    {file = "virtualenv-20.24.2-py3-none-any.whl", hash = "sha256:43a3052be36080548bdee0b42919c88072037d50d56c28bd3f853cbe92b953ff"},
-    {file = "virtualenv-20.24.2.tar.gz", hash = "sha256:fd8a78f46f6b99a67b7ec5cf73f92357891a7b3a40fd97637c27f854aae3b9e0"},
+    {file = "virtualenv-20.24.3-py3-none-any.whl", hash = "sha256:95a6e9398b4967fbcb5fef2acec5efaf9aa4972049d9ae41f95e0972a683fd02"},
+    {file = "virtualenv-20.24.3.tar.gz", hash = "sha256:e5c3b4ce817b0b328af041506a2a299418c98747c4b1e68cb7527e74ced23efc"},
 ]
 
 [[package]]

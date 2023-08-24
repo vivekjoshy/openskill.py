@@ -75,7 +75,7 @@ class BradleyTerryFullRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
-    def __deepcopy__(self, memodict={}):
+    def __deepcopy__(self, memodict: Dict[Any, Any] = {}) -> "BradleyTerryFullRating":
         blf = BradleyTerryFullRating(self.mu, self.sigma, self.name)
         blf.id = self.id
         return blf
@@ -369,7 +369,11 @@ class BradleyTerryFull:
 
         :return: :class:`BradleyTerryFullRating` object
         """
-        return self.BradleyTerryFullRating(mu or self.mu, sigma or self.sigma, name)
+        return self.BradleyTerryFullRating(
+            mu if mu is not None else self.mu,
+            sigma if sigma is not None else self.sigma,
+            name,
+        )
 
     @staticmethod
     def create_rating(

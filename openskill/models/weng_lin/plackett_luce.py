@@ -75,7 +75,7 @@ class PlackettLuceRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
-    def __deepcopy__(self, memodict={}):
+    def __deepcopy__(self, memodict: Dict[Any, Any] = {}) -> "PlackettLuceRating":
         plr = PlackettLuceRating(self.mu, self.sigma, self.name)
         plr.id = self.id
         return plr
@@ -370,7 +370,11 @@ class PlackettLuce:
 
         :return: :class:`PlackettLuceRating` object
         """
-        return self.PlackettLuceRating(mu or self.mu, sigma or self.sigma, name)
+        return self.PlackettLuceRating(
+            mu if mu is not None else self.mu,
+            sigma if sigma is not None else self.sigma,
+            name,
+        )
 
     @staticmethod
     def create_rating(

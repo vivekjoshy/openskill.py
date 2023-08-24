@@ -1,12 +1,30 @@
 """
 Tests common for all models.
 """
+from models import MODELS
 from openskill.models.common import (
     _arg_sort,
     _matrix_transpose,
     _rank_data,
     _unary_minus,
 )
+
+
+def test_model_rating() -> None:
+    """
+    Checks the cases where Falsy values are passed into rating methods.
+    """
+    for model in MODELS:
+        model = model(sigma=21)
+        player = model.rating(mu=0)
+        assert player.sigma == 21
+        assert player.mu == 0
+
+    for model in MODELS:
+        model = model(mu=22)
+        player = model.rating(sigma=0)
+        assert player.sigma == 0
+        assert player.mu == 22
 
 
 def test_unary_minus() -> None:

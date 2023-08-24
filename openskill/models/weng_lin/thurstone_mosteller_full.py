@@ -83,7 +83,9 @@ class ThurstoneMostellerFullRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
-    def __deepcopy__(self, memodict={}):
+    def __deepcopy__(
+        self, memodict: Dict[Any, Any] = {}
+    ) -> "ThurstoneMostellerFullRating":
         tmf = ThurstoneMostellerFullRating(self.mu, self.sigma, self.name)
         tmf.id = self.id
         return tmf
@@ -379,7 +381,9 @@ class ThurstoneMostellerFull:
         :return: :class:`ThurstoneMostellerFullRating` object
         """
         return self.ThurstoneMostellerFullRating(
-            mu or self.mu, sigma or self.sigma, name
+            mu if mu is not None else self.mu,
+            sigma if sigma is not None else self.sigma,
+            name,
         )
 
     @staticmethod
