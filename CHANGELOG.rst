@@ -4,6 +4,21 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 5.1.0 (2023-08-24)
+============================
+
+Features
+--------
+
+- Optimize rating objects for deepcopy (`#108 <https://github.com/OpenDebates/openskill.py/issues/108>`_)
+
+
+Bugfixes
+--------
+
+- model.rating() methods no longer revert to default model parameters when arguments are 0 (`#109 <https://github.com/OpenDebates/openskill.py/issues/109>`_)
+
+
 Openskill 5.0.2 (2023-08-13)
 ============================
 

@@ -42,7 +42,7 @@ strict = true
 
 [project]
 name = "openskill"
-version = "5.0.2"
+version = "5.1.0"
 authors = [
     {name = "Vivek Joshy", email = "vivek@opendebates.net"},
 ]
@@ -106,7 +106,7 @@ release = [
     "black[jupyter]~=23.7",
     "codecov~=2.1",
     "towncrier~=23.6",
-    "bump2version~=1.0",
+    "bump-my-version~=0.9.2",
 ]
 benchmarks = [
     "rbo~=0.1",
