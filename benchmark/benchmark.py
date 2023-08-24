@@ -1,4 +1,3 @@
-from processors import Draw, Large, Rank, Win
 from prompt_toolkit import HTML
 from prompt_toolkit import print_formatted_text as print
 from prompt_toolkit import prompt
@@ -12,6 +11,7 @@ from openskill.models import (
     ThurstoneMostellerFull,
     ThurstoneMostellerPart,
 )
+from processors import Draw, Large, Rank, Win
 
 
 class NumberValidator(Validator):

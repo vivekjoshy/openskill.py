@@ -1,7 +1,7 @@
 """
 Tests common for all models.
 """
-from models import MODELS
+from openskill.models import MODELS
 from openskill.models.common import (
     _arg_sort,
     _matrix_transpose,

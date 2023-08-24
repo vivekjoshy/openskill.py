@@ -4,7 +4,6 @@ Specific classes and functions for the Plackett-Luce model.
 """
 import copy
 import itertools
-import marshal
 import math
 import uuid
 from functools import reduce
