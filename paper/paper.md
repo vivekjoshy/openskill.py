@@ -118,6 +118,48 @@ Finally, running the project against a large dataset of PUBG online matches
 results in a Rank-Biased Overlap [@10.1145/1852102.1852106] of **64.11** and
 an accuracy of **92.03%**.
 
+# Discussion
+
+Our OpenSkill library has demonstrated significant improvements over
+proprietary models in terms of both speed and efficiency.
+However, we recognize that there are still areas that warrant further
+exploration and improvement.
+
+One such area is partial play. Ideally, a comprehensive skill ranking system
+should take into account both the winning and losing side of a game and adjust
+their ratings accordingly. Partial play, where only a subset of players are
+engaged during a match, presents a unique challenge in this regard. While it
+is theoretically easy to implement this feature, the lack of relevant
+data makes it difficult for us to verify its efficacy.
+Consequently, any modifications we make to such models run the risk of
+over-fitting the available data. The absence of a clearly defined metric
+for partial play further complicates matters, as different groups interpret
+it in various ways. Our interpretation of partial play pertains to
+the duration a player participates in a game, but significant work is
+required to operationalize this concept in a tangible way within our library.
+
+More substantially, as of now, OpenSkill does not support weight integration,
+where weights represent a player's contributions to an overall victory.
+The ability to assign different significance to different players based on
+their contributions could greatly improve the accuracy of a player's
+resulting skill rating. We realize the value of this feature,
+and it is a primary area of focus in our ongoing improvements to the library.
+
+On a positive note, OpenSkill does indeed support time decay,
+an important aspect of maintaining an accurate skill rating system.
+Over time, a player's skill can decrease due to inactivity;
+our library allows users to adjust the sigma value accordingly.
+This feature ensures that our library maintains its adaptability and
+relevance even when faced with variable player engagement levels.
+
+Despite these limitations, our OpenSkill library remains a powerful tool for
+video game developers and researchers tasked with competently evaluating
+player skills. It addresses several long-standing issues encountered in
+multiplayer video game ranking systems.
+By continuously seeking out improvements and refining our approach,
+we hope to make OpenSkill an ever more effective and flexible resource
+in the world of online gaming.
+
 # Acknowledgements
 
 We extend our sincere gratitude to Philihp Busby and the openskill.js project [@Busby_2023] for their valuable contributions,
