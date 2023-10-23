@@ -4,7 +4,7 @@ Common functions for the Weng-Lin models.
 import sys
 from itertools import zip_longest
 from statistics import NormalDist
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Tuple
 
 from openskill.models.common import _matrix_transpose
 

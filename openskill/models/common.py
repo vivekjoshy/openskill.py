@@ -1,7 +1,7 @@
 """
 Common functions for all models.
 """
-from typing import Any, List, Union
+from typing import Any, List
 
 
 def _unary_minus(number: float) -> float:

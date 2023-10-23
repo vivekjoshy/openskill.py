@@ -7,7 +7,7 @@ import itertools
 import math
 import uuid
 from functools import reduce
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type, Union
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
 from openskill.models.common import _rank_data, _unary_minus
 from openskill.models.weng_lin.common import _unwind, phi_major, phi_major_inverse
