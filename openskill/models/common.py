@@ -4,7 +4,7 @@ Common functions for all models.
 from typing import Any, List, Union
 
 
-def _unary_minus(number: Union[int, float]) -> Union[int, float]:
+def _unary_minus(number: float) -> float:
     """
     Takes value of a number and makes it negative.
 
