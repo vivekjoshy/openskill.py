@@ -4,16 +4,14 @@ Common functions for the Weng-Lin models.
 import sys
 from itertools import zip_longest
 from statistics import NormalDist
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Tuple
 
 from openskill.models.common import _matrix_transpose
 
 _normal = NormalDist()
 
 
-def _unwind(
-    tenet: List[Union[int, float]], objects: List[Any]
-) -> Tuple[List[Any], List[Union[int, float]]]:
+def _unwind(tenet: List[float], objects: List[Any]) -> Tuple[List[Any], List[float]]:
     """
     Retain the stochastic tenet of a sort to revert original sort order.
 
@@ -23,7 +21,7 @@ def _unwind(
     :return: Ordered objects and their tenets.
     """
 
-    def _pick_zeroth_index(item: Tuple[Union[int, float], Any]) -> Union[int, float]:
+    def _pick_zeroth_index(item: Tuple[float, Any]) -> float:
         """
         Returns the first item in a list.
 
@@ -34,7 +32,7 @@ def _unwind(
 
     def _sorter(
         objects_to_sort: List[Any],
-    ) -> Tuple[List[Any], List[Union[int, float]]]:
+    ) -> Tuple[List[Any], List[float]]:
         """
         Sorts a list of objects based on a tenet.
 
@@ -54,7 +52,7 @@ def _unwind(
     return _sorter(objects) if isinstance(objects, list) else _sorter
 
 
-def phi_major(x: Union[int, float]) -> float:
+def phi_major(x: float) -> float:
     """
     Normal cumulative distribution function.
 
@@ -64,7 +62,7 @@ def phi_major(x: Union[int, float]) -> float:
     return _normal.cdf(x)
 
 
-def phi_major_inverse(x: Union[int, float]) -> float:
+def phi_major_inverse(x: float) -> float:
     """
     Normal inverse cumulative distribution function.
 
@@ -74,7 +72,7 @@ def phi_major_inverse(x: Union[int, float]) -> float:
     return _normal.inv_cdf(x)
 
 
-def phi_minor(x: Union[int, float]) -> float:
+def phi_minor(x: float) -> float:
     """
     Normal probability density function.
 
@@ -84,7 +82,7 @@ def phi_minor(x: Union[int, float]) -> float:
     return _normal.pdf(x)
 
 
-def v(x: Union[int, float], t: Union[int, float]) -> float:
+def v(x: float, t: float) -> float:
     """
     The function :math:`V` as defined in :cite:t:`JMLR:v12:weng11a`
 
@@ -99,7 +97,7 @@ def v(x: Union[int, float], t: Union[int, float]) -> float:
     )
 
 
-def w(x: Union[int, float], t: Union[int, float]) -> float:
+def w(x: float, t: float) -> float:
     """
     The function :math:`W` as defined in :cite:t:`JMLR:v12:weng11a`
 
@@ -114,7 +112,7 @@ def w(x: Union[int, float], t: Union[int, float]) -> float:
     return v(x, t) * (v(x, t) + xt)
 
 
-def vt(x: Union[int, float], t: Union[int, float]) -> float:
+def vt(x: float, t: float) -> float:
     r"""
     The function :math:`\tilde{V}` as defined in :cite:t:`JMLR:v12:weng11a`
 
@@ -132,7 +130,7 @@ def vt(x: Union[int, float], t: Union[int, float]) -> float:
     return (-a if x < 0 else a) / b
 
 
-def wt(x: Union[int, float], t: Union[int, float]) -> float:
+def wt(x: float, t: float) -> float:
     r"""
     The function :math:`\tilde{W}` as defined in :cite:t:`JMLR:v12:weng11a`
 
