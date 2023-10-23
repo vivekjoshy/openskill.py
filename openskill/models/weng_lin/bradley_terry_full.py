@@ -614,9 +614,7 @@ class BradleyTerryFull:
         return math.sqrt(collective_team_sigma)
 
     @staticmethod
-    def _sum_q(
-        team_ratings: List[BradleyTerryFullTeamRating], c: float
-    ) -> List[float]:
+    def _sum_q(team_ratings: List[BradleyTerryFullTeamRating], c: float) -> List[float]:
         r"""
         Sum up all the values of :code:`mu / c` raised to :math:`e`.
 
@@ -728,9 +726,7 @@ class BradleyTerryFull:
             result.append(intermediate_result_per_team)
         return result
 
-    def predict_win(
-        self, teams: List[List[BradleyTerryFullRating]]
-    ) -> List[float]:
+    def predict_win(self, teams: List[List[BradleyTerryFullRating]]) -> List[float]:
         r"""
         Predict how likely a match up against teams of one or more players
         will go. This algorithm has a time complexity of
@@ -786,9 +782,7 @@ class BradleyTerryFull:
             )
         ]
 
-    def predict_draw(
-        self, teams: List[List[BradleyTerryFullRating]]
-    ) -> float:
+    def predict_draw(self, teams: List[List[BradleyTerryFullRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of

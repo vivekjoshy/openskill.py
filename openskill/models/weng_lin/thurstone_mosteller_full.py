@@ -607,9 +607,7 @@ class ThurstoneMostellerFull:
                 final_result.append(final_team)
         return final_result
 
-    def _c(
-        self, team_ratings: List[ThurstoneMostellerFullTeamRating]
-    ) -> float:
+    def _c(self, team_ratings: List[ThurstoneMostellerFullTeamRating]) -> float:
         r"""
         Calculate the square root of the collective team sigma.
 
@@ -819,9 +817,7 @@ class ThurstoneMostellerFull:
             )
         ]
 
-    def predict_draw(
-        self, teams: List[List[ThurstoneMostellerFullRating]]
-    ) -> float:
+    def predict_draw(self, teams: List[List[ThurstoneMostellerFullRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of

@@ -11,9 +11,7 @@ from openskill.models.common import _matrix_transpose
 _normal = NormalDist()
 
 
-def _unwind(
-    tenet: List[float], objects: List[Any]
-) -> Tuple[List[Any], List[float]]:
+def _unwind(tenet: List[float], objects: List[Any]) -> Tuple[List[Any], List[float]]:
     """
     Retain the stochastic tenet of a sort to revert original sort order.
 
