@@ -59,7 +59,7 @@ and bury Elo once and for all:
 
 - Multiplayer.
 - Multifaction.
-- Assymetric faction size.
+- Asymmetric faction size.
 - Predict Win, Draw and Rank Outcomes.
 - 150% faster than TrueSkill.
 - 100% Pure Python.
