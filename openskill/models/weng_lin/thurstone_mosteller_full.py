@@ -388,7 +388,7 @@ class ThurstoneMostellerFull:
 
     @staticmethod
     def create_rating(
-        rating: List[Union[Union[int, float]]], name: Optional[str] = None
+        rating: List[Union[int, float]], name: Optional[str] = None
     ) -> ThurstoneMostellerFullRating:
         """
         Create a :class:`ThurstoneMostellerFullRating` object from a list of `mu`

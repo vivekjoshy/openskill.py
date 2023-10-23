@@ -390,7 +390,7 @@ class ThurstoneMostellerPart:
 
     @staticmethod
     def create_rating(
-        rating: List[Union[Union[int, float]]], name: Optional[str] = None
+        rating: List[Union[int, float]], name: Optional[str] = None
     ) -> ThurstoneMostellerPartRating:
         """
         Create a :class:`ThurstoneMostellerPartRating` object from a list of `mu`

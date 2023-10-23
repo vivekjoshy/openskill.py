@@ -377,7 +377,7 @@ class BradleyTerryFull:
 
     @staticmethod
     def create_rating(
-        rating: List[Union[Union[int, float]]], name: Optional[str] = None
+        rating: List[Union[int, float]], name: Optional[str] = None
     ) -> BradleyTerryFullRating:
         """
         Create a :class:`BradleyTerryFullRating` object from a list of `mu`
