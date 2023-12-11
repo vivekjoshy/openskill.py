@@ -54,6 +54,8 @@
 
 [![Discord](https://img.shields.io/discord/1127581396345556994?logo=discord&label=Official%20Discord%20Server&color=%235865F2&link=https%3A%2F%2Fdiscord.com%2Finvite%2F4JNDeHMYkM)](https://discord.com/invite/4JNDeHMYkM)
 
+In the multifaceted world of online gaming, an accurate multiplayer rating system plays a crucial role. A multiplayer rating system measures and compares players' skill levels in competitive games to ensure balanced match-making, boosting overall gaming experiences. Currently, TrueSkill by Microsoft Research is a notable rating system, but gaming communities are yearning for faster, more adaptable alternatives.
+
 Here are *some*, but not all, of the reasons you should drop TrueSkill
 and bury Elo once and for all:
 
@@ -98,6 +100,12 @@ PlackettLuceRating(mu=23.035705378196937, sigma=8.177962604389991)
 >>> (a == b) and (x == y)
 True
 ```
+
+# Support
+If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
+If you can't find an answer, please open a new [discussion](https://github.com/OpenDebates/openskill.py/discussions) and we'll try to help you out.
+You can also get help from the official [Discord Server](https://discord.com/invite/4JNDeHMYkM>). If you have a feature request, or want to report
+a bug please create a new [issue](https://github.com/OpenDebates/openskill.py/issues/new/choose) if one already doesn't exist.
 
 # References
 This project is originally based off the [openskill.js](https://github.com/philihp/openskill.js) package. All of the Weng-Lin models are based off the work in this wonderful [paper](https://jmlr.org/papers/v12/weng11a.html) or are the derivatives of algorithms found in it.

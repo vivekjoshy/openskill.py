@@ -21,49 +21,104 @@ bibliography: paper.bib
 
 # Summary
 
-Online ranking has been a long-standing issue due to many players being stuck with a
-particular rank, known colloquially as "Elo Hell" [@Elo]. Another major issue
-is that most ranking systems are designed for 1v1 games, and do not scale well
-to multiplayer games. If they are designed for that purpose, the algorithms that
-are available are inefficient. This library is designed to  address all of these
-problems while being faster than and just as accurate as proprietary algorithms.
+In the realm of online gaming, player performance is often measured and
+compared through a system called online ranking. This system assigns a
+"rank" to players based on their performance and outcomes in games. A rank is
+a distinct level or position within a hierarchy that ostensibly represents a
+player's skill relative to others. One common criticism of this system is the
+phenomenon known as "Elo Hell", a situation where players find themselves
+trapped at a certain rank, unable to progress due to perceived flaws in how
+the ranking is calculated or due to the influence of team dynamics [@Elo].
+
+In the context of player ranking systems, several well-established models
+such as Elo and Glicko 2 have set the standard for performance measurement.
+However, a limitation becomes evident when these commonly used systems are
+considered for games that extend beyond two-player matchups.
+The Elo rating system [@elo_rating_1978], for one, was originally formulated
+for chess, a head-to-head game, and it struggles to adapt to the complex
+dynamics of multiplayer scenarios. Similarly, Glicko 2 [@Glicko2], while
+offering improvements in rating accuracy and accounting for player rating
+volatility, still falls short when tasked with accurately representing the
+individual contributions within a team-oriented game setting.
+
+This library represents a concrete implementation of an improved ranking
+system, specifically engineered to address the distinctive challenges of
+multiplayer gaming environments. It systematically corrects for the
+deficiencies of traditional ranking systems, providing a robust solution
+that ensures a fair and dynamic evaluation of each player’s skill level.
+In addition to delivering accuracy on par with implementations of
+proprietary models like TrueSkill [@herbrich2006trueskill], this system
+distinguishes itself through its enhanced speed in computing the ranks,
+facilitating a more responsive and gratifying player experience.
 
 # Statement of need
 
-Bayesian inference of skill ratings from game outcomes is a crucial aspect of online
-video game development and research. This is usually challenging because the players' performance changes
-over time and also varies based on who they are competing against. Our project primarily targets game developers
-and researchers interested in ranking players fairly and accurately. Nevertheless, the problem that the
-software solves is applicable to any context where you have multiple players or entities and you need to track
+Bayesian inference of skill ratings from game outcomes is a crucial aspect of
+online video game development and research. This is usually challenging
+because the players' performance changes over time and also varies based on
+who they are competing against. Our project primarily targets game developers
+and researchers interested in ranking players fairly and accurately.
+Nevertheless, the problem that the software solves is applicable to any
+context where you have multiple players or entities and you need to track
 their skills over time while they compete against each other.
 
-The OpenSkill library furnishes a versatile suite of models and algorithms designed to support a broad spectrum
-of applications. While popular use cases include assisting video game developers and researchers dealing with
-multi-agent scripting environments like Neural MMO [@suarez2019neural], its practical use extends far beyond this
-particular domain. For instance, it finds substantial utilization in recommendation systems, where it efficiently
-gauges unique user behaviors and preferences to suggest personalized recommendations. The matchmaking mechanisms
-in ranking of sports players as seen by Opta Analyst [@Rico_2022] and dating apps are another area where OpenSkill
-proves crucial, ensuring an optimal pairing based on the comparative ranking of user profiles' competencies.
+The OpenSkill library furnishes a versatile suite of models and algorithms
+designed to support a broad spectrum of applications. While popular use cases
+include assisting video game developers and researchers dealing with
+multi-agent scripting environments like Neural MMO [@suarez2019neural],
+its practical use extends far beyond this particular domain. For instance,
+it finds substantial utilization in recommendation systems, where it
+efficiently gauges unique user behaviors and preferences to suggest
+personalized recommendations. The matchmaking mechanisms in ranking of sports
+players as seen by Opta Analyst [@Rico_2022] and dating apps are another area
+where OpenSkill proves crucial, ensuring an optimal pairing based on the
+comparative ranking of user profiles' competencies.
 
-Derived from the research paper by Weng and Lin [@JMLR:v12:weng11a],
-OpenSkill offers a pure Python implementation of their models. Similar to TrueSkill,
-this framework is specifically designed for asymmetric multi-faction multiplayer games.
-However, OpenSkill boasts several advantages over proprietary models like TrueSkill [@herbrich2006trueskill].
-Notably, it delivers significantly faster rating updates, with performance gains of up to 150%.
-Additionally, OpenSkill features a more permissive license, enabling users to freely
-modify and distribute the library.
+Derived from the research paper by Weng and Lin [@JMLR:v12:weng11a], OpenSkill
+offers a pure Python implementation of their Bayesian approximation method for
+probabilistic models of ranked data. OpenSkill attempts to solve the same
+problems TrueSkill does. TrueSkill however employs factor graphs to model the
+probability distributions of players' skills, updating their ranks through
+Bayesian inference after each game by evaluating the likelihood of observed
+outcomes.
 
-OpenSkill includes five distinct models, each with its own unique characteristics and tradeoffs.
+Similar to TrueSkill this library is specifically designed for asymmetric
+multi-faction multiplayer games. In the games it's intended for, the term
+"asymmetric" means that teams might have varying numbers of players.
+For example, one team could have three players while another has just one.
+This creates an uneven playing field where the challenge is to balance
+these differences. The term "multi-faction" means that there are several
+distinct teams or groups within a single game. Unlike simple one-on-one
+contests, these games feature multiple teams, each potentially with a
+different number of players, all competing in the same match.
+This library aims to assess and balance player skill in such dynamic and
+complex game environments.
+
+A concern that users of TrueSkill are plagued with is that it's
+name is trademarked and the rating system itself is also patented
+[@Minka_Graepel_Herbrich_2013]. While there are open-source implementations
+released under permissive licences, Microsoft legally restricts their usage to
+non-commercial applications. In contrast, OpenSkill is not encumbered by
+patents, enabling users to freely modify and distribute the library even for
+commercial use cases.
+
+OpenSkill boasts several advantages over implementations of
+proprietary models like TrueSkill. Notably, it delivers faster
+rating updates, with 3 times the performance of the popular python open source
+implementation of TrueSkill as seen in @Lee_2018. OpenSkill also includes five
+distinct models, each with its own unique characteristics and tradeoffs.
 Among these models are partial pairing and full pairing approaches.
-Partial pairing models engage only a subset of players who are paired with each other
-during rating updates. This strategy considerably improves computational efficiency while
-sacrificing a certain level of accuracy. On the other hand, full pairing models leverage
-all available information within the paired data to make precise rating updates at the cost
-of increased computational requirements.
+Partial pairing models engage only a subset of players who are paired with
+each other during rating updates. This strategy considerably improves
+computational efficiency while sacrificing a certain level of accuracy.
+On the other hand, full pairing models leverage all available information
+within the paired data to make precise rating updates at the cost of increased
+computational requirements.
 
 # Usage
 
-To install the library simply `pip install openskill` and import the library. An conventional example of usage is given below:
+To install the library simply `pip install openskill` and import the library.
+A conventional example of usage is given below:
 
 ```python
 
@@ -82,25 +137,28 @@ PlackettLuceRating(mu=23.035705378196937, sigma=8.177962604389991)
 True
 ```
 
-Each player has a `mu` and a `sigma` value corresponding to their skill ($\mu$) and uncertainty ($\sigma$) in skill. Comparisons between two players can be done by calling the `ordinal()` method.
-In this case it would be on the instances of `PlackettLuceRating`.
+Each player has a `mu` and a `sigma` value corresponding to their skill
+($\mu$) and uncertainty ($\sigma$) in skill. Comparisons between two players
+can be done by calling the `ordinal()` method. In this case it would be on the
+instances of `PlackettLuceRating`.
 
 # Benchmarks
 
-A reproducible set of benchmarks are available in the `benchmark/` folder at the root of the openskill.py repository.
-Simply make sure the appropriate dataset files are available, run the `benchmark.py` file and select the appropriate
-options.
+A reproducible set of benchmarks are available in the `benchmark/` folder at
+the root of the openskill.py repository. Simply run the appropriate Jupyter
+Notebook file to run the relevant benchmark.
 
-Using a dataset of overwatch matches and player info, OpenSkill predicts the winners competitively with TrueSkill.
+Using a dataset of Overwatch [@joshy_2023_overwatch] matches and player info,
+OpenSkill predicts the winners competitively with TrueSkill.
 
 For games restricted to at least 2 matches per player:
 
-|                   | OpenSkill - PlackettLuce |  TrueSkill |
+|                   | OpenSkill - PlackettLuce | TrueSkill  |
 |:-----------------:|:------------------------:|:----------:|
-| Correct Matches   |           583            | 593        |
-| Incorrect Matches |            52            | 42         |
-| Accuracy          |        **91.81%**        | **93.39%** |
-| Runtime Duration  |        **0.77s**         | 2.32s      |
+|  Correct Matches  |           583            |    593     |
+| Incorrect Matches |            52            |     42     |
+|     Accuracy      |        **91.81%**        | **93.39%** |
+| Runtime Duration  |        **1.63s**         |   5.13s    |
 
 When restricted to 1 match per player:
 
@@ -109,10 +167,16 @@ When restricted to 1 match per player:
 | Correct Matches   |           791            |    794     |
 | Incorrect Matches |           342            |    339     |
 | Accuracy          |        **69.81%**        | **70.08%** |
-| Runtime Duration  |        **9.09s**         |   30.76s   |
+| Runtime Duration  |        **11.14s**         |   39.61    |
 
 Using a dataset of chess matches, we also see a similar trend, where OpenSkill
-predicts the same number of matches as TrueSkill, but in less time.
+gives a similar predictive performance to TrueSkill, but in less time.
+
+It should be noted that difference in speed may be partially due to the
+efficiency of the TrueSkill implementation in question. For instance, switching
+to Scipy backend in the TrueSkill implementation slows the inference to around
+8 seconds even though we should be expecting a speedup since Scipy drops into
+faster C code.
 
 Finally, running the project against a large dataset of PUBG online matches
 results in a Rank-Biased Overlap [@10.1145/1852102.1852106] of **64.11** and
@@ -160,11 +224,35 @@ By continuously seeking out improvements and refining our approach,
 we hope to make OpenSkill an ever more effective and flexible resource
 in the world of online gaming.
 
+# Related Packages
+
+This project was originally a direct port of the openskill.js project
+[@Busby_2023] from Javascript to Python. However, we have deviated
+slightly from their implementation in that we focus more on Python specific
+features, and thorough documentation of every object. All documented objects
+have the mathematical formulas from their respective papers included for easier
+inspection of code. We also provide an easy way to customize all the constants
+used in any model very easily. There are also published ports of OpenSkill in
+Elixir, Kotlin and Lua on GitHub.
+
+When comparing our OpenSkill to similar packages like that of Lee's
+TrueSkill implementation, we also provide support for PyPy 3, which uses a
+Just-In-Time compiler as opposed to the standard CPython implementation.
+We also support strict typing of objects, to enable auto-completion in your
+Integrated Development Environments (IDEs). Our development workflow also
+requires a test coverage of 100% being required for any code to be
+merged. This serves are as a starting point to prevent erroneous math from
+making it into the library.
+
 # Acknowledgements
 
-We extend our sincere gratitude to Philihp Busby and the openskill.js project [@Busby_2023] for their valuable contributions,
-which have significantly enhanced the speed and efficiency of the prediction methods.
-Special acknowledgment also goes to Jas Laferriere for their critical contribution of the additive dynamics factor.
-Your collective efforts have been instrumental in improving our work.
+We extend our sincere gratitude to Philihp Busby
+and the openskill.js project for their valuable contributions
+without which this project would not have been possible.
+Additionally, their inputs and contributions to the prediction methods, have
+significantly enhanced its speed and efficiency. Special acknowledgment also
+goes to Jas Laferriere for their critical contribution of the additive
+dynamics factor. Your collective efforts have been instrumental in improving
+our work.
 
 # References
