@@ -94,26 +94,26 @@ different number of players, all competing in the same match.
 This library aims to assess and balance player skill in such dynamic and
 complex game environments.
 
-A concern that users of TrueSkill are plagued with is that it's
-name is trademarked and the rating system itself is also patented
-[@Minka_Graepel_Herbrich_2013]. While there are open-source implementations
-released under permissive licences, Microsoft legally restricts their usage to
-non-commercial applications. In contrast, OpenSkill is not encumbered by
-patents, enabling users to freely modify and distribute the library even for
-commercial use cases.
+OpenSkill boasts several advantages over implementations of proprietary models
+like TrueSkill. Notably, it delivers faster rating updates, with 3 times the
+performance of the popular python open source implementation of TrueSkill as
+seen in @Lee_2018. OpenSkill also includes five distinct models, each with its
+own unique characteristics and tradeoffs. While all the models are general
+purpose, the recommended model for most use cases is Plackett-Luce. This model
+extends the regular Plackett-Luce as described in @Plackett_Luce by
+incorporating variance parameters to account for the probability that a
+certain team is the winner among a set of competing teams.
 
-OpenSkill boasts several advantages over implementations of
-proprietary models like TrueSkill. Notably, it delivers faster
-rating updates, with 3 times the performance of the popular python open source
-implementation of TrueSkill as seen in @Lee_2018. OpenSkill also includes five
-distinct models, each with its own unique characteristics and tradeoffs.
-Among these models are partial pairing and full pairing approaches.
-Partial pairing models engage only a subset of players who are paired with
-each other during rating updates. This strategy considerably improves
-computational efficiency while sacrificing a certain level of accuracy.
-On the other hand, full pairing models leverage all available information
-within the paired data to make precise rating updates at the cost of increased
-computational requirements.
+The Plackett-Luce model can be thought of as a generalized extension of the
+Braldey-Terry model originally introduced in @Bradley_Terry. Both models
+follow logistic distribution, while in contrast the Thurstone-Mosteller model
+follows the Gaussian distribution. Both models can be also used with partial
+pairing and full pairing approaches for rating updates. Partial pairing models
+engage only a subset of players who are paired with each other during rating
+updates. This strategy considerably improves computational efficiency while
+sacrificing a certain level of accuracy. On the other hand, full pairing
+models leverage all available information within the paired data to make
+precise rating updates at the cost of increased computational requirements.
 
 # Usage
 
@@ -233,7 +233,9 @@ features, and thorough documentation of every object. All documented objects
 have the mathematical formulas from their respective papers included for easier
 inspection of code. We also provide an easy way to customize all the constants
 used in any model very easily. There are also published ports of OpenSkill in
-Elixir, Kotlin and Lua on GitHub.
+[Elixir](https://github.com/philihp/openskill.ex),
+[Kotlin](https://github.com/brezinajn/openskill.kt) and
+[Lua](https://github.com/bstummer/openskill.lua) on GitHub.
 
 When comparing our OpenSkill to similar packages like that of Lee's
 TrueSkill implementation, we also provide support for PyPy 3, which uses a
