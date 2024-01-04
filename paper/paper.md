@@ -38,7 +38,7 @@ The Elo rating system [@elo_rating_1978], for one, was originally formulated
 for chess, a head-to-head game, and it struggles to adapt to the complex
 dynamics of multiplayer scenarios. Similarly, Glicko 2 [@Glicko2], while
 offering improvements in rating accuracy and accounting for player rating
-volatility, still falls short when tasked with accurately representing the
+volatility still falls short when tasked with accurately representing the
 individual contributions within a team-oriented game setting.
 
 This library represents a concrete implementation of an improved ranking
@@ -58,7 +58,7 @@ online video game development and research. This is usually challenging
 because the players' performance changes over time and also varies based on
 who they are competing against. Our project primarily targets game developers
 and researchers interested in ranking players fairly and accurately.
-Nevertheless, the problem that the software solves is applicable to any
+Nevertheless, the problem that the software solves applies to any
 context where you have multiple players or entities and you need to track
 their skills over time while they compete against each other.
 
@@ -68,7 +68,7 @@ include assisting video game developers and researchers dealing with
 multi-agent scripting environments like Neural MMO [@suarez2019neural],
 its practical use extends far beyond this particular domain. For instance,
 it finds substantial utilization in recommendation systems, where it
-efficiently gauges unique user behaviors and preferences to suggest
+efficiently gauges unique user behaviours and preferences to suggest
 personalized recommendations. The matchmaking mechanisms in ranking of sports
 players as seen by Opta Analyst [@Rico_2022] and dating apps are another area
 where OpenSkill proves crucial, ensuring an optimal pairing based on the
@@ -96,9 +96,9 @@ complex game environments.
 
 OpenSkill boasts several advantages over implementations of proprietary models
 like TrueSkill. Notably, it delivers faster rating updates, with 3 times the
-performance of the popular python open source implementation of TrueSkill as
+performance of the popular Python open-source implementation of TrueSkill as
 seen in @Lee_2018. OpenSkill also includes five distinct models, each with its
-own unique characteristics and tradeoffs. While all the models are general
+unique characteristics and tradeoffs. While all the models are general
 purpose, the recommended model for most use cases is Plackett-Luce. This model
 extends the regular Plackett-Luce as described in @Plackett_Luce by
 incorporating variance parameters to account for the probability that a
@@ -106,7 +106,7 @@ certain team is the winner among a set of competing teams.
 
 The Plackett-Luce model can be thought of as a generalized extension of the
 Braldey-Terry model originally introduced in @Bradley_Terry. Both models
-follow logistic distribution, while in contrast the Thurstone-Mosteller model
+follow logistic distribution, while in contrast, the Thurstone-Mosteller model
 follows the Gaussian distribution. Both models can be also used with partial
 pairing and full pairing approaches for rating updates. Partial pairing models
 engage only a subset of players who are paired with each other during rating
@@ -144,7 +144,7 @@ instances of `PlackettLuceRating`.
 
 # Benchmarks
 
-A reproducible set of benchmarks are available in the `benchmark/` folder at
+A reproducible set of benchmarks is available in the `benchmark/` folder at
 the root of the openskill.py repository. Simply run the appropriate Jupyter
 Notebook file to run the relevant benchmark.
 
@@ -172,8 +172,8 @@ When restricted to 1 match per player:
 Using a dataset of chess matches, we also see a similar trend, where OpenSkill
 gives a similar predictive performance to TrueSkill, but in less time.
 
-It should be noted that difference in speed may be partially due to the
-efficiency of the TrueSkill implementation in question. For instance, switching
+It should be noted that the difference in speed may be partially due to the
+the efficiency of the TrueSkill implementation in question. For instance, switching
 to Scipy backend in the TrueSkill implementation slows the inference to around
 8 seconds even though we should be expecting a speedup since Scipy drops into
 faster C code.
@@ -196,7 +196,7 @@ engaged during a match, presents a unique challenge in this regard. While it
 is theoretically easy to implement this feature, the lack of relevant
 data makes it difficult for us to verify its efficacy.
 Consequently, any modifications we make to such models run the risk of
-over-fitting the available data. The absence of a clearly defined metric
+overfitting the available data. The absence of a clearly defined metric
 for partial play further complicates matters, as different groups interpret
 it in various ways. Our interpretation of partial play pertains to
 the duration a player participates in a game, but significant work is
@@ -228,7 +228,7 @@ in the world of online gaming.
 
 This project was originally a direct port of the openskill.js project
 [@Busby_2023] from Javascript to Python. However, we have deviated
-slightly from their implementation in that we focus more on Python specific
+slightly from their implementation in that we focus more on Python-specific
 features, and thorough documentation of every object. All documented objects
 have the mathematical formulas from their respective papers included for easier
 inspection of code. We also provide an easy way to customize all the constants
@@ -242,8 +242,8 @@ TrueSkill implementation, we also provide support for PyPy 3, which uses a
 Just-In-Time compiler as opposed to the standard CPython implementation.
 We also support strict typing of objects, to enable auto-completion in your
 Integrated Development Environments (IDEs). Our development workflow also
-requires a test coverage of 100% being required for any code to be
-merged. This serves are as a starting point to prevent erroneous math from
+requires a test coverage of 100% for any code to be
+merged. This serves as a starting point to prevent erroneous math from
 making it into the library.
 
 # Acknowledgements
