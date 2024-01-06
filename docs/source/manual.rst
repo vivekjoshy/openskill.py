@@ -8,8 +8,9 @@ If you don't know what those are, please consider using a short resource on stat
 the terms. We recommend Khan Academy's short course on `statistics and probability <https://www.khanacademy.org/math/statistics-probability>`_.
 
 If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
-If you can't find an answer, please open a new discussion and we'll try to help you out.
-You can also get help from the official `Discord Server <https://discord.com/invite/4JNDeHMYkM>`_.
+If you can't find an answer, please open a new `discussion <https://github.com/OpenDebates/openskill.py/discussions>`_ and we'll try to help you out.
+You can also get help from the official `Discord Server <https://discord.com/invite/4JNDeHMYkM>`_. If you have a feature request, or want to report
+a bug please create a new `issue <https://github.com/OpenDebates/openskill.py/issues/new/choose>`_ if one already doesn't exist.
 
 Let's start with a short refresher:
 

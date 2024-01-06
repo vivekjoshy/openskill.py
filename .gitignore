@@ -135,4 +135,4 @@ dmypy.json
 /.pdm-build/
 
 # Data Files
-/benchmark/data/pubg.csv
+/benchmark/data/
