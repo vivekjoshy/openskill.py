@@ -155,19 +155,19 @@ For games restricted to at least 2 matches per player:
 
 |                   | OpenSkill - PlackettLuce | TrueSkill  |
 |:-----------------:|:------------------------:|:----------:|
-|  Correct Matches  |           583            |    593     |
-| Incorrect Matches |            52            |     42     |
-|     Accuracy      |        **91.81%**        | **93.39%** |
-| Runtime Duration  |        **1.63s**         |   5.13s    |
+|  Correct Matches  |           556            |    587     |
+| Incorrect Matches |            79            |     48     |
+|     Accuracy      |        **87.56%**        | **92.44%** |
+| Runtime Duration  |        **0.97s**         |   3.41s    |
 
 When restricted to 1 match per player:
 
 |                   | OpenSkill - PlackettLuce | TrueSkill  |
 |:-----------------:|:------------------------:|:----------:|
-| Correct Matches   |           791            |    794     |
-| Incorrect Matches |           342            |    339     |
-| Accuracy          |        **69.81%**        | **70.08%** |
-| Runtime Duration  |        **11.14s**         |   39.61    |
+| Correct Matches   |           799            |    830     |
+| Incorrect Matches |           334            |    303     |
+| Accuracy          |        **70.52%**        | **73.26%** |
+| Runtime Duration  |        **17.64s**        |   58.35    |
 
 Using a dataset of chess matches, we also see a similar trend, where OpenSkill
 gives a similar predictive performance to TrueSkill, but in less time.
@@ -233,9 +233,9 @@ features, and thorough documentation of every object. All documented objects
 have the mathematical formulas from their respective papers included for easier
 inspection of code. We also provide an easy way to customize all the constants
 used in any model very easily. There are also published ports of OpenSkill in
-[Elixir](https://github.com/philihp/openskill.ex),
-[Kotlin](https://github.com/brezinajn/openskill.kt) and
-[Lua](https://github.com/bstummer/openskill.lua) on GitHub.
+Elixir [@PhilihpOpenSkillElixir],
+Kotlin [@BrezinaOpenSkillKotlin] and
+Lua [@BstummerOpenSkillLua] on GitHub.
 
 When comparing our OpenSkill to similar packages like that of Lee's
 TrueSkill implementation, we also provide support for PyPy 3, which uses a
