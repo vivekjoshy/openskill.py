@@ -55,12 +55,6 @@ html_theme_options = {
     "dark_code": False,
     "github_url": "https://github.com/OpenDebates/openskill.py",
     "discord_url": "https://discord.gg/4JNDeHMYkM",
-    "light_css_variables": {
-        "--sy-rc-theme": "253, 150, 68",
-    },
-    "dark_css_variables": {
-        "--sy-rc-theme": "250, 130, 49",
-    },
     "light_logo": "_static/text_logo_light.svg",
     "dark_logo": "_static/text_logo_dark.svg",
 }
