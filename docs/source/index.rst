@@ -26,6 +26,7 @@ With the rise of varying team sizes in matches - known as asymmetric multi-team 
    Contributors <contributors>
    Contribution Guidelines <contributing>
    Canonical API </internals.rst>
+   Citation </citation.rst>
    References </references.rst>
 
 Index

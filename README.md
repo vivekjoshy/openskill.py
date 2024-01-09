@@ -30,10 +30,6 @@
             <img
                 src="https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi"
                 alt="codecov" />
-    </a>
-    <img src="https://img.shields.io/pypi/dm/openskill"
-        alt="PyPI - Downloads"
-    />
     <a
         href="https://openskill.me/en/latest/?badge=latest">
             <img
@@ -44,6 +40,9 @@
     <img
         src="https://img.shields.io/github/all-contributors/OpenDebates/openskill.py/main"
     />
+    <a style="border-width:0" href="https://doi.org/10.21105/joss.05901">
+      <img src="https://joss.theoj.org/papers/10.21105/joss.05901/status.svg" alt="DOI badge" >
+    </a>
 </p>
 
 
