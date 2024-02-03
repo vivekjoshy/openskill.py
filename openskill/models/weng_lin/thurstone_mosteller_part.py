@@ -801,16 +801,15 @@ class ThurstoneMostellerPart:
 
         pairwise_probabilities = []
         for pair_a, pair_b in itertools.permutations(teams, 2):
-            pair_a_subset = pair_a[0]
-            pair_b_subset = pair_b[0]
-            mu_a = pair_a_subset.mu
-            sigma_a = pair_a_subset.sigma
-            mu_b = pair_b_subset.mu
-            sigma_b = pair_b_subset.sigma
+            pair_a_subset = self._calculate_team_ratings([pair_a])
+            pair_b_subset = self._calculate_team_ratings([pair_b])
+            mu_a = pair_a_subset[0].mu
+            sigma_a = pair_a_subset[0].sigma_squared
+            mu_b = pair_b_subset[0].mu
+            sigma_b = pair_b_subset[0].sigma_squared
             pairwise_probabilities.append(
                 phi_major(
-                    (mu_a - mu_b)
-                    / math.sqrt(n * self.beta**2 + sigma_a**2 + sigma_b**2)
+                    (mu_a - mu_b) / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
@@ -844,20 +843,20 @@ class ThurstoneMostellerPart:
 
         pairwise_probabilities = []
         for pair_a, pair_b in itertools.permutations(teams, 2):
-            pair_a_subset = pair_a[0]
-            pair_b_subset = pair_b[0]
-            mu_a = pair_a_subset.mu
-            sigma_a = pair_a_subset.sigma
-            mu_b = pair_b_subset.mu
-            sigma_b = pair_b_subset.sigma
+            pair_a_subset = self._calculate_team_ratings([pair_a])
+            pair_b_subset = self._calculate_team_ratings([pair_b])
+            mu_a = pair_a_subset[0].mu
+            sigma_a = pair_a_subset[0].sigma_squared
+            mu_b = pair_b_subset[0].mu
+            sigma_b = pair_b_subset[0].sigma_squared
             pairwise_probabilities.append(
                 phi_major(
                     (draw_margin - mu_a + mu_b)
-                    / math.sqrt(n * self.beta**2 + sigma_a**2 + sigma_b**2)
+                    / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
                 )
                 - phi_major(
                     (mu_a - mu_b - draw_margin)
-                    / math.sqrt(n * self.beta**2 + sigma_a**2 + sigma_b**2)
+                    / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
@@ -892,16 +891,16 @@ class ThurstoneMostellerPart:
 
         pairwise_probabilities = []
         for pair_a, pair_b in itertools.permutations(teams, 2):
-            pair_a_subset = pair_a[0]
-            pair_b_subset = pair_b[0]
-            mu_a = pair_a_subset.mu
-            sigma_a = pair_a_subset.sigma
-            mu_b = pair_b_subset.mu
-            sigma_b = pair_b_subset.sigma
+            pair_a_subset = self._calculate_team_ratings([pair_a])
+            pair_b_subset = self._calculate_team_ratings([pair_b])
+            mu_a = pair_a_subset[0].mu
+            sigma_a = pair_a_subset[0].sigma_squared
+            mu_b = pair_b_subset[0].mu
+            sigma_b = pair_b_subset[0].sigma_squared
             pairwise_probabilities.append(
                 phi_major(
                     (mu_a - mu_b - draw_margin)
-                    / math.sqrt(n * self.beta**2 + sigma_a**2 + sigma_b**2)
+                    / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
                 )
             )
         win_probability = [
