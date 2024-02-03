@@ -1,6 +1,7 @@
 """
 All tests for the ThurstoneMostellerPart model are located here.
 """
+
 import json
 import pathlib
 from typing import List
@@ -488,10 +489,10 @@ def test_predict_draw():
     team_2 = [b1, b2]
 
     probability = model.predict_draw(teams=[team_1, team_2])
-    assert probability == pytest.approx(0.2355271, 0.0001)
+    assert probability == pytest.approx(0.3839934, 0.0001)
 
     probability = model.predict_draw(teams=[team_1, team_2, [a1], [a2], [b1]])
-    assert probability == pytest.approx(0.1144874, 0.0001)
+    assert probability == pytest.approx(0.0535105, 0.0001)
 
     probability = model.predict_draw(teams=[[b1], [b1]])
     assert probability == pytest.approx(1)

@@ -3,6 +3,7 @@ All models described in :cite:p:`JMLR:v12:weng11a` are implemented in this
 module. Some convenience and original methods are also provided to make it
 easier to instantiate and use the models.
 """
+
 from typing import List
 
 from openskill.models.weng_lin.bradley_terry_full import (

@@ -1,6 +1,7 @@
 """
 CLI utility to generate expected test data for the Weng-Lin models.
 """
+
 import json
 import pathlib
 from statistics import NormalDist

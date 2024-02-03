@@ -1,6 +1,7 @@
 """
 Common functions for all models.
 """
+
 from typing import Any, List
 
 

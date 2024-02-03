@@ -1,6 +1,7 @@
 """
 All tests common for Weng-Lin models are located here.
 """
+
 import random
 from typing import Any, List
 
