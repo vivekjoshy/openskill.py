@@ -49,7 +49,7 @@
 
 ## Description
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/openskill) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/openskill)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/openskill) ![Conda (channel only)](https://anaconda.org/conda-forge/openskill/badges/version.svg) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/openskill)
 
 [![Discord](https://img.shields.io/discord/1127581396345556994?logo=discord&label=Official%20Discord%20Server&color=%235865F2&link=https%3A%2F%2Fdiscord.com%2Finvite%2F4JNDeHMYkM)](https://discord.com/invite/4JNDeHMYkM)
 
