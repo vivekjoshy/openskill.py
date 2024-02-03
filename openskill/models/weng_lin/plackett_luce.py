@@ -2,6 +2,7 @@
 
 Specific classes and functions for the Plackett-Luce model.
 """
+
 import copy
 import itertools
 import math
@@ -897,9 +898,7 @@ class PlackettLuce:
         result = []
         for index, team in enumerate(game):
             mu_summed = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
-            sigma_squared = reduce(
-                lambda x, y: x + y, map(lambda p: p.sigma**2, team)
-            )
+            sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma**2, team))
             result.append(
                 PlackettLuceTeamRating(mu_summed, sigma_squared, team, rank[index])
             )

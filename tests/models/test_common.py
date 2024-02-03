@@ -1,6 +1,7 @@
 """
 Tests common for all models.
 """
+
 from openskill.models import MODELS
 from openskill.models.common import (
     _arg_sort,

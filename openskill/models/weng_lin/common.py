@@ -1,6 +1,7 @@
 """
 Common functions for the Weng-Lin models.
 """
+
 import sys
 from itertools import zip_longest
 from statistics import NormalDist

@@ -1,6 +1,7 @@
 """
 All tests for the BradleyTerryFull model are located here.
 """
+
 import json
 import pathlib
 from typing import List

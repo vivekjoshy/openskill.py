@@ -328,9 +328,9 @@ class BradleyTerryFull:
         self.limit_sigma: bool = limit_sigma
 
         # Model Data Container
-        self.BradleyTerryFullRating: Type[
+        self.BradleyTerryFullRating: Type[BradleyTerryFullRating] = (
             BradleyTerryFullRating
-        ] = BradleyTerryFullRating
+        )
 
     def __repr__(self) -> str:
         return f"BradleyTerryFull(mu={self.mu}, sigma={self.sigma})"
@@ -901,9 +901,7 @@ class BradleyTerryFull:
         result = []
         for index, team in enumerate(game):
             mu_summed = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
-            sigma_squared = reduce(
-                lambda x, y: x + y, map(lambda p: p.sigma**2, team)
-            )
+            sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma**2, team))
             result.append(
                 BradleyTerryFullTeamRating(mu_summed, sigma_squared, team, rank[index])
             )

@@ -341,9 +341,9 @@ class ThurstoneMostellerPart:
         self.limit_sigma: bool = limit_sigma
 
         # Model Data Container
-        self.ThurstoneMostellerPartRating: Type[
+        self.ThurstoneMostellerPartRating: Type[ThurstoneMostellerPartRating] = (
             ThurstoneMostellerPartRating
-        ] = ThurstoneMostellerPartRating
+        )
 
     def __repr__(self) -> str:
         return f"ThurstoneMostellerPart(mu={self.mu}, sigma={self.sigma})"
@@ -940,9 +940,7 @@ class ThurstoneMostellerPart:
         result = []
         for index, team in enumerate(game):
             mu_summed = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
-            sigma_squared = reduce(
-                lambda x, y: x + y, map(lambda p: p.sigma**2, team)
-            )
+            sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma**2, team))
             result.append(
                 ThurstoneMostellerPartTeamRating(
                     mu_summed, sigma_squared, team, rank[index]
