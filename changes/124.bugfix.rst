@@ -1,1 +1,0 @@
-Resolves incorrect predictions for matches of size greater than 2.

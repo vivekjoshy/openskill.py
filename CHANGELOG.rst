@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 5.1.1 (2024-02-03)
+============================
+
+Bugfixes
+--------
+
+- Resolves incorrect predictions for matches of size greater than 2. (`#124 <https://github.com/OpenDebates/openskill.py/issues/124>`_)
+
+
 Openskill 5.1.0 (2023-08-24)
 ============================
 
