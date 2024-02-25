@@ -14,6 +14,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/martinazapletalova"><img src="https://avatars.githubusercontent.com/u/91736322?v=4?s=100" width="100px;" alt="Martina Zapletalová"/><br /><sub><b>Martina Zapletalová</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/issues?q=author%3Amartinazapletalova" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://erotemic.wordpress.com/"><img src="https://avatars.githubusercontent.com/u/3186211?v=4?s=100" width="100px;" alt="Jon Crall"/><br /><sub><b>Jon Crall</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/commits?author=Erotemic" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bstummer"><img src="https://avatars.githubusercontent.com/u/52933850?v=4?s=100" width="100px;" alt="bstummer"/><br /><sub><b>bstummer</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/commits?author=bstummer" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/StephenBartos"><img src="https://avatars.githubusercontent.com/u/27743409?v=4?s=100" width="100px;" alt="Stephen Bartos"/><br /><sub><b>Stephen Bartos</b></sub></a><br /><a href="https://github.com/OpenDebates/openskill.py/commits?author=StephenBartos" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
