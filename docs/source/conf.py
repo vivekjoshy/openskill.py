@@ -60,9 +60,11 @@ html_theme_options = {
     "dark_logo": "_static/text_logo_dark.svg",
 }
 html_context = {
-    "source_type": "github|gitlab",
+    "source_type": "github",
     "source_user": "OpenDebates",
     "source_repo": "openskill.py",
+    "source_version": "main",
+    "source_docs_path": "/docs/source/",
 }
 
 html_copy_source = False

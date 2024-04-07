@@ -593,7 +593,10 @@ class ThurstoneMostellerPart:
         # Possible Final Result
         final_result = processed_result
 
-        if limit_sigma:
+        if limit_sigma is not None:
+            self.limit_sigma = limit_sigma
+
+        if self.limit_sigma:
             final_result = []
 
             # Reuse processed_result
