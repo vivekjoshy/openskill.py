@@ -1,49 +1,64 @@
-# Code of Conduct - Open Debates Project
+## Code of Conduct
 
-The Open Debates Project is an open-source project that aims to develop mathematical models for the digital verification of argument soundness. To foster a positive and inclusive community, we have established this Code of Conduct, which applies to all projects within the scope of the Open Debates Project. All participants are expected to adhere to these guidelines in order to maintain a friendly and respectful environment.
+**OpenSkill**, is a project committed to fostering a welcoming and inclusive environment for all contributors. We believe that everyone should feel safe and respected, regardless of their background, identity, or skill level.
 
-## Reporting Grievances
+This Code of Conduct outlines the expected behavior for all participants in the OpenSkill project, including contributors, maintainers, users, and anyone interacting with the project.
 
-If you have any grievances related to any project within the Open Debates Project, such as accusations or concerns about inappropriate behavior, please address them in a private manner. The appropriate channel for reporting grievances is by contacting the Steering Council or the Benevolent Dictator for Life (BDFL) privately. 
+### Our Commitment
 
-Please do not publicize details of your grievances until after an investigation has concluded. Publicizing grievances prematurely will result in voiding impeachments and the barring of accused members from the community. Additionally, it is important to provide evidence to support any claims of inappropriate behavior to ensure fair and objective evaluations.
+We are committed to providing a welcoming and inclusive community for all participants. We strive to foster a space where:
 
-You can contact the BDFL via email at vivek@opendebates.net for reporting any grievances.
+* **Respect** is paramount, and all individuals are treated with dignity and consideration.
+* **Collaboration** is encouraged, and everyone feels empowered to contribute to the project.
+* **Openness** is valued, and ideas are shared freely in a constructive manner.
+* **Diversity** is celebrated, and perspectives from all backgrounds are welcomed.
 
-## Compliance with Laws
+### Expected Behavior
 
-All participants in any project within the Open Debates Project are expected to comply with the laws of their respective countries while engaging in these projects. Violations of legal obligations will not be tolerated.
+We expect all participants to:
 
-## Appropriateness in Communication
+* **Be respectful** of others, even when disagreeing.
+* **Use inclusive language** and avoid discriminatory or offensive comments.
+* **Be constructive** in their feedback and discussions.
+* **Be patient** and understanding with others.
+* **Follow the project's guidelines and policies.**
+* **Report any violations** of this Code of Conduct.
 
-To ensure a professional and inclusive atmosphere, it is essential that all communication within the projects adheres to certain standards:
+### Unacceptable Behavior
 
-1. **Inappropriate Content**: Do not portray or send inappropriate content in any public channels or areas of the projects. This includes but is not limited to offensive language, explicit material, or discriminatory content.
+We will not tolerate any behavior that:
 
-2. **Politics**: Political content should not be discussed in public venues within the projects. Our focus is solely on the development and advancement of mathematical models for argument verification.
+* **Harasses, bullies, or intimidates** others.
+* **Is discriminatory** based on race, religion, gender, sexual orientation, disability, or any other personal characteristic.
+* **Is offensive** or uses inappropriate language.
+* **Violates the privacy** of others.
+* **Promotes violence or illegal activities.**
+* **Is disruptive** or interferes with the project's progress.
 
-## Active Participation
+### Reporting Violations
 
-We encourage all participants to contribute actively and genuinely to the projects within the Open Debates Project in order to promote their health and longevity. Here are some guidelines for active participation:
+If you experience or witness a violation of this Code of Conduct, please report it **privately** using the following form:
 
-1. **Consideration and Respect**: Exercise consideration and respect in your speech and actions towards other participants. Treat everyone with professionalism and courtesy.
+https://openskill.youtrack.cloud/form/f2b97d40-c27d-4617-9bea-7f2152a1db1f
 
-2. **Collaboration over Conflict**: Whenever possible, attempt collaboration and seek common ground to resolve conflicts or disagreements instead of resorting to confrontational behavior.
+All reports will be taken seriously and investigated promptly. Your identity will be kept confidential unless you choose to disclose it.
 
-3. **Demeaning, Discriminatory, or Harassing Behavior**: Refrain from engaging in any form of demeaning, discriminatory, or harassing behavior or speech. Treat others with kindness, empathy, and professionalism.
+### Enforcement
 
-4. **Awareness of Surroundings**: Be mindful of your surroundings and fellow participants. If you notice a dangerous situation, someone in distress, or violations of this Code of Conduct, please alert the community leaders promptly, even if the situation seems inconsequential.
+The project maintainers have the right to take appropriate action against anyone who violates this Code of Conduct. This may include:
 
-5. **Respect Public Event Venues**: During community events or gatherings related to the Open Debates Project, remember that event venues may be shared with members of the public. Please be respectful to all patrons of these locations during project-related activities.
+* **Warning** the individual.
+* **Temporarily or permanently banning** the individual from participating in the project.
+* **Removing content** that violates the Code of Conduct.
 
-## Amendments
+### Contribution License Agreement
 
-This Code of Conduct may be amended from time to time by consensus of the Steering Council. Any proposed amendments must be made in writing and shared with the project's community for review and feedback. The final decision on amendments will be made by the Steering Council after considering the input received.
+By contributing to OpenSkill, you agree to abide by this Code of Conduct.
 
-All participants in any project within the Open Debates Project are expected to follow the updated Code of Conduct once amendments have been approved and implemented.
+### Conclusion
 
-By following these guidelines, we can create a positive and inclusive environment where all participants in projects within the Open Debates Project can thrive intellectually and socially.
+We are committed to maintaining a positive and welcoming environment for everyone involved in OpenSkill. We believe that by adhering to this Code of Conduct, we can create a project that is both productive and enjoyable for all participants.
 
-Thank you for your contribution to the Open Debates Project!
+------
 
-*(Last updated: August 08, 2023)*
+**Please note:** This Code of Conduct is subject to change. We encourage you to review it regularly.
