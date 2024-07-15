@@ -8,9 +8,9 @@ If you don't know what those are, please consider using a short resource on stat
 the terms. We recommend Khan Academy's short course on `statistics and probability <https://www.khanacademy.org/math/statistics-probability>`_.
 
 If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
-If you can't find an answer, please open a new `discussion <https://github.com/OpenDebates/openskill.py/discussions>`_ and we'll try to help you out.
+If you can't find an answer, please open a new `discussion <https://github.com/vivekjoshy/openskill.py/discussions>`_ and we'll try to help you out.
 You can also get help from the official `Discord Server <https://discord.com/invite/4JNDeHMYkM>`_. If you have a feature request, or want to report
-a bug please create a new `issue <https://github.com/OpenDebates/openskill.py/issues/new/choose>`_ if one already doesn't exist.
+a bug please create a new `issue <https://github.com/vivekjoshy/openskill.py/issues/new/choose>`_ if one already doesn't exist.
 
 Let's start with a short refresher:
 
@@ -75,6 +75,11 @@ here are :code:`mu` and :code:`sigma` with :math:`25` and :math:`25/3` as their 
 You can ofcourse shift the values higher or lower. But it doesn't make sense to violate the rule that :code:`sigma` should be
 :math:`\frac{1}{3}` of :code:`mu`. If you do, the model may not work as intended. If you know what you're doing and are a
 statistics expert, you can change the parameters to your liking. But if you're not, we recommend you stick to the default values.
+
+Finally, there is a :code:`balance` flag you can set to :code:`True` if you want the rating system to modify it's
+assumptions about users on the tail ends of the skill distribution. With :code:`balance` turned on, the higher the rating
+a player has, it's assumed it's a much more monumental achievement. The inverse is true for lower rated players. We won't
+enable this feature for our purposes.
 
 Let's now get the object representing a single player by calling the :code:`rating` method
 on the model. This method returns a :py:class:`.PlackettLuceRating` object for which you can set your own
@@ -203,6 +208,21 @@ Ties should have either equivalent rank or score:
    [[p1], [p2], [p3], [p4]] = model.rate(match, scores=scores)
 
 
+Weights
+-------
+
+For faster convergence of ratings, you can use pass the :code:`weights` argument to :py:meth:`.PlackettLuce.rate` method.
+The :code:`weights` argument takes raw numeric values for each player from at the end of a match. These values should only
+represent metrics that **always** contribute to a win condition in the match. For instance, in large scale open battle
+arena games, there is a time limit for the entire game. In such games, a player can still win with very low points or kills.
+Always make sure the metric you choose in your game is something that significantly contributes to winning the match.
+
+.. code-block:: python
+
+   weights = [[20], [1], [3], [15]]
+   [[p1], [p2], [p3], [p4]] = model.rate(match, weights=weights)
+
+
 Matchmaking
 -----------
 
@@ -228,7 +248,7 @@ Let's see what this outputs:
 
 .. code-block:: text
 
-   [0.11101571601720539, 0.8889842839827946]
+   [0.2021226121041832, 0.7978773878958167]
    1.0
 
 
@@ -259,10 +279,10 @@ Let's see what this outputs:
 
 .. code-block:: text
 
-   0.6062109454031768
+   0.0002807397636510
 
 
-Odd, we have a slightly higher than random chance for a draw. This is because the more teams we have the possibilities
+Odd, we have almost no chance for a draw. This is because the more teams we have the possibilities
 for draws decrease due to match dynamics. Let's try with 2 teams and fewer players.
 
 .. code-block:: python
@@ -280,10 +300,14 @@ Okay let's see what changed:
 
 .. code-block:: text
 
-   0.9737737539743392
+   0.4868868769871696
 
 A much higher draw probability! So keep in mind that the more teams you have, the lower the probability of a draw and
 you should account for that in your matchmaking service.
+
+.. note::
+
+   Draw probabilities will never exceed 0.5 since there is always some uncertainty.
 
 Predicting Ranks
 ~~~~~~~~~~~~~~~~
@@ -314,20 +338,13 @@ It will produce the rank and the likelihood of that rank for each team:
 
 .. code-block:: text
 
-   [(1, 0.3784550980818606), (2, 0.27207781945315074), (3, 0.17308509853356993)]
+   [(1, 0.5043035277836156), (2, 0.3328317993957732), (3, 0.16286467282061112)]
 
-Another fact of note is tThe sum of the probabilities of the ranks and the draw probability is always :math:`1.0`.
 
-.. code-block:: python
+.. warning::
 
-   draw_probability = model.predict_draw(teams=[team1, team2, team3])
-   print(sum([y for x, y in rank_predictions]) + draw_probability)
+    The sum of the probabilities of the ranks and the draw probability no longer equal 1.0 from :code:`v6` onwards.
 
-This will produce the following output:
-
-.. code-block:: text
-
-   1.0
 
 Picking Models
 --------------

@@ -25,7 +25,7 @@ Classes
 
 
 
-.. py:class:: ThurstoneMostellerFull(mu = 25.0, sigma = 25.0 / 3.0, beta = 25.0 / 6.0, kappa = 0.0001, gamma = _gamma, tau = 25.0 / 300.0, limit_sigma = False)
+.. py:class:: ThurstoneMostellerFull(mu = 25.0, sigma = 25.0 / 3.0, beta = 25.0 / 6.0, kappa = 0.0001, gamma = _gamma, tau = 25.0 / 300.0, limit_sigma = False, balance = False)
 
 
    Algorithm 3 by :cite:t:`JMLR:v12:weng11a`
@@ -40,7 +40,7 @@ Classes
 
    :param mu: Represents the initial belief about the skill of
               a player before any matches have been played. Known
-              mostly as the mean of the Guassian prior distribution.
+              mostly as the mean of the Gaussian prior distribution.
 
               *Represented by:* :math:`\mu`
 
@@ -77,6 +77,8 @@ Classes
    :param limit_sigma: Boolean that determines whether to restrict
                        the value of sigma from increasing.
 
+   :param balance: Boolean that determines whether to emphasize
+                   rating outliers.
 
    .. py:method:: _a(team_ratings)
       :staticmethod:
@@ -90,7 +92,7 @@ Classes
          A_q = |\{s: r(s) = r(q)\}|, q = 1,...,k
 
       :param team_ratings: The whole rating of a list of teams in a game.
-      :return: A list of Decimals.
+      :return: A list of floats.
 
 
    .. py:method:: _c(team_ratings)
@@ -124,7 +126,7 @@ Classes
       :return: A list of ranks for each team in the game.
 
 
-   .. py:method:: _calculate_team_ratings(game, ranks = None)
+   .. py:method:: _calculate_team_ratings(game, ranks = None, weights = None)
 
       Get the team ratings of a game.
 
@@ -132,6 +134,11 @@ Classes
                    :class:`ThurstoneMostellerFullRating` objects.
 
       :param ranks: A list of ranks for each team in the game.
+
+      :param weights: A list of lists of floats, where each inner list
+                      represents the contribution of each player to the
+                      team's performance. The values should be normalized
+                      from 0 to 1.
 
       :return: A list of :class:`ThurstoneMostellerFullTeamRating` objects.
 
@@ -161,7 +168,7 @@ Classes
 
       :param c: The square root of the collective team sigma.
 
-      :return: A list of Decimals.
+      :return: A list of floats.
 
 
    .. py:method:: create_rating(rating, name = None)
@@ -182,7 +189,7 @@ Classes
 
       Predict how likely a match up against teams of one or more players
       will draw. This algorithm has a time complexity of
-      :math:`\mathcal{0}(n!/(n - 2)!)` where 'n' is the number of teams.
+      :math:`\mathcal{0}(n^2)` where 'n' is the number of teams.
 
       :param teams: A list of two or more teams.
       :return: The odds of a draw.
@@ -191,7 +198,7 @@ Classes
    .. py:method:: predict_rank(teams)
 
       Predict the shape of a match outcome. This algorithm has a time
-      complexity of :math:`\mathcal{0}(n!/(n - 2)!)` where 'n' is the
+      complexity of :math:`\mathcal{0}(n^2)` where 'n' is the
       number of teams.
 
       :param teams: A list of two or more teams.
@@ -202,7 +209,7 @@ Classes
 
       Predict how likely a match up against teams of one or more players
       will go. This algorithm has a time complexity of
-      :math:`\mathcal{0}(n!/(n - 2)!)` where 'n' is the number of teams.
+      :math:`\mathcal{0}(n^2)` where 'n' is the number of teams.
 
       This is a generalization of the algorithm in
       :cite:p:`Ibstedt1322103` to asymmetric n-player n-teams.
@@ -211,18 +218,22 @@ Classes
       :return: A list of odds of each team winning.
 
 
-   .. py:method:: rate(teams, ranks = None, scores = None, tau = None, limit_sigma = None)
+   .. py:method:: rate(teams, ranks = None, scores = None, weights = None, tau = None, limit_sigma = None)
 
       Calculate the new ratings based on the given teams and parameters.
 
       :param teams: A list of teams where each team is a list of
                     :class:`ThurstoneMostellerFullRating` objects.
 
-      :param ranks: A list of Decimals where the lower values
+      :param ranks: A list of floats where the lower values
                     represent winners.
 
-      :param scores: A list of Decimals where higher values
+      :param scores: A list of floats where higher values
                     represent winners.
+
+      :param weights: A list of lists of floats, where each inner list
+                      represents the contribution of each player to the
+                      team's performance.
 
       :param tau: Additive dynamics parameter that prevents sigma from
                   getting too small to increase rating change volatility.
@@ -237,12 +248,12 @@ Classes
    .. py:method:: rating(mu = None, sigma = None, name = None)
 
       Returns a new rating object with your default parameters. The given
-      parameters can be overriden from the defaults provided by the main
+      parameters can be overridden from the defaults provided by the main
       model, but is not recommended unless you know what you are doing.
 
       :param mu: Represents the initial belief about the skill of
                  a player before any matches have been played. Known
-                 mostly as the mean of the Guassian prior distribution.
+                 mostly as the mean of the Gaussian prior distribution.
 
                  *Represented by:* :math:`\mu`
 
@@ -267,7 +278,7 @@ Classes
 
    :param mu: Represents the initial belief about the skill of
               a player before any matches have been played. Known
-              mostly as the mean of the Guassian prior distribution.
+              mostly as the mean of the Gaussian prior distribution.
 
               *Represented by:* :math:`\mu`
 
@@ -279,15 +290,24 @@ Classes
 
    :param name: Optional name for the player.
 
-   .. py:method:: ordinal(z = 3.0)
+   .. py:method:: ordinal(z = 3.0, alpha = 1, target = 0)
 
       A single scalar value that represents the player's skill where their
       true skill is 99.7% likely to be higher.
 
-      :param z: Integer that represents the variance of the skill of a
-                player. By default, set to 3.
+      :param z: Float that represents the number of standard deviations to subtract
+            from the mean. By default, set to 3.0, which corresponds to a
+            99.7% confidence interval in a normal distribution.
 
-      :return: :math:`\mu - z * \sigma`
+      :param alpha: Float scaling factor applied to the entire calculation.
+                    Adjusts the overall scale of the ordinal value.
+                    Defaults to 1.
+
+      :param target: Optional float value used to shift the ordinal value
+                     towards a specific target. The shift is adjusted by the
+                     alpha scaling factor. Defaults to 0.
+
+      :return: :math:`\alpha \cdot ((\mu - z * \sigma) + \frac{\text{target}}{\alpha})`
 
 
 

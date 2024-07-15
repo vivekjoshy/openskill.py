@@ -10,4 +10,4 @@
 
 ## Reporting a Vulnerability
 
-Submit any sensitive issues through private vulnerability reporting or send an email to [`vivek@opendebates.net`](mailto:vivek@opendebates.net).
+Submit any sensitive issues through private vulnerability reporting or send an email to [`vivekjoshy97@gmail.com`](mailto:vivek@opendebates.net).

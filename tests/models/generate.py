@@ -62,8 +62,12 @@ def generate_expected_test_data() -> None:
 
         team_1 = [r()]
         team_2 = [r(), r()]
+        team_3 = [r()]
+        team_4 = [r(), r()]
 
-        game_result = model.rate(teams=[team_1, team_2], ranks=[2, 1])
+        game_result = model.rate(
+            teams=[team_1, team_2, team_3, team_4], ranks=[2, 1, 4, 3]
+        )
         rank_data = generate_model_data(game_result)
 
         team_1 = [r()]
@@ -94,6 +98,25 @@ def generate_expected_test_data() -> None:
         game_result = model.rate(teams=[team_1, team_2, team_3], ranks=[1, 2, 1])
         ties_data = generate_model_data(game_result)
 
+        team_1 = [r(), r(), r()]
+        team_2 = [r(), r()]
+        team_3 = [r(), r(), r()]
+        team_4 = [r(), r()]
+
+        game_result = model.rate(
+            teams=[team_1, team_2, team_3, team_4],
+            ranks=[2, 1, 4, 3],
+            weights=[[2, 0, 0], [1, 2], [0, 0, 1], [0, 1]],
+        )
+        weights_data = generate_model_data(game_result)
+
+        team_1 = [r(), r()]
+        team_2 = [r(), r()]
+
+        model = current_model(mu=mu, sigma=sigma, balance=True)
+        game_result = model.rate(teams=[team_1, team_2], ranks=[1, 2])
+        balance_data = generate_model_data(game_result)
+
         # Write Expected Data
         with open(f"data/{current_model.__name__.lower()}.json", "w") as model_json:
             data = {
@@ -106,6 +129,8 @@ def generate_expected_test_data() -> None:
                 "scores": score_data,
                 "limit_sigma": limit_sigma_data,
                 "ties": ties_data,
+                "weights": weights_data,
+                "balance": balance_data,
             }
             json.dump(data, model_json, indent=4)
 

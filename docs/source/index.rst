@@ -1,4 +1,5 @@
 .. meta::
+   :title: OpenSkill: Multiplayer Rating System. No Friction.
    :description: This advanced rating system is faster, accurate, and flexible with an open license. It supports multiple teams, factions, and predicts outcomes. Elevate your gaming experience with OpenSkill - the superior alternative to TrueSkill.
 
 
@@ -6,7 +7,7 @@
 
 
 .. image:: /_static/banner_agnostic.png
-    :alt: OpenSkill - Multiplayer Rating System. No Friction.
+    :alt: OpenSkill: Multiplayer Rating System. No Friction.
     :align: center
 
 

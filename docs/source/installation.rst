@@ -28,7 +28,7 @@ For Contributors
 Requirements
 ------------
 
-* Python 3.8+
+* Python 3.9+
 * `PDM Package Manager <https://pdm.fming.dev/latest/#recommended-installation-method>`_
 
 Installing from source
@@ -38,7 +38,7 @@ openskill.py is easy to install from source if you already meet the requirements
 
 ::
 
-    git clone https://github.com/OpenDebates/openskill.py
+    git clone https://github.com/vivekjoshy/openskill.py
     cd openskill.py/
 
 ::

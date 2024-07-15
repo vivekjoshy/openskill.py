@@ -7,10 +7,9 @@ import copy
 import itertools
 import math
 import uuid
-from functools import reduce
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
-from openskill.models.common import _rank_data, _unary_minus
+from openskill.models.common import _normalize, _unary_minus
 from openskill.models.weng_lin.common import _unwind, phi_major, phi_major_inverse
 
 __all__: List[str] = ["BradleyTerryFull", "BradleyTerryFullRating"]
@@ -133,17 +132,26 @@ class BradleyTerryFullRating:
                 "You can only compare BradleyTerryFullRating objects with each other."
             )
 
-    def ordinal(self, z: float = 3.0) -> float:
+    def ordinal(self, z: float = 3.0, alpha: float = 1, target: float = 0) -> float:
         r"""
         A single scalar value that represents the player's skill where their
         true skill is 99.7% likely to be higher.
 
-        :param z: Integer that represents the variance of the skill of a
-                  player. By default, set to 3.
+        :param z: Float that represents the number of standard deviations to subtract
+              from the mean. By default, set to 3.0, which corresponds to a
+              99.7% confidence interval in a normal distribution.
 
-        :return: :math:`\mu - z * \sigma`
+        :param alpha: Float scaling factor applied to the entire calculation.
+                      Adjusts the overall scale of the ordinal value.
+                      Defaults to 1.
+
+        :param target: Float value used to shift the ordinal value
+                       towards a specific target. The shift is adjusted by the
+                       alpha scaling factor. Defaults to 0.
+
+        :return: :math:`\alpha \cdot ((\mu - z * \sigma) + \frac{\text{target}}{\alpha})`
         """
-        return self.mu - z * self.sigma
+        return alpha * ((self.mu - z * self.sigma) + (target / alpha))
 
 
 class BradleyTerryFullTeamRating:
@@ -213,6 +221,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[BradleyTerryFullRating],
     rank: int,
+    weights: Optional[List[float]] = None,
 ) -> float:
     """
     Default gamma function for Bradley-Terry Full Pairing.
@@ -228,6 +237,8 @@ def _gamma(
     :param team: The team rating object.
 
     :param rank: The rank of the team.
+
+    :param weights: The weights of the players in a team.
 
     :return: A number.
     """
@@ -260,11 +271,13 @@ class BradleyTerryFull:
                 float,
                 Sequence[BradleyTerryFullRating],
                 int,
+                Optional[List[float]],
             ],
             float,
         ] = _gamma,
         tau: float = 25.0 / 300.0,
         limit_sigma: bool = False,
+        balance: bool = False,
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -306,6 +319,8 @@ class BradleyTerryFull:
         :param limit_sigma: Boolean that determines whether to restrict
                             the value of sigma from increasing.
 
+        :param balance: Boolean that determines whether to emphasize
+                        rating outliers.
         """
         # Model Parameters
         self.mu: float = float(mu)
@@ -320,12 +335,14 @@ class BradleyTerryFull:
                 float,
                 Sequence[BradleyTerryFullRating],
                 int,
+                Optional[List[float]],
             ],
             float,
         ] = gamma
 
         self.tau: float = float(tau)
         self.limit_sigma: bool = limit_sigma
+        self.balance: bool = balance
 
         # Model Data Container
         self.BradleyTerryFullRating: Type[BradleyTerryFullRating] = (
@@ -350,12 +367,12 @@ class BradleyTerryFull:
     ) -> BradleyTerryFullRating:
         r"""
         Returns a new rating object with your default parameters. The given
-        parameters can be overriden from the defaults provided by the main
+        parameters can be overridden from the defaults provided by the main
         model, but is not recommended unless you know what you are doing.
 
         :param mu: Represents the initial belief about the skill of
                    a player before any matches have been played. Known
-                   mostly as the mean of the Guassian prior distribution.
+                   mostly as the mean of the Gaussian prior distribution.
 
                    *Represented by:* :math:`\mu`
 
@@ -451,6 +468,7 @@ class BradleyTerryFull:
         teams: List[List[BradleyTerryFullRating]],
         ranks: Optional[List[float]] = None,
         scores: Optional[List[float]] = None,
+        weights: Optional[List[List[float]]] = None,
         tau: Optional[float] = None,
         limit_sigma: Optional[bool] = None,
     ) -> List[List[BradleyTerryFullRating]]:
@@ -460,11 +478,15 @@ class BradleyTerryFull:
         :param teams: A list of teams where each team is a list of
                       :class:`BradleyTerryFullRating` objects.
 
-        :param ranks: A list of Decimals where the lower values
+        :param ranks: A list of floats where the lower values
                       represent winners.
 
-        :param scores: A list of Decimals where higher values
+        :param scores: A list of floats where higher values
                       represent winners.
+
+        :param weights: A list of lists of floats, where each inner list
+                        represents the contribution of each player to the
+                        team's performance.
 
         :param tau: Additive dynamics parameter that prevents sigma from
                     getting too small to increase rating change volatility.
@@ -530,6 +552,41 @@ class BradleyTerryFull:
                     f"not '{scores.__class__.__name__}'."
                 )
 
+        # Catch weights argument errors
+        if weights:
+            if isinstance(weights, list):
+                if len(weights) != len(teams):
+                    raise ValueError(
+                        f"Argument 'weights' must have the same number of elements as"
+                        f" 'teams', not {len(weights)}."
+                    )
+
+                for index, team_weights in enumerate(weights):
+                    if isinstance(team_weights, list):
+                        if len(team_weights) != len(teams[index]):
+                            raise ValueError(
+                                f"Argument 'weights' must have the same number of elements"
+                                f"as each team in 'teams', not {len(team_weights)}."
+                            )
+                        for weight in team_weights:
+                            if isinstance(weight, (int, float)):
+                                pass
+                            else:
+                                raise TypeError(
+                                    f"Argument 'weights' must be a list of lists of 'float' values, "
+                                    f"not '{weight.__class__.__name__}'."
+                                )
+                    else:
+                        raise TypeError(
+                            f"Argument 'weights' must be a list of lists of 'float' values, "
+                            f"not '{team_weights.__class__.__name__}'."
+                        )
+            else:
+                raise TypeError(
+                    f"Argument 'weights' must be a list of lists of 'float' values, "
+                    f"not '{weights.__class__.__name__}'."
+                )
+
         # Deep Copy Teams
         original_teams = copy.deepcopy(teams)
 
@@ -548,9 +605,17 @@ class BradleyTerryFull:
             for score in scores:
                 ranks.append(_unary_minus(score))
 
+        # Normalize Weights
+        if weights:
+            weights = [_normalize(team_weights, 1, 2) for team_weights in weights]
+
         tenet = None
         if ranks:
             rank_teams_unwound = _unwind(ranks, teams)
+
+            if weights:
+                weights, _ = _unwind(ranks, weights)
+
             ordered_teams = rank_teams_unwound[0]
             tenet = rank_teams_unwound[1]
             teams = ordered_teams
@@ -558,7 +623,7 @@ class BradleyTerryFull:
 
         processed_result = []
         if ranks and tenet:
-            result = self._compute(teams, ranks)
+            result = self._compute(teams=teams, ranks=ranks, weights=weights)
             unwound_result = _unwind(tenet, result)[0]
             for item in unwound_result:
                 team = []
@@ -566,7 +631,7 @@ class BradleyTerryFull:
                     team.append(player)
                 processed_result.append(team)
         else:
-            result = self._compute(teams)
+            result = self._compute(teams=teams, weights=weights)
             for item in result:
                 team = []
                 for player in item:
@@ -633,7 +698,7 @@ class BradleyTerryFull:
 
         :param c: The square root of the collective team sigma.
 
-        :return: A list of Decimals.
+        :return: A list of floats.
         """
 
         sum_q: Dict[int, float] = {}
@@ -659,7 +724,7 @@ class BradleyTerryFull:
            A_q = |\{s: r(s) = r(q)\}|, q = 1,...,k
 
         :param team_ratings: The whole rating of a list of teams in a game.
-        :return: A list of Decimals.
+        :return: A list of ints.
         """
         result = list(
             map(
@@ -673,14 +738,12 @@ class BradleyTerryFull:
         self,
         teams: Sequence[Sequence[BradleyTerryFullRating]],
         ranks: Optional[List[float]] = None,
+        weights: Optional[List[List[float]]] = None,
     ) -> List[List[BradleyTerryFullRating]]:
         # Initialize Constants
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         beta = self.beta
-        c = self._c(team_ratings)
-        sum_q = self._sum_q(team_ratings, c)
-        a = self._a(team_ratings)
 
         result = []
         for i, team_i in enumerate(team_ratings):
@@ -704,24 +767,56 @@ class BradleyTerryFull:
                     s = 0.5
 
                 omega += sigma_squared_to_ciq * (s - piq)
-                gamma_value = self.gamma(
-                    c_iq,
-                    len(team_ratings),
-                    team_i.mu,
-                    team_i.sigma_squared,
-                    team_i.team,
-                    team_i.rank,
-                )
+                if weights:
+                    gamma_value = self.gamma(
+                        c_iq,
+                        len(team_ratings),
+                        team_i.mu,
+                        team_i.sigma_squared,
+                        team_i.team,
+                        team_i.rank,
+                        weights[i],
+                    )
+                else:
+                    gamma_value = self.gamma(
+                        c_iq,
+                        len(team_ratings),
+                        team_i.mu,
+                        team_i.sigma_squared,
+                        team_i.team,
+                        team_i.rank,
+                        None,
+                    )
                 delta += ((gamma_value * sigma_squared_to_ciq) / c_iq) * piq * (1 - piq)
 
             intermediate_result_per_team = []
             for j, j_players in enumerate(team_i.team):
+
+                if weights:
+                    weight = weights[i][j]
+                else:
+                    weight = 1
+
                 mu = j_players.mu
                 sigma = j_players.sigma
-                mu += (sigma**2 / team_i.sigma_squared) * omega
-                sigma *= math.sqrt(
-                    max(1 - (sigma**2 / team_i.sigma_squared) * delta, self.kappa),
-                )
+
+                if omega > 0:
+                    mu += (sigma**2 / team_i.sigma_squared) * omega * weight
+                    sigma *= math.sqrt(
+                        max(
+                            1 - (sigma**2 / team_i.sigma_squared) * delta * weight,
+                            self.kappa,
+                        ),
+                    )
+                else:
+                    mu += (sigma**2 / team_i.sigma_squared) * omega / weight
+                    sigma *= math.sqrt(
+                        max(
+                            1 - (sigma**2 / team_i.sigma_squared) * delta / weight,
+                            self.kappa,
+                        ),
+                    )
+
                 modified_player = original_teams[i][j]
                 modified_player.mu = mu
                 modified_player.sigma = sigma
@@ -733,7 +828,7 @@ class BradleyTerryFull:
         r"""
         Predict how likely a match up against teams of one or more players
         will go. This algorithm has a time complexity of
-        :math:`\mathcal{0}(n!/(n - 2)!)` where 'n' is the number of teams.
+        :math:`\mathcal{0}(n^2)` where 'n' is the number of teams.
 
         This is a generalization of the algorithm in
         :cite:p:`Ibstedt1322103` to asymmetric n-player n-teams.
@@ -745,11 +840,10 @@ class BradleyTerryFull:
         self._check_teams(teams)
 
         n = len(teams)
-        denominator = (n * (n - 1)) / 2
+        total_player_count = sum(len(team) for team in teams)
 
         # 2 Player Case
         if n == 2:
-            total_player_count = len(teams[0]) + len(teams[1])
             teams_ratings = self._calculate_team_ratings(teams)
             a = teams_ratings[0]
             b = teams_ratings[1]
@@ -773,22 +867,26 @@ class BradleyTerryFull:
             sigma_b = pair_b_subset[0].sigma_squared
             pairwise_probabilities.append(
                 phi_major(
-                    (mu_a - mu_b) / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
+                    (mu_a - mu_b)
+                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
-        return [
-            (sum(team_prob) / denominator)
-            for team_prob in itertools.zip_longest(
-                *[iter(pairwise_probabilities)] * (n - 1)
-            )
-        ]
+        win_probabilities = []
+        for i in range(n):
+            team_win_probability = sum(
+                pairwise_probabilities[j] for j in range(i * (n - 1), (i + 1) * (n - 1))
+            ) / (n - 1)
+            win_probabilities.append(team_win_probability)
+
+        total_probability = sum(win_probabilities)
+        return [probability / total_probability for probability in win_probabilities]
 
     def predict_draw(self, teams: List[List[BradleyTerryFullRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of
-        :math:`\mathcal{0}(n!/(n - 2)!)` where 'n' is the number of teams.
+        :math:`\mathcal{0}(n^2)` where 'n' is the number of teams.
 
         :param teams: A list of two or more teams.
         :return: The odds of a draw.
@@ -796,8 +894,7 @@ class BradleyTerryFull:
         # Check Arguments
         self._check_teams(teams)
 
-        n = len(teams)
-        total_player_count = sum([len(_) for _ in teams])
+        total_player_count = sum(len(team) for team in teams)
         draw_probability = 1 / total_player_count
         draw_margin = (
             math.sqrt(total_player_count)
@@ -806,7 +903,7 @@ class BradleyTerryFull:
         )
 
         pairwise_probabilities = []
-        for pair_a, pair_b in itertools.permutations(teams, 2):
+        for pair_a, pair_b in itertools.combinations(teams, 2):
             pair_a_subset = self._calculate_team_ratings([pair_a])
             pair_b_subset = self._calculate_team_ratings([pair_b])
             mu_a = pair_a_subset[0].mu
@@ -816,26 +913,22 @@ class BradleyTerryFull:
             pairwise_probabilities.append(
                 phi_major(
                     (draw_margin - mu_a + mu_b)
-                    / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
+                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
                 )
                 - phi_major(
-                    (mu_a - mu_b - draw_margin)
-                    / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
+                    (mu_b - mu_a - draw_margin)
+                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
-        denominator = 1
-        if n > 2:
-            denominator = n * (n - 1)
-
-        return abs(sum(pairwise_probabilities)) / denominator
+        return sum(pairwise_probabilities) / len(pairwise_probabilities)
 
     def predict_rank(
         self, teams: List[List[BradleyTerryFullRating]]
     ) -> List[Tuple[int, float]]:
         r"""
         Predict the shape of a match outcome. This algorithm has a time
-        complexity of :math:`\mathcal{0}(n!/(n - 2)!)` where 'n' is the
+        complexity of :math:`\mathcal{0}(n^2)` where 'n' is the
         number of teams.
 
         :param teams: A list of two or more teams.
@@ -844,47 +937,45 @@ class BradleyTerryFull:
         self._check_teams(teams)
 
         n = len(teams)
-        total_player_count = sum([len(_) for _ in teams])
-        denom = (n * (n - 1)) / 2
-        draw_probability = 1 / total_player_count
-        draw_margin = (
-            math.sqrt(total_player_count)
-            * self.beta
-            * phi_major_inverse((1 + draw_probability) / 2)
+        total_player_count = sum(len(team) for team in teams)
+        team_ratings = self._calculate_team_ratings(teams)
+
+        win_probabilities = []
+        for i, team_i in enumerate(team_ratings):
+            team_win_probability = 0.0
+            for j, team_j in enumerate(team_ratings):
+                if i != j:
+                    team_win_probability += phi_major(
+                        (team_i.mu - team_j.mu)
+                        / math.sqrt(
+                            total_player_count * self.beta**2
+                            + team_i.sigma_squared
+                            + team_j.sigma_squared
+                        )
+                    )
+            win_probabilities.append(team_win_probability / (n - 1))
+
+        total_probability = sum(win_probabilities)
+        normalized_probabilities = [p / total_probability for p in win_probabilities]
+
+        sorted_teams = sorted(
+            enumerate(normalized_probabilities), key=lambda x: x[1], reverse=True
         )
 
-        pairwise_probabilities = []
-        for pair_a, pair_b in itertools.permutations(teams, 2):
-            pair_a_subset = self._calculate_team_ratings([pair_a])
-            pair_b_subset = self._calculate_team_ratings([pair_b])
-            mu_a = pair_a_subset[0].mu
-            sigma_a = pair_a_subset[0].sigma_squared
-            mu_b = pair_b_subset[0].mu
-            sigma_b = pair_b_subset[0].sigma_squared
-            pairwise_probabilities.append(
-                phi_major(
-                    (mu_a - mu_b - draw_margin)
-                    / math.sqrt(n * self.beta**2 + sigma_a + sigma_b)
-                )
-            )
-        win_probability = [
-            (sum(team_prob) / denom)
-            for team_prob in itertools.zip_longest(
-                *[iter(pairwise_probabilities)] * (n - 1)
-            )
-        ]
+        ranks = [0] * n
+        current_rank = 1
+        for i, (team_index, _) in enumerate(sorted_teams):
+            if i > 0 and sorted_teams[i][1] < sorted_teams[i - 1][1]:
+                current_rank = i + 1
+            ranks[team_index] = current_rank
 
-        ranked_probability = [abs(_) for _ in win_probability]
-        ranks = list(_rank_data(ranked_probability))
-        max_ordinal = max(ranks)
-        ranks = [abs(_ - max_ordinal) + 1 for _ in ranks]
-        predictions = list(zip(ranks, ranked_probability))
-        return predictions
+        return list(zip(ranks, normalized_probabilities))
 
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[BradleyTerryFullRating]],
         ranks: Optional[List[float]] = None,
+        weights: Optional[List[List[float]]] = None,
     ) -> List[BradleyTerryFullTeamRating]:
         """
         Get the team ratings of a game.
@@ -893,6 +984,11 @@ class BradleyTerryFull:
                      :class:`BradleyTerryFullRating` objects.
 
         :param ranks: A list of ranks for each team in the game.
+
+        :param weights: A list of lists of floats, where each inner list
+                        represents the contribution of each player to the
+                        team's performance. The values should be normalized
+                        from 0 to 1.
 
         :return: A list of :class:`BradleyTerryFullTeamRating` objects.
         """
@@ -903,10 +999,23 @@ class BradleyTerryFull:
 
         result = []
         for index, team in enumerate(game):
-            mu_summed = reduce(lambda x, y: x + y, map(lambda p: p.mu, team))
-            sigma_squared = reduce(lambda x, y: x + y, map(lambda p: p.sigma**2, team))
+            sorted_team = sorted(team, key=lambda p: p.ordinal(), reverse=True)
+            max_ordinal = sorted_team[0].ordinal()
+
+            mu_summed = 0.0
+            sigma_squared_summed = 0.0
+            for player in sorted_team:
+                if self.balance:
+                    ordinal_diff = max_ordinal - player.ordinal()
+                    balance_weight = 1 + (ordinal_diff / (max_ordinal + self.kappa))
+                else:
+                    balance_weight = 1.0
+                mu_summed += player.mu * balance_weight
+                sigma_squared_summed += (player.sigma * balance_weight) ** 2
             result.append(
-                BradleyTerryFullTeamRating(mu_summed, sigma_squared, team, rank[index])
+                BradleyTerryFullTeamRating(
+                    mu_summed, sigma_squared_summed, team, rank[index]
+                )
             )
         return result
 

@@ -27,6 +27,9 @@ def test_model_defaults() -> None:
     assert model.sigma == 25.0 / 3.0
     assert model.beta == 25.0 / 6.0
     assert model.kappa == 0.0001
+    assert model.tau == 25.0 / 300.0
+    assert model.limit_sigma is False
+    assert model.balance is False
     assert model.__repr__() == f"PlackettLuce(mu=25.0, sigma={25.0 / 3.0})"
     assert model.__str__() == (
         f"Plackett-Luce Model Parameters: \n\n" f"mu: 25.0\n" f"sigma: {25.0 / 3.0}\n"
@@ -43,12 +46,12 @@ def test_rating_defaults() -> None:
     rating = model.rating()
     assert rating.mu == 30.0
     assert rating.sigma == 30.0 / 3.0
-    assert rating.__repr__() == f"PlackettLuceRating(mu=30.0, sigma={30.0/3.0})"
+    assert rating.__repr__() == f"PlackettLuceRating(mu=30.0, sigma={30.0 / 3.0})"
     assert rating.__str__() == (
         f"Plackett-Luce Player Data: \n\n"
         f"id: {rating.id}\n"
         f"mu: 30.0\n"
-        f"sigma: {30.0/3.0}\n"
+        f"sigma: {30.0 / 3.0}\n"
     )
 
     # Test Hash
@@ -71,13 +74,13 @@ def test_rating_overrides() -> None:
     assert rating_2.mu == 30
     assert rating_2.sigma == 40 / 3
     assert rating_2.name == "Vivek Joshy"
-    assert rating_2.__repr__() == f"PlackettLuceRating(mu=30.0, sigma={40.0/3.0})"
+    assert rating_2.__repr__() == f"PlackettLuceRating(mu=30.0, sigma={40.0 / 3.0})"
     assert rating_2.__str__() == (
         f"Plackett-Luce Player Data: \n\n"
         f"id: {rating_2.id}\n"
         f"name: Vivek Joshy\n"
         f"mu: 30.0\n"
-        f"sigma: {40.0/3.0}\n"
+        f"sigma: {40.0 / 3.0}\n"
     )
 
 
@@ -322,8 +325,12 @@ def test_rate() -> None:
 
     team_1 = [r()]
     team_2 = [r(), r()]
+    team_3 = [r()]
+    team_4 = [r(), r()]
 
-    results_ranks = model.rate(teams=[team_1, team_2], ranks=[2, 1])
+    results_ranks = model.rate(
+        teams=[team_1, team_2, team_3, team_4], ranks=[2, 1, 4, 3]
+    )
     check_expected(data, "ranks", results_ranks)
 
     team_1 = [r()]
@@ -348,6 +355,27 @@ def test_rate() -> None:
 
     results_ties = model.rate(teams=[team_1, team_2, team_3], ranks=[1, 2, 1])
     check_expected(data, "ties", results_ties)
+
+    # Test Weights
+    team_1 = [r(), r(), r()]
+    team_2 = [r(), r()]
+    team_3 = [r(), r(), r()]
+    team_4 = [r(), r()]
+
+    results_weights = model.rate(
+        teams=[team_1, team_2, team_3, team_4],
+        ranks=[2, 1, 4, 3],
+        weights=[[2, 0, 0], [1, 2], [0, 0, 1], [0, 1]],
+    )
+    check_expected(data, "weights", results_weights)
+
+    # Test Balance
+    team_1 = [r(), r()]
+    team_2 = [r(), r()]
+
+    model = PlackettLuce(mu, sigma, balance=True)
+    results_balance = model.rate(teams=[team_1, team_2], ranks=[1, 2])
+    check_expected(data, "balance", results_balance)
 
 
 def test_rate_errors() -> None:
@@ -384,6 +412,31 @@ def test_rate_errors() -> None:
 
     with pytest.raises(TypeError):
         model.rate(teams=[team_1, team_2, team_3], scores=[21, "abc", 23])
+
+    with pytest.raises(ValueError):
+        model.rate(teams=[team_1, team_2], ranks=[2, 1], weights=[[10, 5], [10, 5]])
+
+    with pytest.raises(ValueError):
+        model.rate(teams=[team_1, team_2], ranks=[2, 1], weights=[10, 5, 5])  # type: ignore
+
+    with pytest.raises(TypeError):
+        model.rate(teams=[team_1, team_2], ranks=[2, 1], weights=[[10], [10, "5"]])
+
+    with pytest.raises(TypeError):
+        model.rate(teams=[team_1, team_2], ranks=[2, 1], weights=21)  # type: ignore
+
+    with pytest.raises(TypeError):
+        model.rate(teams=[team_1, team_2], ranks=[2, 1], weights=[[10], "5"])
+
+    with pytest.raises(ValueError):
+        model.rate(
+            teams=[team_1, team_2], ranks=[2, 1], weights=[[10], [10, 5], [1, 2, 50]]
+        )
+
+    # Make sure this doesn't result in an error
+    [[_], [_, _]] = model.rate(
+        teams=[team_1, team_2], ranks=[2, 1], weights=[[5], [5, 10]]
+    )
 
     # Prevents sigma from rising
     a = r(mu=40, sigma=3)
@@ -476,13 +529,13 @@ def test_predict_draw():
     team_2 = [b1, b2]
 
     probability = model.predict_draw(teams=[team_1, team_2])
-    assert probability == pytest.approx(0.3839934, 0.0001)
+    assert probability == pytest.approx(0.1694772, 0.0001)
 
     probability = model.predict_draw(teams=[team_1, team_2, [a1], [a2], [b1]])
-    assert probability == pytest.approx(0.0535105, 0.0001)
+    assert probability == pytest.approx(0.0518253, 0.0001)
 
     probability = model.predict_draw(teams=[[b1], [b1]])
-    assert probability == pytest.approx(1)
+    assert probability == pytest.approx(0.5)
 
     with pytest.raises(ValueError):
         model.predict_draw(teams=[team_1])
@@ -507,15 +560,15 @@ def test_predict_rank():
     team_2 = [a2, b2]
     team_3 = [a3, b3]
 
+    # Test predict_rank
     ranks = model.predict_rank(teams=[team_1, team_2, team_3])
     total_rank_probability = sum([y for x, y in ranks])
-    draw_probability = model.predict_draw(teams=[team_1, team_2, team_3])
-    assert total_rank_probability + draw_probability == pytest.approx(1)
+    assert total_rank_probability == pytest.approx(1)
 
-    ranks = model.predict_rank(teams=[team_1, team_1, team_1])
-    total_rank_probability = sum([y for x, y in ranks])
-    draw_probability = model.predict_draw(teams=[team_1, team_1, team_1])
-    assert total_rank_probability + draw_probability == pytest.approx(1)
+    # Test with identical teams
+    identical_ranks = model.predict_rank(teams=[team_1, team_1, team_1])
+    identical_total_rank_probability = sum([y for x, y in identical_ranks])
+    assert identical_total_rank_probability == pytest.approx(1)
 
     with pytest.raises(ValueError):
         model.predict_rank(teams=[team_1])

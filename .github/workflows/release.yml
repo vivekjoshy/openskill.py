@@ -11,14 +11,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get Tag
         id: tag
         run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Set Up Python 3.11
-        uses: actions/setup-python@v4
+      - name: Set Up Python 3.12
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: 'pip'

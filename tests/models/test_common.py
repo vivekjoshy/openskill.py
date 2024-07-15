@@ -3,12 +3,7 @@ Tests common for all models.
 """
 
 from openskill.models import MODELS
-from openskill.models.common import (
-    _arg_sort,
-    _matrix_transpose,
-    _rank_data,
-    _unary_minus,
-)
+from openskill.models.common import _matrix_transpose, _normalize, _unary_minus
 
 
 def test_model_rating() -> None:
@@ -40,31 +35,6 @@ def test_unary_minus() -> None:
     assert _unary_minus(0.0) == 0.0
 
 
-def test_arg_sort() -> None:
-    """
-    Tests the :code:`_arg_sort` function.
-    """
-    assert _arg_sort([1, 2, 3]) == [0, 1, 2]
-    assert _arg_sort([3, 2, 1]) == [2, 1, 0]
-    assert _arg_sort([1, 3, 2]) == [0, 2, 1]
-    assert _arg_sort([1, 1, 1]) == [0, 1, 2]
-    assert _arg_sort([1, 1, 2]) == [0, 1, 2]
-    assert _arg_sort([1, 2, 1]) == [0, 2, 1]
-
-
-def test_rank_data() -> None:
-    """
-    Tests the :code:`_rank_data` function.
-    """
-    assert _rank_data([1, 2, 3]) == [1, 2, 3]
-    assert _rank_data([3, 2, 1]) == [3, 2, 1]
-    assert _rank_data([1, 3, 2]) == [1, 3, 2]
-    assert _rank_data([1, 1, 1]) == [1, 1, 1]
-    assert _rank_data([1, 1, 3]) == [1, 1, 3]
-    assert _rank_data([1, 2, 3, 3, 3, 4]) == [1, 2, 3, 3, 3, 6]
-    assert _rank_data([1, 2, 2, 3, 3, 4]) == [1, 2, 2, 4, 4, 6]
-
-
 def test_matrix_transpose() -> None:
     """
     Tests the :code:`_matrix_transpose` function.
@@ -79,3 +49,14 @@ def test_matrix_transpose() -> None:
         [3, 6, 9],
     ]
     assert _matrix_transpose([[1, 2], [3, 4]]) == [[1, 3], [2, 4]]
+
+
+def test_normalize() -> None:
+    """
+    Tests the :code:`_normalize` function.
+    """
+    assert _normalize([1, 2, 3], 0, 1) == [0.0, 0.5, 1.0]
+    assert _normalize([1, 2, 3], 0, 100) == [0.0, 50.0, 100.0]
+    assert _normalize([1, 2, 3], 0, 10) == [0.0, 5.0, 10.0]
+    assert _normalize([1, 2, 3], 1, 0) == [1.0, 0.5, 0.0]
+    assert _normalize([1, 1, 1], 0, 1) == [0.0, 0.0, 0.0]

@@ -13,7 +13,7 @@ import openskill
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project: str = "openskill.py"
-copyright: str = "Copyright &copy 2023, Vivek Joshy"
+copyright: str = "Copyright &copy 2023 - 2024, Vivek Joshy"
 author: str = "Vivek Joshy"
 version: str = openskill.__version__
 release: str = version
@@ -54,14 +54,14 @@ html_theme = "shibuya"
 html_static_path = ["_static"]
 html_theme_options = {
     "dark_code": False,
-    "github_url": "https://github.com/OpenDebates/openskill.py",
+    "github_url": "https://github.com/vivekjoshy/openskill.py",
     "discord_url": "https://discord.gg/4JNDeHMYkM",
     "light_logo": "_static/text_logo_light.svg",
     "dark_logo": "_static/text_logo_dark.svg",
 }
 html_context = {
     "source_type": "github",
-    "source_user": "OpenDebates",
+    "source_user": "vivekjoshy",
     "source_repo": "openskill.py",
     "source_version": "main",
     "source_docs_path": "/docs/source/",
@@ -103,7 +103,7 @@ mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 
 # -- Options for OpenGraph output ---------------------------------------------
 ogp_site_url = "https://openskill.me/en/stable/"
-ogp_site_name = "OpenSkill - Multiplayer Rating System. No Friction."
+ogp_site_name = "OpenSkill: Multiplayer Rating System. No Friction."
 ogp_image = "https://i.imgur.com/HqkBLVt.png"
 ogp_description_length = 200
 ogp_type = "website"

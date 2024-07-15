@@ -18,19 +18,10 @@ Functions
 
 .. autoapisummary::
 
-   openskill.models.common._arg_sort
    openskill.models.common._matrix_transpose
-   openskill.models.common._rank_data
+   openskill.models.common._normalize
    openskill.models.common._unary_minus
 
-
-
-.. py:function:: _arg_sort(vector)
-
-   Returns the indices that would sort a vector.
-
-   :param vector: A list of objects.
-   :return: Rank vector without ties.
 
 
 .. py:function:: _matrix_transpose(matrix)
@@ -41,13 +32,14 @@ Functions
    :return: A transposed matrix.
 
 
-.. py:function:: _rank_data(vector)
+.. py:function:: _normalize(vector, target_minimum, target_maximum)
 
-   Sorting with 'competition ranking'. Pure python equivalent of
-   :code:`scipy.stats.rankdata` function.
+   Normalizes a vector to a target range of values.
 
-   :param vector: A list of objects.
-   :return: Rank vector with ties.
+   :param vector: A vector to normalize.
+   :param target_minimum: Minimum value to scale the values between.
+   :param target_maximum: Maximum value to scale the values between.
+   :return: Normalized vector.
 
 
 .. py:function:: _unary_minus(number)

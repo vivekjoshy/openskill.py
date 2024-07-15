@@ -15,46 +15,6 @@ def _unary_minus(number: float) -> float:
     return -number
 
 
-def _arg_sort(vector: List[Any]) -> List[int]:
-    """
-    Returns the indices that would sort a vector.
-
-    :param vector: A list of objects.
-    :return: Rank vector without ties.
-    """
-    return [i for (v, i) in sorted((v, i) for (i, v) in enumerate(vector))]
-
-
-def _rank_data(vector: List[Any]) -> List[int]:
-    """
-    Sorting with 'competition ranking'. Pure python equivalent of
-    :code:`scipy.stats.rankdata` function.
-
-    :param vector: A list of objects.
-    :return: Rank vector with ties.
-    """
-    vector_length = len(vector)
-    arg_sort_rank_vector = _arg_sort(vector)
-    arg_sorted_vector = [vector[rank] for rank in arg_sort_rank_vector]
-    sum_ranks = 0
-    duplicate_count = 0
-    rank_vector_with_ties = [0] * vector_length
-    for index in range(vector_length):
-        sum_ranks += index
-        duplicate_count += 1
-        if (
-            index == vector_length - 1
-            or arg_sorted_vector[index] != arg_sorted_vector[index + 1]
-        ):
-            for j in range(index - duplicate_count + 1, index + 1):
-                rank_vector_with_ties[arg_sort_rank_vector[j]] = (
-                    index + 1 - duplicate_count + 1
-                )
-            sum_ranks = 0
-            duplicate_count = 0
-    return rank_vector_with_ties
-
-
 def _matrix_transpose(matrix: List[List[Any]]) -> List[List[Any]]:
     """
     Transpose a matrix.
@@ -63,3 +23,34 @@ def _matrix_transpose(matrix: List[List[Any]]) -> List[List[Any]]:
     :return: A transposed matrix.
     """
     return [list(row) for row in zip(*matrix)]
+
+
+def _normalize(
+    vector: List[float], target_minimum: float, target_maximum: float
+) -> List[float]:
+    """
+    Normalizes a vector to a target range of values.
+
+    :param vector: A vector to normalize.
+    :param target_minimum: Minimum value to scale the values between.
+    :param target_maximum: Maximum value to scale the values between.
+    :return: Normalized vector.
+    """
+
+    if len(vector) == 1:
+        return [target_maximum]
+
+    source_minimum = min(vector)
+    source_maximum = max(vector)
+    source_range = source_maximum - source_minimum
+    target_range = target_maximum - target_minimum
+
+    if source_range == 0:
+        source_range = 0.0001
+
+    scaled_vector = [
+        ((((value - source_minimum) / source_range) * target_range) + target_minimum)
+        for value in vector
+    ]
+
+    return scaled_vector
