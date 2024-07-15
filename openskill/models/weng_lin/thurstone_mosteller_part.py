@@ -143,9 +143,7 @@ class ThurstoneMostellerPartRating:
                 "You can only compare ThurstoneMostellerPartRating objects with each other."
             )
 
-    def ordinal(
-        self, z: float = 3.0, alpha: float = 1, target: float = 0
-    ) -> float:
+    def ordinal(self, z: float = 3.0, alpha: float = 1, target: float = 0) -> float:
         r"""
         A single scalar value that represents the player's skill where their
         true skill is 99.7% likely to be higher.

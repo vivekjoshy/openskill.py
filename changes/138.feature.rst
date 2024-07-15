@@ -1,0 +1,2 @@
+Support Per Player Weights and Balance Flag
+Prediction methods have faster runtime.
