@@ -62,6 +62,8 @@ and bury Elo once and for all:
 - Multifaction.
 - Asymmetric faction size.
 - Predict Win, Draw and Rank Outcomes.
+- Per Player Weights
+- Partial Play
 - 150% faster than TrueSkill.
 - 100% Pure Python.
 - 100% Test Coverage.
@@ -69,7 +71,7 @@ and bury Elo once and for all:
 - 5 Separate Models.
 - Fine-grained control of mathematical constants.
 - Open License
-- Up to 7% more accurate than TrueSkill.
+- Accuracy on par with TrueSkill.
 
 
 ## Installation

@@ -2,22 +2,20 @@
 Frequently Asked Questions
 ==========================
 
-1. Does this library support partial play?
-++++++++++++++++++++++++++++++++++++++++++
-
-No. Partial play is theoretically easy to implement, but hard to verify due to lack of data.
-Without data, any modifications to models might end up over-fitting the data. It is also not
-clear what metric to use for partial play since different groups mean different
-things. If partial play is to implemented, what we mean by it is that the amount of time a
-player was in a game.
-
-
-2. Does this library support weights?
+1. Does this library support weights?
 +++++++++++++++++++++++++++++++++++++
 
-No. By weights we mean a value between :math:`0` and :math:`1` that represent a player's contribution to
-the team's overall victory (if they win). We are however currently working on it.
+Yes. By weights we mean any value that represents a player's contribution to
+the team's overall victory (if they win). You can pass raw scores to :code:`weights` if they mainly determine
+the win condition. If they don't explicitly determine win conditions (eg: last to stay alive wins), then it's
+usually redundant and won't improve predictions.
 
+
+2. Does this library support partial play?
+++++++++++++++++++++++++++++++++++++++++++
+
+Yes, however it's only effective if the player's playtime determines the win condition. You can use any number
+representing playtime and invert it relative to all other player durations. Simply pass these values into :code:`weights`.
 
 3. Does this library support score margins?
 +++++++++++++++++++++++++++++++++++++++++++
@@ -48,3 +46,11 @@ section.
 Yes. Simply adjust ``sigma`` by a small value as needed when you feel a player has been inactive. A small negative
 delta added every day after being inactive till the value reaches the default sigma is usually good enough.
 Make sure to test against your own data to ensure it actually predicts outcomes.
+
+7. How do I scale rating ordinal score to reflect Elo?
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+While there is no one-to-one correpondence between Elo and OpenSkill, one standard deviation is approximately
+equivalent to around 200 points for an Elo rating starting at around 1500. To mimic Elo, simply set :code:`alpha`
+to :math:`\frac{200}{\sigma}` and :code:`target` to 1500 for :py:meth:`ordinal`.
+
