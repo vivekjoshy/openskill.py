@@ -69,4 +69,4 @@ fail, please rework and resubmit your PR.
 
 Remember to follow this
 [guide](https://allcontributors.org/docs/en/bot/usage) to add yourself
-to the list of [contributors](https://github.com/OpenDebates/openskill.py/blob/main/CONTRIBUTORS.md).
+to the list of [contributors](https://github.com/vivekjoshy/openskill.py/blob/main/CONTRIBUTORS.md).

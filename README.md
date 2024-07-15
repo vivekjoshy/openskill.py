@@ -19,16 +19,16 @@
 
 <p align="center" style="text-align: center">
     <a
-        href="https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml">
+        href="https://github.com/vivekjoshy/openskill.py/actions/workflows/main.yml">
             <img
-                src="https://github.com/OpenDebates/openskill.py/actions/workflows/main.yml/badge.svg"
+                src="https://github.com/vivekjoshy/openskill.py/actions/workflows/main.yml/badge.svg"
                 alt="Tests"
     />
     </a>
     <a
-        href="https://codecov.io/gh/OpenDebates/openskill.py">
+        href="https://codecov.io/gh/vivekjoshy/openskill.py">
             <img
-                src="https://codecov.io/gh/OpenDebates/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi"
+                src="https://codecov.io/gh/vivekjoshy/openskill.py/branch/main/graph/badge.svg?token=Ep07QEelsi"
                 alt="codecov" />
     <a
         href="https://openskill.me/en/latest/?badge=latest">
@@ -38,7 +38,7 @@
             />
     </a>
     <img
-        src="https://img.shields.io/github/all-contributors/OpenDebates/openskill.py/main"
+        src="https://img.shields.io/github/all-contributors/vivekjoshy/openskill.py/main"
     />
     <a style="border-width:0" href="https://doi.org/10.21105/joss.05901">
       <img src="https://joss.theoj.org/papers/10.21105/joss.05901/status.svg" alt="DOI badge" >
@@ -104,9 +104,9 @@ True
 
 # Support
 If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
-If you can't find an answer, please open a new [discussion](https://github.com/OpenDebates/openskill.py/discussions) and we'll try to help you out.
+If you can't find an answer, please open a new [discussion](https://github.com/vivekjoshy/openskill.py/discussions) and we'll try to help you out.
 You can also get help from the official [Discord Server](https://discord.com/invite/4JNDeHMYkM>). If you have a feature request, or want to report
-a bug please create a new [issue](https://github.com/OpenDebates/openskill.py/issues/new/choose) if one already doesn't exist.
+a bug please create a new [issue](https://github.com/vivekjoshy/openskill.py/issues/new/choose) if one already doesn't exist.
 
 # References
 This project is originally based off the [openskill.js](https://github.com/philihp/openskill.js) package. All of the Weng-Lin models are based off the work in this wonderful [paper](https://jmlr.org/papers/v12/weng11a.html) or are the derivatives of algorithms found in it.

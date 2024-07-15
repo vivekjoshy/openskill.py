@@ -1,1 +1,0 @@
-Prediction methods better account for uncertainty.
