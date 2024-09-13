@@ -588,7 +588,8 @@ class PlackettLuce:
                 )
 
         # Deep Copy Teams
-        original_teams = copy.deepcopy(teams)
+        original_teams = teams
+        teams = copy.deepcopy(original_teams)
 
         # Correct Sigma With Tau
         tau = tau if tau else self.tau

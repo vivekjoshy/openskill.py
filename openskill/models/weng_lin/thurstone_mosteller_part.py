@@ -605,7 +605,8 @@ class ThurstoneMostellerPart:
                 )
 
         # Deep Copy Teams
-        original_teams = copy.deepcopy(teams)
+        original_teams = teams
+        teams = copy.deepcopy(original_teams)
 
         # Correct Sigma With Tau
         tau = tau if tau else self.tau
@@ -669,6 +670,7 @@ class ThurstoneMostellerPart:
                 final_team = []
                 for player_index, player in enumerate(team):
                     player_original = original_teams[team_index][player_index]
+                    player = copy.deepcopy(player)
                     if player.sigma <= player_original.sigma:
                         player.sigma = player.sigma
                     else:
