@@ -657,7 +657,9 @@ class BradleyTerryPart:
             for team_index, team in enumerate(processed_result):
                 final_team = []
                 for player_index, player in enumerate(team):
-                    player.sigma = min(player.sigma, original_teams[team_index][player_index].sigma)
+                    player.sigma = min(
+                        player.sigma, original_teams[team_index][player_index].sigma
+                    )
                     final_team.append(player)
                 final_result.append(final_team)
         return final_result
