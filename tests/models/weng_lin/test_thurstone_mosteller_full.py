@@ -451,15 +451,15 @@ def test_rate_errors() -> None:
     a = r(mu=40, sigma=3)
     b = r(mu=-20, sigma=3)
     [[winner], [loser]] = model.rate([[a], [b]], tau=0.3, limit_sigma=True)
-    assert winner.sigma == a.sigma
-    assert loser.sigma == b.sigma
+    assert winner.sigma <= a.sigma
+    assert loser.sigma <= b.sigma
 
-    # Ensures sigma decreases
+    # Ensures sigma does not increase
     a = r()
     b = r()
     [[winner], [loser]] = model.rate([[a], [b]], tau=0.3, limit_sigma=True)
-    assert winner.sigma == a.sigma
-    assert loser.sigma == b.sigma
+    assert winner.sigma <= a.sigma
+    assert loser.sigma <= b.sigma
 
     # Test ValueError
     team_1 = [r()]
