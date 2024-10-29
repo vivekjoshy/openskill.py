@@ -36,7 +36,7 @@ extensions: List[str] = [
     "sphinx_copybutton",
     "myst_parser",
     "nbsphinx",
-    "sphinx_docsearch"
+    "sphinx_docsearch",
 ]
 
 templates_path: List[str] = ["_templates"]
@@ -130,4 +130,4 @@ favicons = [
 docsearch_app_id = "TUWNQQ885H"
 docsearch_api_key = "19a09d80f4b370188bea620ff3738fb1"
 docsearch_index_name = "openskill"
-nbsphinx_requirejs_path = ''
+nbsphinx_requirejs_path = ""
