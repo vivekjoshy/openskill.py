@@ -1,0 +1,29 @@
+name: Bug Report
+description: >-
+  Please fill in this form with accurate information so we can reproduce the
+  issue. Make sure to keep the issue title concise and short.
+labels:
+  - 'bug: maybe'
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear and concise description of the problem.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Minimal Reproduction
+      description: Provide steps to reproduce the problem.
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Version
+      description: The versions of openskill.py that experience this issue.
+      multiple: true
+      options:
+        - v6
+        - v5
+    validations:
+      required: true

@@ -1,0 +1,19 @@
+name: Feature Request
+description: Please be clear in your description of the feature or enhancement you'd like.
+labels:
+  - enhancement
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear and concise description of the problem or missing capability
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Possible Solutions
+      description: If you have a solution in mind, please describe it.
+  - type: textarea
+    attributes:
+      label: Alternatives
+      description: Have you considered any alternative solutions or workarounds?
