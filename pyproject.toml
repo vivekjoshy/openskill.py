@@ -37,7 +37,7 @@ doctest_optionflags = "NUMBER"
 profile = "black"
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.9"
 strict = true
 
 [project]
@@ -51,7 +51,7 @@ maintainers = [
 ]
 description = "Multiplayer Rating System. No Friction."
 readme = "README.md"
-requires-python = "~=3.10"
+requires-python = "~=3.9"
 keywords = ["ranking", "trueskill", "statistics", "rating", "math", "rank"]
 license = {text = "MIT"}
 classifiers = [
