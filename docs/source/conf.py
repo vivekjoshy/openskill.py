@@ -36,6 +36,7 @@ extensions: List[str] = [
     "sphinx_copybutton",
     "myst_parser",
     "nbsphinx",
+    "sphinx_docsearch"
 ]
 
 templates_path: List[str] = ["_templates"]
@@ -125,17 +126,8 @@ favicons = [
     },
 ]
 
-
-# -- Custom CSS and JS -------------------------------------------------------
-
-
-def setup(app):
-    # CSS
-    app.add_css_file(
-        "https://cdn.jsdelivr.net/npm/@docsearch/css@3", type="text/css; charset=utf-8"
-    )
-    app.add_css_file("css/custom.css")
-
-    # JavaScript
-    app.add_js_file("https://cdn.jsdelivr.net/npm/@docsearch/js@3")
-    app.add_js_file("js/custom.js")
+# Docsearch
+docsearch_app_id = "TUWNQQ885H"
+docsearch_api_key = "19a09d80f4b370188bea620ff3738fb1"
+docsearch_index_name = "openskill"
+nbsphinx_requirejs_path = ''
