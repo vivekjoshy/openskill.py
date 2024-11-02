@@ -274,6 +274,7 @@ class ThurstoneMostellerFull:
         sigma: float = 25.0 / 3.0,
         beta: float = 25.0 / 6.0,
         kappa: float = 0.0001,
+        epsilon: float = 0.1,
         gamma: Callable[
             [
                 float,
@@ -317,6 +318,10 @@ class ThurstoneMostellerFull:
 
                       *Represented by:* :math:`\kappa`
 
+        :param epsilon: The draw margin for Thurstone-Mosteller models.
+
+                        *Represented by:* :math:`\epsilon`
+
         :param gamma: Custom function you can pass that must contain 5
                       parameters. The function must return a float or int.
 
@@ -338,6 +343,7 @@ class ThurstoneMostellerFull:
         self.sigma: float = float(sigma)
         self.beta: float = beta
         self.kappa: float = float(kappa)
+        self.epsilon: float = float(epsilon)
         self.gamma: Callable[
             [
                 float,
@@ -797,28 +803,28 @@ class ThurstoneMostellerFull:
                     )
 
                 if team_q.rank > team_i.rank:
-                    omega += sigma_squared_to_ciq * v(delta_mu, self.kappa / c_iq)
+                    omega += sigma_squared_to_ciq * v(delta_mu, self.epsilon / c_iq)
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * w(delta_mu, self.kappa / c_iq)
+                        * w(delta_mu, self.epsilon / c_iq)
                     )
                 elif team_q.rank < team_i.rank:
-                    omega += -sigma_squared_to_ciq * v(-delta_mu, self.kappa / c_iq)
+                    omega += -sigma_squared_to_ciq * v(-delta_mu, self.epsilon / c_iq)
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * w(-delta_mu, self.kappa / c_iq)
+                        * w(-delta_mu, self.epsilon / c_iq)
                     )
                 else:
-                    omega += sigma_squared_to_ciq * vt(delta_mu, self.kappa / c_iq)
+                    omega += sigma_squared_to_ciq * vt(delta_mu, self.epsilon / c_iq)
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * wt(delta_mu, self.kappa / c_iq)
+                        * wt(delta_mu, self.epsilon / c_iq)
                     )
 
             intermediate_result_per_team = []

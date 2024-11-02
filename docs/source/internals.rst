@@ -14,9 +14,9 @@ we make no effort to document some __dunder__ methods.
    about the private methods displayed here. They may change
    at any time without warning.
 
-
 .. toctree::
    :maxdepth: 2
-   :caption: Reference API:
+   :caption: Models API:
 
-   API </api/openskill/index.rst>
+   Common <api/openskill.models.common>
+   Weng-Lin <api/openskill.models.weng_lin>
