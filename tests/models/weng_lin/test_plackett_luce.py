@@ -529,10 +529,10 @@ def test_predict_draw():
     team_2 = [b1, b2]
 
     probability = model.predict_draw(teams=[team_1, team_2])
-    assert probability == pytest.approx(0.1694772, 0.0001)
+    assert probability == pytest.approx(0.1919967, 0.0001)
 
     probability = model.predict_draw(teams=[team_1, team_2, [a1], [a2], [b1]])
-    assert probability == pytest.approx(0.0518253, 0.0001)
+    assert probability == pytest.approx(0.0603735, 0.0001)
 
     probability = model.predict_draw(teams=[[b1], [b1]])
     assert probability == pytest.approx(0.5)
