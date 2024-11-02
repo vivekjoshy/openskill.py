@@ -50,8 +50,8 @@ For instance if a player has a :code:`mu` of :code:`25` and a :code:`sigma` of :
 The Basics
 ----------
 
-First we have to initialize the mode we want to use. We will use the :py:class:`.PlackettLuce` model for this example.
-The :py:class:`.PlackettLuce` model is generally a good choice if you're not expecting large matches with lots of players and teams.
+First we have to initialize the mode we want to use. We will use the :py:class:`PlackettLuce <openskill.models.weng_lin.plackett_luce.PlackettLuce>` model for this example.
+The :py:class:`PlackettLuce <openskill.models.weng_lin.plackett_luce.PlackettLuce>` model is generally a good choice if you're not expecting large matches with lots of players and teams.
 On the whole, all the 5 models have the same capabilities, but some are more accurate and some are faster than others. It's up to
 you to test out what works for you.
 
@@ -68,7 +68,7 @@ under the :code:`openskill.models` module.
 Every model comes with a set of parameters that can be set. These parameters are
 used to configure the model to your liking. The parameters for all the Weng-Lin models are somewhat similar.
 
-The default parameters for the :py:class:`.PlackettLuce` model are found here, but you are free to use anything
+The default parameters for the :py:class:`PlackettLuce <openskill.models.weng_lin.plackett_luce.PlackettLuce>` model are found here, but you are free to use anything
 in so far as you don't violate the rules of the underlying assumptions of the model. The important and relevant parameters
 here are :code:`mu` and :code:`sigma` with :math:`25` and :math:`25/3` as their default values respectively.
 
@@ -82,7 +82,7 @@ a player has, it's assumed it's a much more monumental achievement. The inverse 
 enable this feature for our purposes.
 
 Let's now get the object representing a single player by calling the :code:`rating` method
-on the model. This method returns a :py:class:`.PlackettLuceRating` object for which you can set your own
+on the model. This method returns a :py:class:`PlackettLuceRating <openskill.models.weng_lin.plackett_luce.PlackettLuceRating>` object for which you can set your own
 values. Since we are using the default values, each player will also start with those values. We can also set a optional name.
 It can anything, an ID, a username, anything. It's just a way to identify the player.
 
@@ -163,7 +163,7 @@ method to create a player from a list of :code:`mu` and :code:`sigma` values. Ju
 Ranks
 -----
 
-When displaying a rating, or sorting a list of ratings, you can use :py:meth:`.PlackettLuceRating.ordinal`.
+When displaying a rating, or sorting a list of ratings, you can use :py:meth:`ordinal <openskill.models.weng_lin.plackett_luce.PlackettLuceRating.ordinal>`.
 
 .. code-block:: python
 
@@ -182,7 +182,7 @@ Which will print out the following:
 By default, this returns :math:`\mu - 3\sigma`, showing a rating for which there's a 99.7% likelihood the player's true
 rating is higher, so with early games, a player's ordinal rating will usually go up and could go up even if that
 player loses. If you want to prevent that you can pass the :code:`limit_sigma` boolean parameter to the model defaults
-or the :py:meth:`.PlackettLuce.rate` method.
+or the :py:meth:`rate <openskill.models.weng_lin.plackett_luce.PlackettLuce.rate>` method.
 
 
 Artificial Ranks
@@ -211,7 +211,7 @@ Ties should have either equivalent rank or score:
 Weights
 -------
 
-For faster convergence of ratings, you can use pass the :code:`weights` argument to :py:meth:`.PlackettLuce.rate` method.
+For faster convergence of ratings, you can use pass the :code:`weights` argument to the :py:meth:`rate <openskill.models.weng_lin.plackett_luce.PlackettLuce.rate>` method.
 The :code:`weights` argument takes raw numeric values for each player from at the end of a match. These values should only
 represent metrics that **always** contribute to a win condition in the match. For instance, in large scale open battle
 arena games, there is a time limit for the entire game. In such games, a player can still win with very low points or kills.
@@ -353,12 +353,12 @@ The models are all very similar, but some are more efficient and more accurate d
 
 There are currently 5 models:
 
-* :py:class:`.BradleyTerryFull`
-* :py:class:`.BradleyTerryPart`
-* :py:class:`.PlackettLuce`
-* :py:class:`.ThurstoneMostellerFull`
-* :py:class:`.ThurstoneMostellerPart`
+* :py:class:`BradleyTerryFull <openskill.models.weng_lin.bradley_terry_full.BradleyTerryFull>`
+* :py:class:`BradleyTerryPart <openskill.models.weng_lin.bradley_terry_part.BradleyTerryPart>`
+* :py:class:`PlackettLuce <openskill.models.weng_lin.plackett_luce.PlackettLuce>`
+* :py:class:`ThurstoneMostellerFull <openskill.models.weng_lin.thurstone_mosteller_full.ThurstoneMostellerFull>`
+* :py:class:`ThurstoneMostellerPart <openskill.models.weng_lin.thurstone_mosteller_part.ThurstoneMostellerPart>`
 
 :code:`Part` stands for partial paring and is a reference to how ratings are calculated underneath the hood. Suffice to say
-the partial pairing models are more efficient, but less accurate than the full pairing models. The :py:class:`.PlackettLuce`
+the partial pairing models are more efficient, but less accurate than the full pairing models. The :py:class:`Plackett-Luce <openskill.models.weng_lin.plackett_luce.PlackettLuce>`
 model is a good balance between efficiency and accuracy and is the recommended model for most use cases.

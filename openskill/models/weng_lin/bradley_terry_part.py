@@ -847,7 +847,6 @@ class BradleyTerryPart:
         self._check_teams(teams)
 
         n = len(teams)
-        total_player_count = sum(len(team) for team in teams)
 
         # 2 Player Case
         if n == 2:
@@ -856,11 +855,7 @@ class BradleyTerryPart:
             b = teams_ratings[1]
             result = phi_major(
                 (a.mu - b.mu)
-                / math.sqrt(
-                    total_player_count * self.beta**2
-                    + a.sigma_squared
-                    + b.sigma_squared
-                )
+                / math.sqrt(2 * self.beta**2 + a.sigma_squared + b.sigma_squared)
             )
             return [result, 1 - result]
 
@@ -874,8 +869,7 @@ class BradleyTerryPart:
             sigma_b = pair_b_subset[0].sigma_squared
             pairwise_probabilities.append(
                 phi_major(
-                    (mu_a - mu_b)
-                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
+                    (mu_a - mu_b) / math.sqrt(2 * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
@@ -920,11 +914,11 @@ class BradleyTerryPart:
             pairwise_probabilities.append(
                 phi_major(
                     (draw_margin - mu_a + mu_b)
-                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
+                    / math.sqrt(2 * self.beta**2 + sigma_a + sigma_b)
                 )
                 - phi_major(
                     (mu_b - mu_a - draw_margin)
-                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
+                    / math.sqrt(2 * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
@@ -944,7 +938,6 @@ class BradleyTerryPart:
         self._check_teams(teams)
 
         n = len(teams)
-        total_player_count = sum(len(team) for team in teams)
         team_ratings = self._calculate_team_ratings(teams)
 
         win_probabilities = []
@@ -955,7 +948,7 @@ class BradleyTerryPart:
                     team_win_probability += phi_major(
                         (team_i.mu - team_j.mu)
                         / math.sqrt(
-                            total_player_count * self.beta**2
+                            2 * self.beta**2
                             + team_i.sigma_squared
                             + team_j.sigma_squared
                         )

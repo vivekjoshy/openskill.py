@@ -276,6 +276,7 @@ class ThurstoneMostellerPart:
         sigma: float = 25.0 / 3.0,
         beta: float = 25.0 / 6.0,
         kappa: float = 0.0001,
+        epsilon: float = 0.1,
         gamma: Callable[
             [
                 float,
@@ -305,7 +306,6 @@ class ThurstoneMostellerPart:
                       where :math:`z` is an integer that represents the
                       variance of the skill of a player.
 
-
         :param beta: Hyperparameter that determines the level of uncertainty
                      or variability present in the prior distribution of
                      ratings.
@@ -318,6 +318,10 @@ class ThurstoneMostellerPart:
                       of as a regularization parameter.
 
                       *Represented by:* :math:`\kappa`
+
+        :param epsilon: The draw margin for Thurstone-Mosteller models.
+
+                        *Represented by:* :math:`\epsilon`
 
         :param gamma: Custom function you can pass that must contain 5
                       parameters. The function must return a float or int.
@@ -340,6 +344,7 @@ class ThurstoneMostellerPart:
         self.sigma: float = float(sigma)
         self.beta: float = beta
         self.kappa: float = float(kappa)
+        self.epsilon: float = float(epsilon)
         self.gamma: Callable[
             [
                 float,
@@ -799,25 +804,25 @@ class ThurstoneMostellerPart:
                     )
 
                 if team_q.rank > team_i.rank:
-                    omega += sigma_squared_to_c_iq * v(delta_mu, self.kappa / c_iq)
+                    omega += sigma_squared_to_c_iq * v(delta_mu, self.epsilon / c_iq)
                     delta += (
                         (gamma_value * sigma_squared_to_c_iq)
                         / c_iq
-                        * w(delta_mu, self.kappa / c_iq)
+                        * w(delta_mu, self.epsilon / c_iq)
                     )
                 elif team_q.rank < team_i.rank:
-                    omega += -sigma_squared_to_c_iq * v(-delta_mu, self.kappa / c_iq)
+                    omega += -sigma_squared_to_c_iq * v(-delta_mu, self.epsilon / c_iq)
                     delta += (
                         (gamma_value * sigma_squared_to_c_iq)
                         / c_iq
-                        * w(-delta_mu, self.kappa / c_iq)
+                        * w(-delta_mu, self.epsilon / c_iq)
                     )
                 else:
-                    omega += sigma_squared_to_c_iq * vt(delta_mu, self.kappa / c_iq)
+                    omega += sigma_squared_to_c_iq * vt(delta_mu, self.epsilon / c_iq)
                     delta += (
                         (gamma_value * sigma_squared_to_c_iq)
                         / c_iq
-                        * wt(delta_mu, self.kappa / c_iq)
+                        * wt(delta_mu, self.epsilon / c_iq)
                     )
 
             intermediate_result_per_team = []
@@ -873,7 +878,6 @@ class ThurstoneMostellerPart:
         self._check_teams(teams)
 
         n = len(teams)
-        total_player_count = sum(len(team) for team in teams)
 
         # 2 Player Case
         if n == 2:
@@ -882,11 +886,7 @@ class ThurstoneMostellerPart:
             b = teams_ratings[1]
             result = phi_major(
                 (a.mu - b.mu)
-                / math.sqrt(
-                    total_player_count * self.beta**2
-                    + a.sigma_squared
-                    + b.sigma_squared
-                )
+                / math.sqrt(2 * self.beta**2 + a.sigma_squared + b.sigma_squared)
             )
             return [result, 1 - result]
 
@@ -900,8 +900,7 @@ class ThurstoneMostellerPart:
             sigma_b = pair_b_subset[0].sigma_squared
             pairwise_probabilities.append(
                 phi_major(
-                    (mu_a - mu_b)
-                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
+                    (mu_a - mu_b) / math.sqrt(2 * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
@@ -946,11 +945,11 @@ class ThurstoneMostellerPart:
             pairwise_probabilities.append(
                 phi_major(
                     (draw_margin - mu_a + mu_b)
-                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
+                    / math.sqrt(2 * self.beta**2 + sigma_a + sigma_b)
                 )
                 - phi_major(
                     (mu_b - mu_a - draw_margin)
-                    / math.sqrt(total_player_count * self.beta**2 + sigma_a + sigma_b)
+                    / math.sqrt(2 * self.beta**2 + sigma_a + sigma_b)
                 )
             )
 
@@ -970,7 +969,6 @@ class ThurstoneMostellerPart:
         self._check_teams(teams)
 
         n = len(teams)
-        total_player_count = sum(len(team) for team in teams)
         team_ratings = self._calculate_team_ratings(teams)
 
         win_probabilities = []
@@ -981,7 +979,7 @@ class ThurstoneMostellerPart:
                     team_win_probability += phi_major(
                         (team_i.mu - team_j.mu)
                         / math.sqrt(
-                            total_player_count * self.beta**2
+                            2 * self.beta**2
                             + team_i.sigma_squared
                             + team_j.sigma_squared
                         )
