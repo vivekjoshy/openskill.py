@@ -1,2 +1,0 @@
-- Use correct constants in Thurstone-Mosteller models.
-- Scale beta**2 by 2 instead of by total player count.

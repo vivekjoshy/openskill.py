@@ -4,6 +4,17 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 6.0.1 (2024-11-02)
+============================
+
+Bugfixes
+--------
+
+- Fix rate mutating rating objects when limit_sigma enabled. (`#141 <https://github.com/vivekjoshy/openskill.py/issues/141>`_)
+- Use correct constants in Thurstone-Mosteller models. (`#148 <https://github.com/vivekjoshy/openskill.py/issues/148>`_)
+- Scale beta**2 by 2 instead of by total player count. (`#148 <https://github.com/vivekjoshy/openskill.py/issues/148>`_)
+
+
 Openskill 6.0.0 (2024-07-15)
 ============================
 
