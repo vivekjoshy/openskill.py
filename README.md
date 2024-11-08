@@ -117,5 +117,6 @@ This project is originally based off the [openskill.js](https://github.com/phili
 ## Implementations in other Languages
 - [Javascript](https://github.com/philihp/openskill.js)
 - [Elixir](https://github.com/philihp/openskill.ex)
+- [Java](https://github.com/pocketcombats/openskill-java)
 - [Kotlin](https://github.com/brezinajn/openskill.kt)
 - [Lua](https://github.com/bstummer/openskill.lua)
