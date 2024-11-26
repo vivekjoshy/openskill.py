@@ -43,7 +43,7 @@ section.
 6. Does this library support time decay?
 ++++++++++++++++++++++++++++++++++++++++
 
-Yes. Simply adjust ``sigma`` by a small value as needed when you feel a player has been inactive. A small negative
+Yes. Simply adjust ``sigma`` by a small value as needed when you feel a player has been inactive. A small 
 delta added every day after being inactive till the value reaches the default sigma is usually good enough.
 Make sure to test against your own data to ensure it actually predicts outcomes.
 
