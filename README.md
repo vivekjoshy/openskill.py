@@ -105,7 +105,7 @@ True
 # Support
 If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
 If you can't find an answer, please open a new [discussion](https://github.com/vivekjoshy/openskill.py/discussions) and we'll try to help you out.
-You can also get help from the official [Discord Server](https://discord.com/invite/4JNDeHMYkM>). If you have a feature request, or want to report
+You can also get help from the official [Discord Server](https://discord.com/invite/4JNDeHMYkM). If you have a feature request, or want to report
 a bug please create a new [issue](https://github.com/vivekjoshy/openskill.py/issues/new/choose) if one already doesn't exist.
 
 # References
