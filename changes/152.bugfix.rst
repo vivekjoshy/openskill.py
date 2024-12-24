@@ -1,0 +1,1 @@
+Update Dependencies + Add GitHub as Trusted Publisher
