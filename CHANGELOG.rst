@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 6.0.2 (2024-12-25)
+============================
+
+Bugfixes
+--------
+
+- Update Dependencies + Add GitHub as Trusted Publisher (`#152 <https://github.com/vivekjoshy/openskill.py/issues/152>`_)
+
+
 Openskill 6.0.1 (2024-11-02)
 ============================
 
