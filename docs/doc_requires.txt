@@ -1,7 +1,7 @@
 sphinx~=8.1
 nbsphinx~=0.9
 pygments~=2.18
-shibuya~=2024.7
+shibuya~=2025.1
 ipykernel~=6.29
 matplotlib~=3.9
 myst_parser~=4.0  # Must Be Underscore, not Hyphen
