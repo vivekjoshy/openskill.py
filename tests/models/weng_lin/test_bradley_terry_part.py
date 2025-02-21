@@ -27,6 +27,7 @@ def test_model_defaults() -> None:
     assert model.beta == 25.0 / 6.0
     assert model.kappa == 0.0001
     assert model.tau == 25.0 / 300.0
+    assert model.window_size == 4
     assert model.limit_sigma is False
     assert model.balance is False
     assert model.__repr__() == f"BradleyTerryPart(mu=25.0, sigma={25.0 / 3.0})"
@@ -382,6 +383,22 @@ def test_rate() -> None:
     model = BradleyTerryPart(mu, sigma, balance=True)
     results_balance = model.rate(teams=[team_1, team_2], ranks=[1, 2])
     check_expected(data, "balance", results_balance)
+
+    # Test Window Size of 0
+    model = BradleyTerryPart(mu, sigma, window_size=0, tau=0)
+    r = model.rating
+    team_a = [r(mu=30, sigma=30 / 3)]
+    team_b = [r(mu=25, sigma=25 / 3)]
+
+    a_mu, a_sigma = team_a[0].mu, team_a[0].sigma
+    b_mu, b_sigma = team_b[0].mu, team_b[0].sigma
+    results = model.rate(teams=[team_a, team_b], ranks=[1, 2])
+    updated_a = results[0][0]
+    updated_b = results[1][0]
+    assert updated_a.mu == pytest.approx(a_mu, rel=1e-6)
+    assert updated_a.sigma == pytest.approx(a_sigma, rel=1e-6)
+    assert updated_b.mu == pytest.approx(b_mu, rel=1e-6)
+    assert updated_b.sigma == pytest.approx(b_sigma, rel=1e-6)
 
 
 def test_rate_errors() -> None:
