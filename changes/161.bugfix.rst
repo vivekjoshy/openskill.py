@@ -1,1 +1,0 @@
-Fixes inconsistent updates from ties in free-for-all matches.
