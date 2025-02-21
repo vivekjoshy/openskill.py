@@ -1,9 +1,7 @@
 from typing import List
 
 # Public API
-__all__: List[str] = [
-    "models"
-]
+__all__: List[str] = ["models"]
 
 
 # Metadata

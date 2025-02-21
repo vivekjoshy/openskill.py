@@ -11,7 +11,6 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
 from openskill.models.common import _normalize, _unary_minus
 from openskill.models.weng_lin.common import (
-    _ladder_pairs,
     _unwind,
     phi_major,
     phi_major_inverse,
@@ -290,6 +289,7 @@ class ThurstoneMostellerPart:
             float,
         ] = _gamma,
         tau: float = 25.0 / 300.0,
+        window_size: int = 4,
         limit_sigma: bool = False,
         balance: bool = False,
     ):
@@ -333,6 +333,10 @@ class ThurstoneMostellerPart:
 
                     *Represented by:* :math:`\tau`
 
+        :param window_size: The sliding window size for partial pairing such
+                            that a larger window size tends to full pairing
+                            mode's accuracy.
+
         :param limit_sigma: Boolean that determines whether to restrict
                             the value of sigma from increasing.
 
@@ -359,6 +363,7 @@ class ThurstoneMostellerPart:
         ] = gamma
 
         self.tau: float = float(tau)
+        self.window_size: int = int(window_size)
         self.limit_sigma: bool = limit_sigma
         self.balance: bool = balance
 
@@ -763,25 +768,31 @@ class ThurstoneMostellerPart:
         ranks: Optional[List[float]] = None,
         weights: Optional[List[List[float]]] = None,
     ) -> List[List[ThurstoneMostellerPartRating]]:
-        # Initialize Constants
+        # Initialize constants
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         beta = self.beta
-        adjacent_teams = _ladder_pairs(team_ratings)
-
+        num_teams = len(team_ratings)
+        window = self.window_size
         result = []
-        for i, (team_i, adjacent_i) in enumerate(zip(team_ratings, adjacent_teams)):
-            omega = 0.0
-            delta = 0.0
 
-            for q, team_q in enumerate(adjacent_i):
+        for i, team_i in enumerate(team_ratings):
+            omega_sum = 0.0
+            delta_sum = 0.0
+            comparisons = 0
+
+            start = max(0, i - window)
+            end = min(num_teams, i + window + 1)
+            for q in range(start, end):
                 if q == i:
                     continue
+                team_q = team_ratings[q]
                 c_iq = 2 * math.sqrt(
                     team_i.sigma_squared + team_q.sigma_squared + (2 * beta**2)
                 )
                 delta_mu = (team_i.mu - team_q.mu) / c_iq
-                sigma_squared_to_c_iq = team_i.sigma_squared / c_iq
+                sigma_sq_to_c_iq = team_i.sigma_squared / c_iq
+
                 if weights:
                     gamma_value = self.gamma(
                         c_iq,
@@ -804,60 +815,59 @@ class ThurstoneMostellerPart:
                     )
 
                 if team_q.rank > team_i.rank:
-                    omega += sigma_squared_to_c_iq * v(delta_mu, self.epsilon / c_iq)
-                    delta += (
-                        (gamma_value * sigma_squared_to_c_iq)
-                        / c_iq
-                        * w(delta_mu, self.epsilon / c_iq)
+                    omega_sum += sigma_sq_to_c_iq * v(delta_mu, self.epsilon / c_iq)
+                    delta_sum += (gamma_value * sigma_sq_to_c_iq / c_iq) * w(
+                        delta_mu, self.epsilon / c_iq
                     )
                 elif team_q.rank < team_i.rank:
-                    omega += -sigma_squared_to_c_iq * v(-delta_mu, self.epsilon / c_iq)
-                    delta += (
-                        (gamma_value * sigma_squared_to_c_iq)
-                        / c_iq
-                        * w(-delta_mu, self.epsilon / c_iq)
+                    omega_sum += -sigma_sq_to_c_iq * v(-delta_mu, self.epsilon / c_iq)
+                    delta_sum += (gamma_value * sigma_sq_to_c_iq / c_iq) * w(
+                        -delta_mu, self.epsilon / c_iq
                     )
                 else:
-                    omega += sigma_squared_to_c_iq * vt(delta_mu, self.epsilon / c_iq)
-                    delta += (
-                        (gamma_value * sigma_squared_to_c_iq)
-                        / c_iq
-                        * wt(delta_mu, self.epsilon / c_iq)
+                    omega_sum += sigma_sq_to_c_iq * vt(delta_mu, self.epsilon / c_iq)
+                    delta_sum += (gamma_value * sigma_sq_to_c_iq / c_iq) * wt(
+                        delta_mu, self.epsilon / c_iq
                     )
+
+                comparisons += 1
+
+            if comparisons > 0:
+                omega = omega_sum / comparisons
+                delta = delta_sum / comparisons
+            else:
+                omega = 0.0
+                delta = 0.0
 
             intermediate_result_per_team = []
-            for j, j_players in enumerate(team_i.team):
-
-                if weights:
-                    weight = weights[i][j]
-                else:
-                    weight = 1
-
-                mu = j_players.mu
-                sigma = j_players.sigma
+            for j, player in enumerate(team_i.team):
+                w_val = weights[i][j] if weights else 1
+                new_mu = player.mu
+                new_sigma = player.sigma
 
                 if omega > 0:
-                    mu += (sigma**2 / team_i.sigma_squared) * omega * weight
-                    sigma *= math.sqrt(
+                    new_mu += (new_sigma**2 / team_i.sigma_squared) * omega * w_val
+                    new_sigma *= math.sqrt(
                         max(
-                            1 - (sigma**2 / team_i.sigma_squared) * delta * weight,
+                            1 - (new_sigma**2 / team_i.sigma_squared) * delta * w_val,
                             self.kappa,
-                        ),
+                        )
                     )
                 else:
-                    mu += (sigma**2 / team_i.sigma_squared) * omega / weight
-                    sigma *= math.sqrt(
+                    new_mu += (new_sigma**2 / team_i.sigma_squared) * omega / w_val
+                    new_sigma *= math.sqrt(
                         max(
-                            1 - (sigma**2 / team_i.sigma_squared) * delta / weight,
+                            1 - (new_sigma**2 / team_i.sigma_squared) * delta / w_val,
                             self.kappa,
-                        ),
+                        )
                     )
 
                 modified_player = team_i.team[j]
-                modified_player.mu = mu
-                modified_player.sigma = sigma
+                modified_player.mu = new_mu
+                modified_player.sigma = new_sigma
                 intermediate_result_per_team.append(modified_player)
             result.append(intermediate_result_per_team)
+
         return result
 
     def predict_win(

@@ -746,6 +746,12 @@ class PlackettLuce:
         sum_q = self._sum_q(team_ratings, c)
         a = self._a(team_ratings)
 
+        rank_groups: dict[int, list[int]] = {}
+        for i, team_i in enumerate(team_ratings):
+            if team_i.rank not in rank_groups:
+                rank_groups[team_i.rank] = []
+            rank_groups[team_i.rank].append(i)
+
         result = []
         for i, team_i in enumerate(team_ratings):
             omega = 0.0
@@ -758,7 +764,7 @@ class PlackettLuce:
                     delta += (
                         i_mu_over_ce_over_sum_q * (1 - i_mu_over_ce_over_sum_q) / a[q]
                     )
-                    if q == i:
+                    if team_q.rank == team_i.rank:
                         omega += (1 - i_mu_over_ce_over_sum_q) / a[q]
                     else:
                         omega -= i_mu_over_ce_over_sum_q / a[q]
@@ -790,7 +796,6 @@ class PlackettLuce:
 
             intermediate_result_per_team = []
             for j, j_players in enumerate(team_i.team):
-
                 if weights:
                     weight = weights[i][j]
                 else:
@@ -799,7 +804,7 @@ class PlackettLuce:
                 mu = j_players.mu
                 sigma = j_players.sigma
 
-                if omega > 0:
+                if omega >= 0:
                     mu += (sigma**2 / team_i.sigma_squared) * omega * weight
                     sigma *= math.sqrt(
                         max(
@@ -821,6 +826,16 @@ class PlackettLuce:
                 modified_player.sigma = sigma
                 intermediate_result_per_team.append(modified_player)
             result.append(intermediate_result_per_team)
+
+        for rank, indices in rank_groups.items():
+            if len(indices) > 1:
+                avg_mu_change = sum(
+                    result[i][0].mu - original_teams[i][0].mu for i in indices
+                ) / len(indices)
+                for i in indices:
+                    for j in range(len(result[i])):
+                        result[i][j].mu = original_teams[i][j].mu + avg_mu_change
+
         return result
 
     def predict_win(self, teams: List[List[PlackettLuceRating]]) -> List[float]:
