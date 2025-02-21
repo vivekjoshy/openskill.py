@@ -746,8 +746,7 @@ class PlackettLuce:
         sum_q = self._sum_q(team_ratings, c)
         a = self._a(team_ratings)
 
-        # Pre-compute rank groups
-        rank_groups = {}
+        rank_groups: dict[int, list[int]] = {}
         for i, team_i in enumerate(team_ratings):
             if team_i.rank not in rank_groups:
                 rank_groups[team_i.rank] = []
@@ -805,9 +804,7 @@ class PlackettLuce:
                 mu = j_players.mu
                 sigma = j_players.sigma
 
-                # Apply weight differently for gains vs losses
                 if omega >= 0:
-                    # For gains (winners), multiply by weight
                     mu += (sigma**2 / team_i.sigma_squared) * omega * weight
                     sigma *= math.sqrt(
                         max(
@@ -816,7 +813,6 @@ class PlackettLuce:
                         ),
                     )
                 else:
-                    # For losses (losers), divide by weight
                     mu += (sigma**2 / team_i.sigma_squared) * omega / weight
                     sigma *= math.sqrt(
                         max(
@@ -831,7 +827,6 @@ class PlackettLuce:
                 intermediate_result_per_team.append(modified_player)
             result.append(intermediate_result_per_team)
 
-        # Ensure tied teams get identical rating changes
         for rank, indices in rank_groups.items():
             if len(indices) > 1:
                 avg_mu_change = sum(

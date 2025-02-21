@@ -1,0 +1,1 @@
+Add `window_size` parameter that affect accuracy of partial pairing models.

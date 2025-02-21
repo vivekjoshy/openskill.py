@@ -767,7 +767,7 @@ class ThurstoneMostellerFull:
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         beta = self.beta
 
-        rank_groups = {}
+        rank_groups: dict[int, list[int]] = {}
         for i, team_i in enumerate(team_ratings):
             if team_i.rank not in rank_groups:
                 rank_groups[team_i.rank] = []
