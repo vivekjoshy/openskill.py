@@ -85,6 +85,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "retrooper",
+      "name": "retrooper",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49798017?v=4",
+      "profile": "https://github.com/retrooper",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
