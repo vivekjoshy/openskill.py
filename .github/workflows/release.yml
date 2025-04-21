@@ -1,6 +1,11 @@
 name: Release
 
 on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
   release:
     types:
       - published
@@ -27,6 +32,7 @@ jobs:
             python -m pip install --upgrade build
             python -m pip install --upgrade pip
             python -m pip install --upgrade cibuildwheel~=2.23.2
+            echo "USE_MYPYC=1" >> "$GITHUB_ENV"
 
       - name: Build Project for Distribution
         run: python -m cibuildwheel --output-dir wheelhouse
