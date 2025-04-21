@@ -44,26 +44,26 @@ strict = true
 name = "openskill"
 version = "6.1.0-alpha.0"
 authors = [
-    {name = "Vivek Joshy", email = "vivekjoshy97@gmail.com"},
+    {name = "Vivek Joshy", email = "git@vivekjoshy.com"},
 ]
 maintainers = [
-  {name = "Vivek Joshy", email = "vivekjoshy97@gmail.com"}
+  {name = "Vivek Joshy", email = "git@vivekjoshy.com"}
 ]
 description = "Multiplayer Rating System. No Friction."
 readme = "README.md"
 requires-python = "~=3.10"
 keywords = ["ranking", "trueskill", "statistics", "rating", "math", "rank"]
-license = {text = "MIT"}
+license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
 	"Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy"
 ]
@@ -72,11 +72,11 @@ classifiers = [
 Source = "https://github.com/vivekjoshy/openskill.py"
 Documentation = "https://openskill.me/en/stable"
 Changelog = "https://github.com/vivekjoshy/openskill.py/blob/main/CHANGELOG.rst"
-Funding = "https://opencollective.com/openskill"
+Funding = "https://github.com/sponsors/vivekjoshy"
 Tracker = "https://github.com/vivekjoshy/openskill.py/issues"
 
-[tool.uv]
-dev-dependencies = [
+[project.optional-dependencies]
+docs = [
     "sphinx~=8.1",
     "nbsphinx~=0.9",
     "pygments~=2.19",
@@ -91,16 +91,21 @@ dev-dependencies = [
     "sphinxext-opengraph~=0.9",
     "sphinxcontrib-bibtex~=2.6",
     "sphinx-autodoc-typehints~=3.0",
+]
+tests = [
     "tox~=4.24",
     "mypy~=1.15",
     "pytest~=8.3",
+    "codecov~=2.1",
     "coverage~=7.6",
     "pytest-cov~=6.0",
+]
+build = [
     "twine~=6.1",
     "build~=1.2",
     "isort~=6.0",
+    "mypy[mypyc]~=1.15",
     "black[jupyter]~=25.1",
-    "codecov~=2.1",
     "towncrier~=23.11",
     "bump-my-version~=0.32",
 ]
@@ -109,5 +114,5 @@ dev-dependencies = [
 package-dir = {"openskill" = "openskill"}
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "mypy"]
 build-backend = "setuptools.build_meta"

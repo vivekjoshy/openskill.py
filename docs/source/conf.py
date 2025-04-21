@@ -18,7 +18,7 @@ sys.path.insert(0, source_path)
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project: str = "openskill.py"
-copyright: str = "Copyright &copy 2023 - 2024, Vivek Joshy"
+copyright: str = "Copyright &copy 2023 - 2025, Vivek Joshy"
 author: str = "Vivek Joshy"
 version: str = openskill.__version__
 release: str = version

@@ -1,53 +1,71 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types:
+      - published
 
 jobs:
-  Release:
-    runs-on: ubuntu-latest
-    environment:
-        name: release
-        url: https://pypi.org/p/openskill
-    permissions: write-all
+  Wheels:
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-13, macos-latest]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get Tag
-        id: tag
-        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
-      - name: Set Up Python 3.12
+      - name: Set Up Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: 'pip'
 
       - name: Upgrade Dependencies
         run: |
             python -m pip install --upgrade build
             python -m pip install --upgrade pip
+            python -m pip install --upgrade cibuildwheel~=2.23.2
 
       - name: Build Project for Distribution
-        run: python -m build
+        run: python -m cibuildwheel --output-dir wheelhouse
 
-      - name: Check Version
-        id: check-version
-        run: |
-            pip install -e .
-            [[ "$(python -c "import openskill; print(openskill.__version__)")" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || echo "prerelease=true" >> $GITHUB_OUTPUT
-      - name: Create Release
-        uses: ncipollo/release-action@v1
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          artifacts: "dist/*"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          draft: false
-          prerelease: steps.check-version.outputs.prerelease == 'true'
-          generateReleaseNotes: true
+          name: openskill-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
 
-      - name: Publish a Python distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+  Source:
+    name: Build Source Distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Source
+        run: |
+            python -m pip install --upgrade build
+            python -m build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openskill-sdist
+          path: dist/*.tar.gz
+
+  Upload:
+    needs: [Wheels, Source]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: openskill-*
+          path: dist
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

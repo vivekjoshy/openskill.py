@@ -799,7 +799,7 @@ class PlackettLuce:
                 if weights:
                     weight = weights[i][j]
                 else:
-                    weight = 1
+                    weight = 1.0
 
                 mu = j_players.mu
                 sigma = j_players.sigma
