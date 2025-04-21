@@ -2,7 +2,7 @@ import os
 
 from setuptools import setup
 
-USE_MYPYC = bool(int(os.getenv("USE_MYPYC", "0") == "1"))
+USE_MYPYC = os.getenv("USE_MYPYC", "0") == "1"
 
 # Attempt to import MyPyC
 if USE_MYPYC:
