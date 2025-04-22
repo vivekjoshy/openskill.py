@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 6.1.0-alpha.1 (2025-04-22)
+====================================
+
+Features
+--------
+
+- Improve Model Speed Using MyPyC Compiled C-Extensions (`#163 <https://github.com/vivekjoshy/openskill.py/issues/163>`_)
+
+
 Openskill 6.1.0-alpha.0 (2025-02-22)
 ====================================
 

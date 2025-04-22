@@ -58,20 +58,54 @@ In the multifaceted world of online gaming, an accurate multiplayer rating syste
 Here are *some*, but not all, of the reasons you should drop TrueSkill
 and bury Elo once and for all:
 
-- Multiplayer.
-- Multifaction.
-- Asymmetric faction size.
-- Predict Win, Draw and Rank Outcomes.
-- Per Player Weights
-- Partial Play
-- 150% faster than TrueSkill.
-- 100% Pure Python.
-- 100% Test Coverage.
-- CPython and PyPy Support.
-- 5 Separate Models.
-- Fine-grained control of mathematical constants.
-- Open License
-- Accuracy on par with TrueSkill.
+```mermaid
+graph TD
+    subgraph OpenSkill["OpenSkill Features"]
+
+    subgraph Game["Game"]
+    GF1[Multiplayer]
+    GF2[Multifaction]
+    GF3[Asymmetric Faction Size]
+    GF4[Predict Win, Draw, Rank]
+    GF5[Per Player Weights]
+    end
+
+    subgraph Technical["Technical"]
+    TF1[100% Pure Python]
+    TF2[CPython and PyPy Support]
+    TF3[C-compiled Wheels]
+    TF4[100% Test Coverage]
+    TF5[5 Separate Models]
+    end
+
+    subgraph Performance["Performance"]
+    PF1[150% faster than TrueSkill]
+    PF2[Accuracy matches TrueSkill]
+    PF3[Open License]
+    PF4[Partial Play]
+    PF5[Fine-grained Parameter Control]
+    end
+
+    end
+
+    style GF1 fill:#f37231,color:#ffffff,stroke:#f37231
+    style GF2 fill:#f37231,color:#ffffff,stroke:#f37231
+    style GF3 fill:#f37231,color:#ffffff,stroke:#f37231
+    style GF4 fill:#f37231,color:#ffffff,stroke:#f37231
+    style GF5 fill:#f37231,color:#ffffff,stroke:#f37231
+
+    style TF1 fill:#f37231,color:#ffffff,stroke:#f37231
+    style TF2 fill:#f37231,color:#ffffff,stroke:#f37231
+    style TF3 fill:#f37231,color:#ffffff,stroke:#f37231
+    style TF4 fill:#f37231,color:#ffffff,stroke:#f37231
+    style TF5 fill:#f37231,color:#ffffff,stroke:#f37231
+
+    style PF1 fill:#f37231,color:#ffffff,stroke:#f37231
+    style PF2 fill:#f37231,color:#ffffff,stroke:#f37231
+    style PF3 fill:#f37231,color:#ffffff,stroke:#f37231
+    style PF4 fill:#f37231,color:#ffffff,stroke:#f37231
+    style PF5 fill:#f37231,color:#ffffff,stroke:#f37231
+```
 
 
 ## Installation

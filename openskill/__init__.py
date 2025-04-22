@@ -5,7 +5,7 @@ __all__: List[str] = ["models"]
 
 
 # Metadata
-__version__ = "6.1.0-alpha.0"
+__version__ = "6.1.0-alpha.1"
 __author__ = "Vivek Joshy"
 __email__ = "git@vivekjoshy.com"
 __copyright__ = "Copyright 2023 - 2025, Vivek Joshy"
