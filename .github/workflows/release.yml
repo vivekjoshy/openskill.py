@@ -15,27 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-          os: [linux-intel, linux-arm, windows, macOS-intel, macOS-arm, iOS, pyodide]
-          include:
-            - archs: auto
-              platform: auto
-            - os: linux-intel
-              runs-on: ubuntu-latest
-            - os: linux-arm
-              runs-on: ubuntu-24.04-arm
-            - os: windows
-              runs-on: windows-latest
-            - os: macos-intel
-              runs-on: macos-13
-            - os: macos-arm
-              runs-on: macos-latest
-              archs: auto,universal2
-            - os: ios
-              runs-on: macos-latest
-              platform: ios
-            - os: pyodide
-              runs-on: ubuntu-latest
-              platform: pyodide
+          os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-13, macos-latest]
 
     steps:
       - name: Checkout code
