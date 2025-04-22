@@ -37,7 +37,7 @@ jobs:
         env:
           CIBW_ENVIRONMENT: USE_MYPYC=1
           CIBW_PLATFORM: ${{ matrix.platform }}
-          CIBW_ARCHS: ${{ matrix.archs }}
+          CIBW_ARCHS: "auto"
         run: python -m cibuildwheel --output-dir wheelhouse
 
       - name: Upload Artifacts
