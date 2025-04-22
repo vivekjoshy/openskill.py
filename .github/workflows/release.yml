@@ -82,9 +82,6 @@ jobs:
           path: wheelhouse
           merge-multiple: true
 
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
       - name: Set Up Python 3.13
         uses: actions/setup-python@v5
         with:
