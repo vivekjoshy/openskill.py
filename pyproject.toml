@@ -107,7 +107,7 @@ build = [
     "mypy[mypyc]~=1.15",
     "black[jupyter]~=25.1",
     "towncrier~=23.11",
-    "bump-my-version~=0.32",
+    "bump-my-version~=1.1",
 ]
 
 [tool.setuptools]
