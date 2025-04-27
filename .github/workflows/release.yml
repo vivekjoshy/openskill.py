@@ -14,6 +14,7 @@ jobs:
   Compiled:
     name: Build Compiled Wheels
     runs-on: ${{ matrix.os }}
+    permissions: write-all
     strategy:
         matrix:
           os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-13, macos-latest]
@@ -53,6 +54,7 @@ jobs:
   Source:
     name: Build Source Distribution
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -70,6 +72,7 @@ jobs:
   Universal:
     name: Build Universal Wheels
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
