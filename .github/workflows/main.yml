@@ -15,6 +15,7 @@ jobs:
       github.repository
     name: ${{ matrix.os }} / ${{ matrix.python-version }} (${{ matrix.architecture }})
     runs-on: ${{ matrix.os }}-latest
+    permissions: write-all
     strategy:
       fail-fast: false
       matrix:
@@ -56,6 +57,7 @@ jobs:
       github.repository
     name: ${{ matrix.os }} / ${{ matrix.python-version }} (${{ matrix.architecture }})
     runs-on: ${{ matrix.os }}-latest
+    permissions: write-all
     strategy:
       fail-fast: true
       matrix:
@@ -96,6 +98,7 @@ jobs:
       github.repository
     name: ${{ matrix.os }} / ${{ matrix.python-version }} (${{ matrix.architecture }})
     runs-on: ${{ matrix.os }}-latest
+    permissions: write-all
     strategy:
       fail-fast: true
       matrix:
