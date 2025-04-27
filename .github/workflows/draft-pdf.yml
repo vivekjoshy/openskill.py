@@ -5,6 +5,7 @@ jobs:
   paper:
     runs-on: ubuntu-latest
     name: Paper Draft
+    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v4
