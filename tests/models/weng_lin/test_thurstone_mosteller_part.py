@@ -354,6 +354,10 @@ def test_rate() -> None:
     results_scores = model.rate(teams=[team_1, team_2], scores=[1, 2])
     check_expected(data, "scores", results_scores)
 
+    model.margin = 2.0
+    results_margins = model.rate(teams=[team_1, team_2], scores=[1, 4])
+    check_expected(data, "margins", results_margins)
+
     team_1 = [r()]
     team_2 = [r(), r()]
     team_3 = [r(), r(), r()]

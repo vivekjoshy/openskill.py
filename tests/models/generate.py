@@ -76,6 +76,11 @@ def generate_expected_test_data() -> None:
         game_result = model.rate(teams=[team_1, team_2], scores=[1, 2])
         score_data = generate_model_data(game_result)
 
+        model.margin = 2.0
+        game_result = model.rate(teams=[team_1, team_2], scores=[1, 4])
+        margin_data = generate_model_data(game_result)
+        model.margin = 0.0
+
         team_1 = [r()]
         team_2 = [r(), r()]
         team_3 = [r(), r(), r()]
@@ -127,6 +132,7 @@ def generate_expected_test_data() -> None:
                 "normal": normal_data,
                 "ranks": rank_data,
                 "scores": score_data,
+                "margins": margin_data,
                 "limit_sigma": limit_sigma_data,
                 "ties": ties_data,
                 "weights": weights_data,

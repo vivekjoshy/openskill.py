@@ -109,6 +109,13 @@ build = [
     "towncrier~=23.11",
     "bump-my-version~=0.32",
 ]
+benchmark = [
+    "rich~=14.0",
+    "tqdm~=4.67",
+    "pooch~=1.8",
+    "jsonlines~=4.0",
+    "scikit-learn~=1.6",
+]
 
 [tool.setuptools]
 package-dir = {"openskill" = "openskill"}

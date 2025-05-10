@@ -208,6 +208,19 @@ Ties should have either equivalent rank or score:
    [[p1], [p2], [p3], [p4]] = model.rate(match, scores=scores)
 
 
+Score Margins
+-------------
+
+If winning or losing by some margin of difference between two scores is important, then your can set the :code:`margin` parameter. This should normally improve accuracy
+for games where for instance winning by two points (like in tennis) is not as impressive as winning by 5 or 6 points.
+
+.. code-block:: python
+
+   model = PlackettLuce(margin=2.0)
+   scores = [11, 9, 0, 3]
+   [[p1], [p2], [p3], [p4]] = model.rate(match, scores=scores)
+
+
 Weights
 -------
 
