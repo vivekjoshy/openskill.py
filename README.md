@@ -67,7 +67,7 @@ graph TD
     GF2[Multifaction]
     GF3[Asymmetric Faction Size]
     GF4[Predict Win, Draw, Rank]
-    GF5[Per Player Weights]
+    GF5[Weights, Score Margins]
     end
 
     subgraph Technical["Technical"]

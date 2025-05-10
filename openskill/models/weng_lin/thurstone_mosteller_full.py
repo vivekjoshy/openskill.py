@@ -9,7 +9,7 @@ import math
 import uuid
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
-from openskill.models.common import _normalize, _unary_minus
+from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import (
     _unwind,
     phi_major,
@@ -288,6 +288,7 @@ class ThurstoneMostellerFull:
             float,
         ] = _gamma,
         tau: float = 25.0 / 300.0,
+        margin: float = 0.0,
         limit_sigma: bool = False,
         balance: bool = False,
     ):
@@ -332,6 +333,9 @@ class ThurstoneMostellerFull:
 
                     *Represented by:* :math:`\tau`
 
+        :param margin: The margin of victory needed for a win to be considered
+                       impressive.
+
         :param limit_sigma: Boolean that determines whether to restrict
                             the value of sigma from increasing.
 
@@ -358,6 +362,7 @@ class ThurstoneMostellerFull:
         ] = gamma
 
         self.tau: float = float(tau)
+        self.margin: float = float(margin)
         self.limit_sigma: bool = limit_sigma
         self.balance: bool = balance
 
@@ -623,9 +628,7 @@ class ThurstoneMostellerFull:
 
         # Convert Score to Ranks
         if not ranks and scores:
-            ranks = []
-            for score in scores:
-                ranks.append(_unary_minus(score))
+            ranks = [float(r) for r in self._calculate_rankings(teams, scores)]
 
         # Normalize Weights
         if weights:
@@ -645,7 +648,9 @@ class ThurstoneMostellerFull:
 
         processed_result = []
         if ranks and tenet:
-            result = self._compute(teams=teams, ranks=ranks, weights=weights)
+            result = self._compute(
+                teams=teams, ranks=ranks, scores=scores, weights=weights
+            )
             unwound_result = _unwind(tenet, result)[0]
             for item in unwound_result:
                 team = []
@@ -760,12 +765,18 @@ class ThurstoneMostellerFull:
         self,
         teams: Sequence[Sequence[ThurstoneMostellerFullRating]],
         ranks: Optional[List[float]] = None,
+        scores: Optional[List[float]] = None,
         weights: Optional[List[List[float]]] = None,
     ) -> List[List[ThurstoneMostellerFullRating]]:
         # Initialize Constants
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         beta = self.beta
+
+        score_mapping = {}
+        if scores and len(scores) == len(team_ratings):
+            for i, team in enumerate(team_ratings):
+                score_mapping[i] = scores[i]
 
         rank_groups: dict[int, list[int]] = {}
         for i, team_i in enumerate(team_ratings):
@@ -808,29 +819,42 @@ class ThurstoneMostellerFull:
                         None,
                     )
 
+                margin_factor = 1.0
+                if scores and i in score_mapping and q in score_mapping and i != q:
+                    score_diff = score_mapping[i] - score_mapping[q]
+                    if score_diff > 0 and team_q.rank < team_i.rank:
+                        if score_diff > self.margin and self.margin > 0.0:
+                            margin_factor = 1.0 + math.log1p(score_diff)
+
                 if team_q.rank > team_i.rank:
-                    omega += sigma_squared_to_ciq * v(delta_mu, self.epsilon / c_iq)
+                    omega += sigma_squared_to_ciq * v(
+                        delta_mu * margin_factor, self.epsilon / c_iq
+                    )
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * w(delta_mu, self.epsilon / c_iq)
+                        * w(delta_mu * margin_factor, self.epsilon / c_iq)
                     )
                 elif team_q.rank < team_i.rank:
-                    omega += -sigma_squared_to_ciq * v(-delta_mu, self.epsilon / c_iq)
+                    omega += -sigma_squared_to_ciq * v(
+                        -delta_mu * margin_factor, self.epsilon / c_iq
+                    )
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * w(-delta_mu, self.epsilon / c_iq)
+                        * w(-delta_mu * margin_factor, self.epsilon / c_iq)
                     )
                 else:
-                    omega += sigma_squared_to_ciq * vt(delta_mu, self.epsilon / c_iq)
+                    omega += sigma_squared_to_ciq * vt(
+                        delta_mu * margin_factor, self.epsilon / c_iq
+                    )
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * wt(delta_mu, self.epsilon / c_iq)
+                        * wt(delta_mu * margin_factor, self.epsilon / c_iq)
                     )
 
             intermediate_result_per_team = []

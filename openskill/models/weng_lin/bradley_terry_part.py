@@ -9,7 +9,7 @@ import math
 import uuid
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
-from openskill.models.common import _normalize, _unary_minus
+from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import (
     _unwind,
     phi_major,
@@ -280,6 +280,7 @@ class BradleyTerryPart:
             float,
         ] = _gamma,
         tau: float = 25.0 / 300.0,
+        margin: float = 0.0,
         window_size: int = 4,
         limit_sigma: bool = False,
         balance: bool = False,
@@ -321,6 +322,9 @@ class BradleyTerryPart:
 
                     *Represented by:* :math:`\tau`
 
+        :param margin: The margin of victory needed for a win to be considered
+                       impressive.
+
         :param window_size: The sliding window size for partial pairing such
                             that a larger window size tends to full pairing
                             mode's accuracy.
@@ -350,6 +354,7 @@ class BradleyTerryPart:
         ] = gamma
 
         self.tau: float = float(tau)
+        self.margin: float = float(margin)
         self.window_size: int = int(window_size)
         self.limit_sigma: bool = limit_sigma
         self.balance: bool = balance
@@ -612,9 +617,7 @@ class BradleyTerryPart:
 
         # Convert Score to Ranks
         if not ranks and scores:
-            ranks = []
-            for score in scores:
-                ranks.append(_unary_minus(score))
+            ranks = [float(r) for r in self._calculate_rankings(teams, scores)]
 
         # Normalize Weights
         if weights:
@@ -634,7 +637,9 @@ class BradleyTerryPart:
 
         processed_result = []
         if ranks and tenet:
-            result = self._compute(teams=teams, ranks=ranks, weights=weights)
+            result = self._compute(
+                teams=teams, ranks=ranks, scores=scores, weights=weights
+            )
             unwound_result = _unwind(tenet, result)[0]
             for item in unwound_result:
                 team = []
@@ -747,6 +752,7 @@ class BradleyTerryPart:
         self,
         teams: List[List[BradleyTerryPartRating]],
         ranks: Optional[List[float]] = None,
+        scores: Optional[List[float]] = None,
         weights: Optional[List[List[float]]] = None,
     ) -> List[List[BradleyTerryPartRating]]:
         # Initialize Constants
@@ -755,8 +761,13 @@ class BradleyTerryPart:
         beta = self.beta
         num_teams = len(team_ratings)
         window = self.window_size
-        result = []
 
+        score_mapping = {}
+        if scores and len(scores) == len(team_ratings):
+            for i, team in enumerate(team_ratings):
+                score_mapping[i] = scores[i]
+
+        result = []
         for i, team_i in enumerate(team_ratings):
             omega_sum = 0.0
             delta_sum = 0.0
@@ -767,6 +778,7 @@ class BradleyTerryPart:
             for q in range(start, end):
                 if q == i:
                     continue
+
                 team_q = team_ratings[q]
                 c_iq = math.sqrt(
                     team_i.sigma_squared + team_q.sigma_squared + (2 * beta**2)
@@ -780,7 +792,14 @@ class BradleyTerryPart:
                 elif team_q.rank == team_i.rank:
                     s = 0.5
 
-                omega_sum += sigma_to_ciq * (s - p_iq)
+                margin_factor = 1.0
+                if scores and i in score_mapping and q in score_mapping and i != q:
+                    score_diff = score_mapping[i] - score_mapping[q]
+                    if score_diff > 0 and team_q.rank < team_i.rank:
+                        if score_diff > self.margin and self.margin > 0.0:
+                            margin_factor = 1.0 + math.log1p(score_diff)
+
+                omega_sum += (sigma_to_ciq * (s - p_iq)) * margin_factor
                 current_weights = weights[i] if weights else None
                 gamma_value = self.gamma(
                     c_iq,
@@ -791,7 +810,9 @@ class BradleyTerryPart:
                     team_i.rank,
                     current_weights,
                 )
-                delta_sum += (gamma_value * sigma_to_ciq / c_iq) * p_iq * (1 - p_iq)
+                delta_sum += (
+                    (gamma_value * sigma_to_ciq / c_iq) * p_iq * (1 - p_iq)
+                ) * margin_factor
                 comparisons += 1
 
             if comparisons > 0:

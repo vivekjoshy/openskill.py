@@ -20,9 +20,9 @@ representing playtime and invert it relative to all other player durations. Simp
 3. Does this library support score margins?
 +++++++++++++++++++++++++++++++++++++++++++
 
-No. Score margins are much harder to implement and require reinterpreting the models as differences
-in scores. The update rules for each model is different, so more than likely an entirely new
-model will need to be constructed.
+Yes. If a margin of victory or loss is significant, set the :code:`margin` parameter to the said margin value.
+This should start to consider margins when using the :code:`scores` parameter. Margins cannot work with ranks
+because of the consistent interval nature of ranks.
 
 4. What is the main difference between a partial pairing model and full pairing model?
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -43,7 +43,7 @@ section.
 6. Does this library support time decay?
 ++++++++++++++++++++++++++++++++++++++++
 
-Yes. Simply adjust ``sigma`` by a small value as needed when you feel a player has been inactive. A small 
+Yes. Simply adjust ``sigma`` by a small value as needed when you feel a player has been inactive. A small
 delta added every day after being inactive till the value reaches the default sigma is usually good enough.
 Make sure to test against your own data to ensure it actually predicts outcomes.
 

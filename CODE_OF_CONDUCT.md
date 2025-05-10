@@ -37,9 +37,9 @@ We will not tolerate any behavior that:
 
 ### Reporting Violations
 
-If you experience or witness a violation of this Code of Conduct, please report it **privately** using the following form:
+If you experience or witness a violation of this Code of Conduct, please report it **privately** to this email:
 
-https://openskill.youtrack.cloud/form/f2b97d40-c27d-4617-9bea-7f2152a1db1f
+[coc@openskill.me](mailto:coc@openskill.com)
 
 All reports will be taken seriously and investigated promptly. Your identity will be kept confidential unless you choose to disclose it.
 
