@@ -1,7 +1,7 @@
 User Manual
 ===========
 
-OpenSkill requires knowledge of some domain specific jargon to navigate.
+OpenSkill requires knowledge of some domain-specific jargon to navigate.
 If you know what the central measures of tendency and Gaussian distributions are, you are pretty much set.
 
 If you don't know what those are, please consider using a short resource on statistics to get acquainted with
@@ -9,8 +9,8 @@ the terms. We recommend Khan Academy's short course on `statistics and probabili
 
 If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
 If you can't find an answer, please open a new `discussion <https://github.com/vivekjoshy/openskill.py/discussions>`_ and we'll try to help you out.
-You can also get help from the official `Discord Server <https://discord.com/invite/4JNDeHMYkM>`_. If you have a feature request, or want to report
-a bug please create a new `issue <https://github.com/vivekjoshy/openskill.py/issues/new/choose>`_ if one already doesn't exist.
+You can also get help from the official `Discord Server <https://discord.com/invite/4JNDeHMYkM>`_. If you have a feature request or want to report
+a bug, please create a new `issue <https://github.com/vivekjoshy/openskill.py/issues/new/choose>`_ if one already doesn't exist.
 
 Let's start with a short refresher:
 
@@ -52,7 +52,7 @@ The Basics
 
 First we have to initialize the mode we want to use. We will use the :py:class:`PlackettLuce <openskill.models.weng_lin.plackett_luce.PlackettLuce>` model for this example.
 The :py:class:`PlackettLuce <openskill.models.weng_lin.plackett_luce.PlackettLuce>` model is generally a good choice if you're not expecting large matches with lots of players and teams.
-On the whole, all the 5 models have the same capabilities, but some are more accurate and some are faster than others. It's up to
+On the whole, all five models have the same capabilities, but some are more accurate, and some are faster than others. It's up to
 you to test out what works for you.
 
 Let's start the example by importing the model from the package. All models live
