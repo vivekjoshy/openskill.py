@@ -774,19 +774,6 @@ wheels = [
 ]
 
 [[package]]
-name = "incremental"
-version = "24.7.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "setuptools" },
-    { name = "tomli", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/27/87/156b374ff6578062965afe30cc57627d35234369b3336cf244b240c8d8e6/incremental-24.7.2.tar.gz", hash = "sha256:fb4f1d47ee60efe87d4f6f0ebb5f70b9760db2b2574c59c8e8912be4ebd464c9", size = 28157 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/0d/38/221e5b2ae676a3938c2c1919131410c342b6efc2baffeda395dd66eeca8f/incremental-24.7.2-py3-none-any.whl", hash = "sha256:8cb2c3431530bec48ad70513931a760f446ad6c25e8333ca5d95e24b0ed7b8fe", size = 20516 },
-]
-
-[[package]]
 name = "iniconfig"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1520,7 +1507,7 @@ wheels = [
 
 [[package]]
 name = "openskill"
-version = "6.1.0a1"
+version = "6.1.0"
 source = { editable = "." }
 
 [package.optional-dependencies]
@@ -1595,7 +1582,7 @@ requires-dist = [
     { name = "sphinx-intl", marker = "extra == 'docs'", specifier = "~=2.3" },
     { name = "sphinxcontrib-bibtex", marker = "extra == 'docs'", specifier = "~=2.6" },
     { name = "sphinxext-opengraph", marker = "extra == 'docs'", specifier = "~=0.9" },
-    { name = "towncrier", marker = "extra == 'build'", specifier = "~=23.11" },
+    { name = "towncrier", marker = "extra == 'build'", specifier = "~=24.8" },
     { name = "tox", marker = "extra == 'tests'", specifier = "~=4.24" },
     { name = "tqdm", marker = "extra == 'benchmark'", specifier = "~=4.67" },
     { name = "twine", marker = "extra == 'build'", specifier = "~=6.1" },
@@ -2799,17 +2786,16 @@ wheels = [
 
 [[package]]
 name = "towncrier"
-version = "23.11.0"
+version = "24.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "incremental" },
     { name = "jinja2" },
     { name = "tomli", version = "2.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e0/43/bb5161b32c538a099e1e1a8b79eedd4556dca925facc3b11e0ea7ab96d40/towncrier-23.11.0.tar.gz", hash = "sha256:13937c247e3f8ae20ac44d895cf5f96a60ad46cfdcc1671759530d7837d9ee5d", size = 51483 }
+sdist = { url = "https://files.pythonhosted.org/packages/69/d7/a5183f788cf4fabf03f7c767ae0b968249b0c737eb64b4d87a07ae01fea7/towncrier-24.8.0.tar.gz", hash = "sha256:013423ee7eed102b2f393c287d22d95f66f1a3ea10a4baa82d298001a7f18af3", size = 61635 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/36/5a/6546c8ea2bee64c9e9552e06fdb31118a4f23a12aa161581b5fefd070152/towncrier-23.11.0-py3-none-any.whl", hash = "sha256:2e519ca619426d189e3c98c99558fe8be50c9ced13ea1fc20a4a353a95d2ded7", size = 49327 },
+    { url = "https://files.pythonhosted.org/packages/93/1b/2f7b88506e22d9798c139261af4946865c0787cfa345514ca3c70173a9cc/towncrier-24.8.0-py3-none-any.whl", hash = "sha256:9343209592b839209cdf28c339ba45792fbfe9775b5f9c177462fd693e127d8d", size = 56981 },
 ]
 
 [[package]]
