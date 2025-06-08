@@ -617,7 +617,8 @@ class BradleyTerryPart:
 
         # Convert Score to Ranks
         if not ranks and scores:
-            ranks = [float(r) for r in self._calculate_rankings(teams, scores)]
+            ranks = [-s for s in scores]
+            ranks = self._calculate_rankings(teams, ranks)
 
         # Normalize Weights
         if weights:
@@ -780,10 +781,20 @@ class BradleyTerryPart:
                     continue
 
                 team_q = team_ratings[q]
+
+                margin_factor = 1.0
+                if scores and i in score_mapping and q in score_mapping and i != q:
+                    score_diff = abs(score_mapping[i] - score_mapping[q])
+                    if score_diff > 0 and team_q.rank < team_i.rank:
+                        if score_diff > self.margin and self.margin > 0.0:
+                            margin_factor = math.log1p(score_diff / self.margin)
+
                 c_iq = math.sqrt(
                     team_i.sigma_squared + team_q.sigma_squared + (2 * beta**2)
                 )
-                p_iq = 1 / (1 + math.exp((team_q.mu - team_i.mu) / c_iq))
+                p_iq = 1 / (
+                    1 + math.exp(((team_q.mu - team_i.mu) * margin_factor) / c_iq)
+                )
                 sigma_to_ciq = team_i.sigma_squared / c_iq
 
                 s = 0.0
@@ -792,14 +803,7 @@ class BradleyTerryPart:
                 elif team_q.rank == team_i.rank:
                     s = 0.5
 
-                margin_factor = 1.0
-                if scores and i in score_mapping and q in score_mapping and i != q:
-                    score_diff = score_mapping[i] - score_mapping[q]
-                    if score_diff > 0 and team_q.rank < team_i.rank:
-                        if score_diff > self.margin and self.margin > 0.0:
-                            margin_factor = 1.0 + math.log1p(score_diff)
-
-                omega_sum += (sigma_to_ciq * (s - p_iq)) * margin_factor
+                omega_sum += sigma_to_ciq * (s - p_iq)
                 current_weights = weights[i] if weights else None
                 gamma_value = self.gamma(
                     c_iq,
@@ -810,9 +814,7 @@ class BradleyTerryPart:
                     team_i.rank,
                     current_weights,
                 )
-                delta_sum += (
-                    (gamma_value * sigma_to_ciq / c_iq) * p_iq * (1 - p_iq)
-                ) * margin_factor
+                delta_sum += (gamma_value * sigma_to_ciq / c_iq) * p_iq * (1 - p_iq)
                 comparisons += 1
 
             if comparisons > 0:
@@ -1036,7 +1038,7 @@ class BradleyTerryPart:
                 sigma_squared_summed += (player.sigma * balance_weight) ** 2
             result.append(
                 BradleyTerryPartTeamRating(
-                    mu_summed, sigma_squared_summed, team, rank[index]
+                    mu_summed, sigma_squared_summed, team, int(rank[index])
                 )
             )
         return result
@@ -1045,12 +1047,13 @@ class BradleyTerryPart:
         self,
         game: Sequence[Sequence[BradleyTerryPartRating]],
         ranks: Optional[List[float]] = None,
-    ) -> List[int]:
+    ) -> List[float]:
         """
         Calculates the rankings based on the scores or ranks of the teams.
 
         It assigns a rank to each team based on their score, with the team with
-        the highest score being ranked first.
+        the highest score being ranked first. Ties are broken by a team's prior
+        averaged :math:`mu` values.
 
         :param game: A list of teams, where teams are lists of
                      :class:`BradleyTerryPartRating` objects.
@@ -1059,21 +1062,39 @@ class BradleyTerryPart:
 
         :return: A list of ranks for each team in the game.
         """
-        if ranks:
-            team_scores = []
-            for index, _ in enumerate(game):
-                if isinstance(ranks[index], int):
-                    team_scores.append(ranks[index])
-                else:
-                    team_scores.append(index)
-        else:
-            team_scores = [i for i, _ in enumerate(game)]
+        if not game:
+            return []
 
-        rank_output = {}
-        s = 0
-        for index, value in enumerate(team_scores):
-            if index > 0:
-                if team_scores[index - 1] < team_scores[index]:
-                    s = index
-            rank_output[index] = s
-        return list(rank_output.values())
+        if ranks is None:
+            return list(range(len(game)))
+
+        team_data = []
+        for index, rank in enumerate(ranks):
+            team = game[index]
+            average_ordinal = sum(player.ordinal() for player in team) / len(team)
+            team_data.append((rank, average_ordinal, index))
+
+        # Lower Ranks (Better), Higher Skill (Breaks Ties)
+        team_data.sort(key=lambda data: (data[0], -data[1]))  # Rank, -(Average Skill)
+
+        # Assign Final Ranks: Preserve Ranks for Identical Skill
+        final_ranks = [0.0] * len(game)
+        current_rank = 0
+
+        for team_index, (
+            original_rank,
+            average_ordinal,
+            original_team_index,
+        ) in enumerate(team_data):
+            if team_index > 0:
+                preceding_original_rank, preceding_average_ordinal, _ = team_data[
+                    team_index - 1
+                ]
+                # Advance Rank: Performance Changes OR Rank Changes
+                if (
+                    original_rank != preceding_original_rank
+                    or average_ordinal != preceding_average_ordinal
+                ):
+                    current_rank = original_team_index
+            final_ranks[original_team_index] = float(current_rank)
+        return final_ranks
