@@ -7,6 +7,7 @@ import copy
 import itertools
 import math
 import uuid
+from itertools import permutations
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
 from openskill.models.common import _normalize
@@ -628,7 +629,7 @@ class ThurstoneMostellerFull:
 
         # Convert Score to Ranks
         if not ranks and scores:
-            ranks = [-s for s in scores]
+            ranks = list(map(lambda s: -s, scores))
             ranks = self._calculate_rankings(teams, ranks)
 
         # Normalize Weights
@@ -1103,8 +1104,7 @@ class ThurstoneMostellerFull:
         Calculates the rankings based on the scores or ranks of the teams.
 
         It assigns a rank to each team based on their score, with the team with
-        the highest score being ranked first. Ties are broken by a team's prior
-        averaged :math:`mu` values.
+        the highest score being ranked first.
 
         :param game: A list of teams, where teams are lists of
                      :class:`ThurstoneMostellerFullRating` objects.
@@ -1116,36 +1116,16 @@ class ThurstoneMostellerFull:
         if not game:
             return []
 
-        if ranks is None:
-            return list(range(len(game)))
+        if ranks:
+            team_scores = [ranks[i] or i for i, _ in enumerate(game)]
+        else:
+            team_scores = [i for i, _ in enumerate(game)]
 
-        team_data = []
-        for index, rank in enumerate(ranks):
-            team = game[index]
-            average_ordinal = sum(player.ordinal() for player in team) / len(team)
-            team_data.append((rank, average_ordinal, index))
-
-        # Lower Ranks (Better), Higher Skill (Breaks Ties)
-        team_data.sort(key=lambda data: (data[0], -data[1]))  # Rank, -(Average Skill)
-
-        # Assign Final Ranks: Preserve Ranks for Identical Skill
-        final_ranks = [0.0] * len(game)
-        current_rank = 0
-
-        for team_index, (
-            original_rank,
-            average_ordinal,
-            original_team_index,
-        ) in enumerate(team_data):
-            if team_index > 0:
-                preceding_original_rank, preceding_average_ordinal, _ = team_data[
-                    team_index - 1
-                ]
-                # Advance Rank: Performance Changes OR Rank Changes
-                if (
-                    original_rank != preceding_original_rank
-                    or average_ordinal != preceding_average_ordinal
-                ):
-                    current_rank = original_team_index
-            final_ranks[original_team_index] = float(current_rank)
-        return final_ranks
+        output_ranks: dict[int, float] = {}
+        s = 0
+        for index, value in enumerate(team_scores):
+            if index > 0:
+                if team_scores[index - 1] < team_scores[index]:
+                    s = index
+            output_ranks[index] = s
+        return list(output_ranks.values())

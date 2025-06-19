@@ -9,7 +9,7 @@ A standalone script to benchmark multiple OpenSkill rating systems with differen
 - BradleyTerryFull
 - BradleyTerryPart
 
-Each system is tested with margin=0.0 and margin=2.0 to evaluate the impact on prediction accuracy.
+Each system is tested with margin=0.0 and margin=1.0 to evaluate the impact on prediction accuracy.
 """
 
 import gc
@@ -79,7 +79,7 @@ class RatingSystemBenchmark:
         }
 
         # Define margins to test
-        self.margins = [0.0, 2.0]
+        self.margins = [0.0, 1.0]
 
     def load_data(self) -> None:
         """
@@ -391,7 +391,7 @@ class RatingSystemBenchmark:
         table.add_column("Avg Time (s)", style="yellow")
 
         # Add a separate table for margin difference analysis
-        diff_table = Table(title="Margin Impact Analysis (2.0 vs 0.0)")
+        diff_table = Table(title="Margin Impact Analysis")
         diff_table.add_column("Model", style="cyan")
         diff_table.add_column("Accuracy Difference", style="magenta")
         diff_table.add_column("Speed Difference", style="yellow")
@@ -412,19 +412,27 @@ class RatingSystemBenchmark:
                     f"{metrics[3]:.2f}",
                 )
 
-            # Calculate the difference between margin=2.0 and margin=0.0
-            if 0.0 in metrics_by_margin and 2.0 in metrics_by_margin:
-                m0 = metrics_by_margin[0.0]
-                m2 = metrics_by_margin[2.0]
+            # Calculate the difference between margins automatically
+            if len(self.margins) >= 2:
+                # Sort margins to get consistent comparison (highest vs lowest)
+                sorted_margins = sorted(self.margins)
+                low_margin = sorted_margins[0]
+                high_margin = sorted_margins[-1]
 
-                acc_diff = m2[2] - m0[2]
-                time_diff = (m2[3] / m0[3] - 1.0) * 100
+                if low_margin in metrics_by_margin and high_margin in metrics_by_margin:
+                    m_low = metrics_by_margin[low_margin]
+                    m_high = metrics_by_margin[high_margin]
 
-                diff_table.add_row(
-                    model_name,
-                    f"{acc_diff:.2f}% {'better' if acc_diff > 0 else 'worse'}",
-                    f"{abs(time_diff):.2f}% {'slower' if time_diff > 0 else 'faster'}",
-                )
+                    acc_diff = m_high[2] - m_low[2]
+                    time_diff = (
+                        (m_high[3] / m_low[3] - 1.0) * 100 if m_low[3] > 0 else 0
+                    )
+
+                    diff_table.add_row(
+                        model_name,
+                        f"{acc_diff:+.2f}% ({'better' if acc_diff > 0 else 'worse' if acc_diff < 0 else 'same'})",
+                        f"{abs(time_diff):.2f}% {'slower' if time_diff > 0 else 'faster' if time_diff < 0 else 'same'}",
+                    )
 
         # Print tables
         self.console.print(table)

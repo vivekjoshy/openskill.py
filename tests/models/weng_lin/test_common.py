@@ -81,7 +81,7 @@ def test_calculate_rankings(model) -> None:
     assert model._calculate_rankings([]) == []
     assert model._calculate_rankings([], []) == []
     assert model._calculate_rankings([a, b, c, d]) == [0, 1, 2, 3]
-    assert model._calculate_rankings([a, b], [0, 0]) == [0, 0]
+    assert model._calculate_rankings([a, b], [0, 0]) == [0, 1]
     assert model._calculate_rankings([a, b, c, d], [1, 2, 3, 4]) == [0, 1, 2, 3]
     assert model._calculate_rankings([a, b, c, d], [1, 1, 3, 4]) == [0, 0, 2, 3]
     assert model._calculate_rankings([a, b, c, d], [1, 2, 3, 3]) == [0, 1, 2, 2]

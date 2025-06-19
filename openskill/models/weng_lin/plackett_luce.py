@@ -607,7 +607,7 @@ class PlackettLuce:
 
         # Convert Score to Ranks
         if not ranks and scores:
-            ranks = [-s for s in scores]
+            ranks = list(map(lambda s: -s, scores))
             ranks = self._calculate_rankings(teams, ranks)
 
         # Normalize Weights
@@ -686,8 +686,12 @@ class PlackettLuce:
             collective_team_sigma += team.sigma_squared + beta_squared
         return math.sqrt(collective_team_sigma)
 
-    @staticmethod
-    def _sum_q(team_ratings: List[PlackettLuceTeamRating], c: float) -> List[float]:
+    def _sum_q(
+        self,
+        team_ratings: List[PlackettLuceTeamRating],
+        c: float,
+        scores: Optional[List[float]] = None,
+    ) -> List[float]:
         r"""
         Sum up all the values of :code:`mu / c` raised to :math:`e`.
 
@@ -703,12 +707,46 @@ class PlackettLuce:
 
         :param c: The square root of the collective team sigma.
 
+        :param scores: Optional scores for margin factor calculation.
+
         :return: A list of floats.
         """
+        # Create Score Mapping for Margin Calculations
+        score_mapping = {}
+        if scores and len(scores) == len(team_ratings):
+            for i, team in enumerate(team_ratings):
+                score_mapping[i] = scores[i]
 
         sum_q: Dict[int, float] = {}
         for i, team_i in enumerate(team_ratings):
-            summed = math.exp(team_i.mu / c)
+            adjusted_mu = team_i.mu
+
+            if scores and i in score_mapping:
+                margin_adjustment = 0.0
+                comparison_count = 0
+
+                for j, team_j in enumerate(team_ratings):
+                    if i != j and j in score_mapping:
+                        score_diff = abs(score_mapping[i] - score_mapping[j])
+                        if score_diff > 0:
+                            margin_factor = 1.0
+                            if score_diff > self.margin and self.margin > 0.0:
+                                margin_factor = math.log1p(score_diff / self.margin)
+
+                            # Apply Margin Factor to the Skill Difference
+                            if score_mapping[i] > score_mapping[j]:  # Performed Better
+                                margin_adjustment += (team_i.mu - team_j.mu) * (
+                                    margin_factor - 1.0
+                                )
+                            else:  # Performed Worse
+                                margin_adjustment -= (team_j.mu - team_i.mu) * (
+                                    margin_factor - 1.0
+                                )
+                            comparison_count += 1
+
+                adjusted_mu += margin_adjustment / comparison_count
+
+            summed = math.exp(adjusted_mu / c)
             for q, team_q in enumerate(team_ratings):
                 if team_i.rank >= team_q.rank:
                     if q in sum_q:
@@ -750,7 +788,7 @@ class PlackettLuce:
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         c = self._c(team_ratings)
-        sum_q = self._sum_q(team_ratings, c)
+        sum_q = self._sum_q(team_ratings, c, scores)
         a = self._a(team_ratings)
 
         score_mapping = {}
@@ -768,25 +806,44 @@ class PlackettLuce:
         for i, team_i in enumerate(team_ratings):
             omega = 0.0
             delta = 0.0
-            i_mu_over_c = math.exp(team_i.mu / c)
+
+            adjusted_mu_i = team_i.mu
+            if scores and i in score_mapping:
+                margin_adjustment = 0.0
+                comparison_count = 0
+
+                for j, team_j in enumerate(team_ratings):
+                    if i != j and j in score_mapping:
+                        score_diff = abs(score_mapping[i] - score_mapping[j])
+                        if score_diff > 0:
+                            margin_factor = 1.0
+                            if score_diff > self.margin and self.margin > 0.0:
+                                margin_factor = math.log1p(score_diff / self.margin)
+
+                            if score_mapping[i] > score_mapping[j]:
+                                margin_adjustment += (team_i.mu - team_j.mu) * (
+                                    margin_factor - 1.0
+                                )
+                            else:
+                                margin_adjustment -= (team_j.mu - team_i.mu) * (
+                                    margin_factor - 1.0
+                                )
+                            comparison_count += 1
+
+                adjusted_mu_i += margin_adjustment / comparison_count
+
+            i_mu_over_c = math.exp(adjusted_mu_i / c)
 
             for q, team_q in enumerate(team_ratings):
-                margin_factor = 1.0
-                if scores and i in score_mapping and q in score_mapping and i != q:
-                    score_diff = abs(score_mapping[i] - score_mapping[q])
-                    if score_diff > 0 and team_q.rank < team_i.rank:
-                        if score_diff > self.margin and self.margin > 0.0:
-                            margin_factor = math.log1p(score_diff / self.margin)
-
                 i_mu_over_ce_over_sum_q = i_mu_over_c / sum_q[q]
                 if team_q.rank <= team_i.rank:
                     delta += (
                         i_mu_over_ce_over_sum_q * (1 - i_mu_over_ce_over_sum_q) / a[q]
-                    ) * margin_factor
+                    )
                     if team_q.rank == team_i.rank:
-                        omega += ((1 - i_mu_over_ce_over_sum_q) / a[q]) * margin_factor
+                        omega += (1 - i_mu_over_ce_over_sum_q) / a[q]
                     else:
-                        omega -= (i_mu_over_ce_over_sum_q / a[q]) * margin_factor
+                        omega -= i_mu_over_ce_over_sum_q / a[q]
 
             omega *= team_i.sigma_squared / c
             delta *= team_i.sigma_squared / c**2
@@ -1051,11 +1108,10 @@ class PlackettLuce:
         ranks: Optional[List[float]] = None,
     ) -> List[float]:
         """
-        Calculates the rankings based on the scores or ranks of the teams.
+        Calculates the rankings based on the scores of the teams.
 
         It assigns a rank to each team based on their score, with the team with
-        the highest score being ranked first. Ties are broken by a team's prior
-        averaged :math:`mu` values.
+        the highest score being ranked first.
 
         :param game: A list of teams, where teams are lists of
                      :class:`PlackettLuceRating` objects.
@@ -1067,36 +1123,16 @@ class PlackettLuce:
         if not game:
             return []
 
-        if ranks is None:
-            return list(range(len(game)))
+        if ranks:
+            team_scores = [ranks[i] or i for i, _ in enumerate(game)]
+        else:
+            team_scores = [i for i, _ in enumerate(game)]
 
-        team_data = []
-        for index, rank in enumerate(ranks):
-            team = game[index]
-            average_ordinal = sum(player.ordinal() for player in team) / len(team)
-            team_data.append((rank, average_ordinal, index))
-
-        # Lower Ranks (Better), Higher Skill (Breaks Ties)
-        team_data.sort(key=lambda data: (data[0], -data[1]))  # Rank, -(Average Skill)
-
-        # Assign Final Ranks: Preserve Ranks for Identical Skill
-        final_ranks = [0.0] * len(game)
-        current_rank = 0
-
-        for team_index, (
-            original_rank,
-            average_ordinal,
-            original_team_index,
-        ) in enumerate(team_data):
-            if team_index > 0:
-                preceding_original_rank, preceding_average_ordinal, _ = team_data[
-                    team_index - 1
-                ]
-                # Advance Rank: Performance Changes OR Rank Changes
-                if (
-                    original_rank != preceding_original_rank
-                    or average_ordinal != preceding_average_ordinal
-                ):
-                    current_rank = original_team_index
-            final_ranks[original_team_index] = float(current_rank)
-        return final_ranks
+        output_ranks: dict[int, float] = {}
+        s = 0
+        for index, value in enumerate(team_scores):
+            if index > 0:
+                if team_scores[index - 1] < team_scores[index]:
+                    s = index
+            output_ranks[index] = s
+        return list(output_ranks.values())
