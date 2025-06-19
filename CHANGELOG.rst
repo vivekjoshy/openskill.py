@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 6.1.2 (2025-06-19)
+============================
+
+Bugfixes
+--------
+
+- Fix unordered mu diffs when passing scores in some scenarios.
+
+
 Openskill 6.1.1 (2025-06-08)
 ============================
 
