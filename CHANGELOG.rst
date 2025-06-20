@@ -4,6 +4,15 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+Openskill 6.1.3 (2025-06-20)
+============================
+
+Bugfixes
+--------
+
+- Fix infinite rating gain bug
+
+
 Openskill 6.1.2 (2025-06-19)
 ============================
 
