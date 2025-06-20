@@ -53,7 +53,7 @@ description = "Multiplayer Rating System. No Friction."
 readme = "README.md"
 requires-python = "~=3.10"
 keywords = ["ranking", "trueskill", "statistics", "rating", "math", "rank"]
-license = {"text" = "MIT"}
+license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
 	"Intended Audience :: Developers",

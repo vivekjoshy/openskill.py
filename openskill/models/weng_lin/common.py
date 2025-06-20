@@ -44,7 +44,7 @@ def _unwind(tenet: List[float], objects: List[Any]) -> Tuple[List[Any], List[flo
         unsorted_matrix = _matrix_transpose(matrix)
         if unsorted_matrix:
             zipped_matrix = list(zip(unsorted_matrix[0], unsorted_matrix[1]))
-            zipped_matrix.sort(key=_pick_zeroth_index)
+            zipped_matrix = sorted(zipped_matrix, key=_pick_zeroth_index)
             sorted_matrix = [x for _, x in zipped_matrix]
             return [x for x, _ in sorted_matrix], [x for _, x in sorted_matrix]
         else:

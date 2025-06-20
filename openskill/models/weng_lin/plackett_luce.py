@@ -744,7 +744,11 @@ class PlackettLuce:
                                 )
                             comparison_count += 1
 
-                adjusted_mu += margin_adjustment / comparison_count
+                adjusted_mu += (
+                    (margin_adjustment / comparison_count)
+                    if comparison_count
+                    else margin_adjustment
+                )
 
             summed = math.exp(adjusted_mu / c)
             for q, team_q in enumerate(team_ratings):
@@ -830,7 +834,11 @@ class PlackettLuce:
                                 )
                             comparison_count += 1
 
-                adjusted_mu_i += margin_adjustment / comparison_count
+                adjusted_mu_i += (
+                    (margin_adjustment / comparison_count)
+                    if comparison_count
+                    else margin_adjustment
+                )
 
             i_mu_over_c = math.exp(adjusted_mu_i / c)
 
@@ -1075,10 +1083,8 @@ class PlackettLuce:
 
         :return: A list of :class:`PlackettLuceTeamRating` objects.
         """
-        if ranks:
-            rank = self._calculate_rankings(game, ranks)
-        else:
-            rank = self._calculate_rankings(game)
+        if ranks is None:
+            ranks = self._calculate_rankings(game)
 
         result = []
         for index, team in enumerate(game):
@@ -1097,7 +1103,7 @@ class PlackettLuce:
                 sigma_squared_summed += (player.sigma * balance_weight) ** 2
             result.append(
                 PlackettLuceTeamRating(
-                    mu_summed, sigma_squared_summed, team, int(rank[index])
+                    mu_summed, sigma_squared_summed, team, int(ranks[index])
                 )
             )
         return result
@@ -1124,15 +1130,15 @@ class PlackettLuce:
             return []
 
         if ranks:
-            team_scores = [ranks[i] or i for i, _ in enumerate(game)]
+            team_scores = []
+            for index, _ in enumerate(game):
+                team_scores.append(ranks[index] or index)
         else:
             team_scores = [i for i, _ in enumerate(game)]
 
-        output_ranks: dict[int, float] = {}
-        s = 0
-        for index, value in enumerate(team_scores):
-            if index > 0:
-                if team_scores[index - 1] < team_scores[index]:
-                    s = index
-            output_ranks[index] = s
-        return list(output_ranks.values())
+        sorted_scores = sorted(team_scores)
+        rank_map: dict[float, int] = {}
+        for index, value in enumerate(sorted_scores):
+            if value not in rank_map:
+                rank_map[value] = index
+        return [rank_map[v] for v in team_scores]

@@ -1108,15 +1108,15 @@ class ThurstoneMostellerPart:
             return []
 
         if ranks:
-            team_scores = [ranks[i] or i for i, _ in enumerate(game)]
+            team_scores = []
+            for index, _ in enumerate(game):
+                team_scores.append(ranks[index] or index)
         else:
             team_scores = [i for i, _ in enumerate(game)]
 
-        output_ranks: dict[int, float] = {}
-        s = 0
-        for index, value in enumerate(team_scores):
-            if index > 0:
-                if team_scores[index - 1] < team_scores[index]:
-                    s = index
-            output_ranks[index] = s
-        return list(output_ranks.values())
+        sorted_scores = sorted(team_scores)
+        rank_map: dict[float, int] = {}
+        for index, value in enumerate(sorted_scores):
+            if value not in rank_map:
+                rank_map[value] = index
+        return [rank_map[v] for v in team_scores]
