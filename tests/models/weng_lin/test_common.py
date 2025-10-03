@@ -81,7 +81,7 @@ def test_calculate_rankings(model) -> None:
     assert model._calculate_rankings([]) == []
     assert model._calculate_rankings([], []) == []
     assert model._calculate_rankings([a, b, c, d]) == [0, 1, 2, 3]
-    assert model._calculate_rankings([a, b], [0, 0]) == [0, 1]
+    assert model._calculate_rankings([a, b], [0, 0]) == [0, 0]
     assert model._calculate_rankings([a, b, c, d], [1, 2, 3, 4]) == [0, 1, 2, 3]
     assert model._calculate_rankings([a, b, c, d], [1, 1, 3, 4]) == [0, 0, 2, 3]
     assert model._calculate_rankings([a, b, c, d], [1, 2, 3, 3]) == [0, 1, 2, 2]
@@ -201,3 +201,24 @@ def test_ladder_pairs():
     assert _ladder_pairs([1, 2]) == [[2], [1]]
     assert _ladder_pairs([1, 2, 3]) == [[2], [1, 3], [2]]
     assert _ladder_pairs([1, 2, 3, 4]) == [[2], [1, 3], [2, 4], [3]]
+
+
+@pytest.mark.parametrize("model", MODELS)
+@pytest.mark.parametrize("tie_score", [-1, 0, 0.1, 10, 13.4])
+def test_ties(model, tie_score):
+    model_instance = model()
+
+    player_1 = model_instance.rating()
+    player_2 = model_instance.rating()
+
+    result = model_instance.rate(
+        [[player_1], [player_2]], scores=[tie_score, tie_score]
+    )
+
+    # Both players should have the same rating change
+    assert (
+        result[0][0].mu == result[1][0].mu
+    ), f"Model {model.__name__} with score {tie_score}: Players should have equal mu after tie"
+    assert (
+        result[0][0].sigma == result[1][0].sigma
+    ), f"Model {model.__name__} with score {tie_score}: Players should have equal sigma after tie"

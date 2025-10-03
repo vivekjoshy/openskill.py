@@ -1119,7 +1119,7 @@ class ThurstoneMostellerFull:
         if ranks:
             team_scores = []
             for index, _ in enumerate(game):
-                team_scores.append(ranks[index] or index)
+                team_scores.append(ranks[index] if ranks[index] is not None else index)
         else:
             team_scores = [i for i, _ in enumerate(game)]
 
