@@ -94,6 +94,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "xelandernt",
+      "name": "Alex",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60134319?v=4",
+      "profile": "https://github.com/xelandernt",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
