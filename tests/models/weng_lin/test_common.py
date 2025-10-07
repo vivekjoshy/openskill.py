@@ -205,20 +205,52 @@ def test_ladder_pairs():
 
 @pytest.mark.parametrize("model", MODELS)
 @pytest.mark.parametrize("tie_score", [-1, 0, 0.1, 10, 13.4])
-def test_ties(model, tie_score):
+@pytest.mark.parametrize("num_teams", [2, 5, 10])
+@pytest.mark.parametrize("team_size", [1, 2, 5, 10])
+@pytest.mark.parametrize("tie_type", ["score", "rank"])
+def test_ties(model, tie_score, num_teams, team_size, tie_type) -> None:
+    model_instance = model()
+    teams = [
+        [model_instance.rating() for _ in range(team_size)] for _ in range(num_teams)
+    ]
+    player_mu_before = [player.mu for team in teams for player in team]
+    assert all(
+        mu == player_mu_before[0] for mu in player_mu_before
+    ), f"Model {model.__name__} with score {tie_score}: All players should start with equal mu"
+
+    player_sigma_before = [player.sigma for team in teams for player in team]
+    assert all(
+        sigma == player_sigma_before[0] for sigma in player_sigma_before
+    ), f"Model {model.__name__} with score {tie_score}: All players should start with equal sigma"
+
+    if tie_type == "score":
+        scores = [tie_score for _ in range(num_teams)]
+        new_teams = model_instance.rate(teams, scores=scores)
+    else:  # rank
+        ranks = [tie_score for _ in range(num_teams)]
+        new_teams = model_instance.rate(teams, ranks=ranks)
+
+    player_mu_after = [player.mu for team in new_teams for player in team]
+    assert all(
+        mu_after == mu_before
+        for mu_after, mu_before in zip(player_mu_after, player_mu_before)
+    ), f"Model {model.__name__} with score {tie_score}: All players should end with equal mu"
+    player_sigma_after = [player.sigma for team in new_teams for player in team]
+    assert all(
+        sigma_after <= sigma_before
+        for sigma_after, sigma_before in zip(player_sigma_after, player_sigma_before)
+    ), f"Model {model.__name__} with score {tie_score}: All players should end with lower or equal sigma"
+
+
+@pytest.mark.parametrize("model", MODELS)
+def test_ties_with_close_ratings(model) -> None:
     model_instance = model()
 
-    player_1 = model_instance.rating()
-    player_2 = model_instance.rating()
+    player_1 = model_instance.rating(mu=30)
+    player_2 = model_instance.rating(mu=20)
 
-    result = model_instance.rate(
-        [[player_1], [player_2]], scores=[tie_score, tie_score]
-    )
+    new_teams = model_instance.rate([[player_1], [player_2]], ranks=[0, 0])
 
-    # Both players should have the same rating change
-    assert (
-        result[0][0].mu == result[1][0].mu
-    ), f"Model {model.__name__} with score {tie_score}: Players should have equal mu after tie"
-    assert (
-        result[0][0].sigma == result[1][0].sigma
-    ), f"Model {model.__name__} with score {tie_score}: Players should have equal sigma after tie"
+    # ratings should converge on ties.
+    assert new_teams[0][0].mu < 30
+    assert new_teams[1][0].mu > 20
