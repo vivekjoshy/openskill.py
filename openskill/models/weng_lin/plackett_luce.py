@@ -848,7 +848,7 @@ class PlackettLuce:
                     delta += (
                         i_mu_over_ce_over_sum_q * (1 - i_mu_over_ce_over_sum_q) / a[q]
                     )
-                    if team_q.rank == team_i.rank:
+                    if q == i:
                         omega += (1 - i_mu_over_ce_over_sum_q) / a[q]
                     else:
                         omega -= i_mu_over_ce_over_sum_q / a[q]
