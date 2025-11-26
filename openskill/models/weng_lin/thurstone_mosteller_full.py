@@ -731,7 +731,7 @@ class ThurstoneMostellerFull:
            A_q = |\{s: r(s) = r(q)\}|, q = 1,...,k
 
         :param team_ratings: The whole rating of a list of teams in a game.
-        :return: A list of floats.
+        :return: A list of ints.
         """
         return [sum(1 for q in team_ratings if q.rank == i.rank) for i in team_ratings]
 
