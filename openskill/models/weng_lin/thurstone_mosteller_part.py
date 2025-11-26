@@ -93,10 +93,7 @@ class ThurstoneMostellerPartRating:
         if not isinstance(other, ThurstoneMostellerPartRating):
             return NotImplemented
 
-        if self.mu == other.mu and self.sigma == other.sigma:
-            return True
-        else:
-            return False
+        return self.mu == other.mu and self.sigma == other.sigma
 
     def __lt__(self, other: "ThurstoneMostellerPartRating") -> bool:
         if not isinstance(other, ThurstoneMostellerPartRating):
@@ -104,10 +101,7 @@ class ThurstoneMostellerPartRating:
                 "You can only compare ThurstoneMostellerPartRating objects with each other."
             )
 
-        if self.ordinal() < other.ordinal():
-            return True
-        else:
-            return False
+        return self.ordinal() < other.ordinal()
 
     def __gt__(self, other: "ThurstoneMostellerPartRating") -> bool:
         if not isinstance(other, ThurstoneMostellerPartRating):
@@ -115,10 +109,7 @@ class ThurstoneMostellerPartRating:
                 "You can only compare ThurstoneMostellerPartRating objects with each other."
             )
 
-        if self.ordinal() > other.ordinal():
-            return True
-        else:
-            return False
+        return self.ordinal() > other.ordinal()
 
     def __le__(self, other: "ThurstoneMostellerPartRating") -> bool:
         if not isinstance(other, ThurstoneMostellerPartRating):
@@ -126,10 +117,7 @@ class ThurstoneMostellerPartRating:
                 "You can only compare ThurstoneMostellerPartRating objects with each other."
             )
 
-        if self.ordinal() <= other.ordinal():
-            return True
-        else:
-            return False
+        return self.ordinal() <= other.ordinal()
 
     def __ge__(self, other: "ThurstoneMostellerPartRating") -> bool:
         if not isinstance(other, ThurstoneMostellerPartRating):
@@ -137,10 +125,7 @@ class ThurstoneMostellerPartRating:
                 "You can only compare ThurstoneMostellerPartRating objects with each other."
             )
 
-        if self.ordinal() >= other.ordinal():
-            return True
-        else:
-            return False
+        return self.ordinal() >= other.ordinal()
 
     def ordinal(self, z: float = 3.0, alpha: float = 1, target: float = 0) -> float:
         r"""
