@@ -80,57 +80,42 @@ class BradleyTerryFullRating:
         return blf
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, BradleyTerryFullRating):
-            if self.mu == other.mu and self.sigma == other.sigma:
-                return True
-            else:
-                return False
-        else:
+        if not isinstance(other, BradleyTerryFullRating):
             return NotImplemented
 
+        return self.mu == other.mu and self.sigma == other.sigma
+
     def __lt__(self, other: "BradleyTerryFullRating") -> bool:
-        if isinstance(other, BradleyTerryFullRating):
-            if self.ordinal() < other.ordinal():
-                return True
-            else:
-                return False
-        else:
+        if not isinstance(other, BradleyTerryFullRating):
             raise ValueError(
                 "You can only compare BradleyTerryFullRating objects with each other."
             )
+
+        return self.ordinal() < other.ordinal()
 
     def __gt__(self, other: "BradleyTerryFullRating") -> bool:
-        if isinstance(other, BradleyTerryFullRating):
-            if self.ordinal() > other.ordinal():
-                return True
-            else:
-                return False
-        else:
+        if not isinstance(other, BradleyTerryFullRating):
             raise ValueError(
                 "You can only compare BradleyTerryFullRating objects with each other."
             )
+
+        return self.ordinal() > other.ordinal()
 
     def __le__(self, other: "BradleyTerryFullRating") -> bool:
-        if isinstance(other, BradleyTerryFullRating):
-            if self.ordinal() <= other.ordinal():
-                return True
-            else:
-                return False
-        else:
+        if not isinstance(other, BradleyTerryFullRating):
             raise ValueError(
                 "You can only compare BradleyTerryFullRating objects with each other."
             )
 
+        return self.ordinal() <= other.ordinal()
+
     def __ge__(self, other: "BradleyTerryFullRating") -> bool:
-        if isinstance(other, BradleyTerryFullRating):
-            if self.ordinal() >= other.ordinal():
-                return True
-            else:
-                return False
-        else:
+        if not isinstance(other, BradleyTerryFullRating):
             raise ValueError(
                 "You can only compare BradleyTerryFullRating objects with each other."
             )
+
+        return self.ordinal() >= other.ordinal()
 
     def ordinal(self, z: float = 3.0, alpha: float = 1, target: float = 0) -> float:
         r"""
@@ -200,15 +185,15 @@ class BradleyTerryFullTeamRating:
         )
 
     def __eq__(self, other: Any) -> bool:
-        if isinstance(other, BradleyTerryFullTeamRating):
-            return (
-                self.mu == other.mu
-                and self.sigma_squared == other.sigma_squared
-                and self.team == other.team
-                and self.rank == other.rank
-            )
-        else:
+        if not isinstance(other, BradleyTerryFullTeamRating):
             return NotImplemented
+
+        return (
+            self.mu == other.mu
+            and self.sigma_squared == other.sigma_squared
+            and self.team == other.team
+            and self.rank == other.rank
+        )
 
     def __hash__(self) -> int:
         return hash((self.mu, self.sigma_squared, tuple(self.team), self.rank))
@@ -436,37 +421,35 @@ class BradleyTerryFull:
         :param teams: List of lists of BradleyTerryFullRating objects.
         """
         # Catch teams argument errors
-        if isinstance(teams, list):
-            if len(teams) < 2:
-                raise ValueError(
-                    f"Argument 'teams' must have at least 2 teams, not {len(teams)}."
-                )
-
-            for team in teams:
-                if isinstance(team, list):
-                    if len(team) < 1:
-                        raise ValueError(
-                            f"Argument 'teams' must have at least 1 player per team, not {len(team)}."
-                        )
-
-                    for player in team:
-                        if isinstance(player, BradleyTerryFullRating):
-                            pass
-                        else:
-                            raise TypeError(
-                                f"Argument 'teams' must be a list of lists of 'BradleyTerryFullRating' objects, "
-                                f"not '{player.__class__.__name__}'."
-                            )
-                else:
-                    raise TypeError(
-                        f"Argument 'teams' must be a list of lists of 'BradleyTerryFullRating' objects, "
-                        f"not '{team.__class__.__name__}'."
-                    )
-        else:
+        if not isinstance(teams, list):
             raise TypeError(
                 f"Argument 'teams' must be a list of lists of 'BradleyTerryFullRating' objects, "
                 f"not '{teams.__class__.__name__}'."
             )
+
+        if len(teams) < 2:
+            raise ValueError(
+                f"Argument 'teams' must have at least 2 teams, not {len(teams)}."
+            )
+
+        for team in teams:
+            if not isinstance(team, list):
+                raise TypeError(
+                    f"Argument 'teams' must be a list of lists of 'BradleyTerryFullRating' objects, "
+                    f"not '{team.__class__.__name__}'."
+                )
+
+            if len(team) < 1:
+                raise ValueError(
+                    f"Argument 'teams' must have at least 1 player per team, not {len(team)}."
+                )
+
+            for player in team:
+                if not isinstance(player, BradleyTerryFullRating):
+                    raise TypeError(
+                        f"Argument 'teams' must be a list of lists of 'BradleyTerryFullRating' objects, "
+                        f"not '{player.__class__.__name__}'."
+                    )
 
     def rate(
         self,
@@ -507,26 +490,24 @@ class BradleyTerryFull:
 
         # Catch ranks argument errors
         if ranks:
-            if isinstance(ranks, list):
-                if len(ranks) != len(teams):
-                    raise ValueError(
-                        f"Argument 'ranks' must have the same number of elements as 'teams', "
-                        f"not {len(ranks)}."
-                    )
-
-                for rank in ranks:
-                    if isinstance(rank, (int, float)):
-                        pass
-                    else:
-                        raise TypeError(
-                            f"Argument 'ranks' must be a list of 'int' or 'float' values, "
-                            f"not '{rank.__class__.__name__}'."
-                        )
-            else:
+            if not isinstance(ranks, list):
                 raise TypeError(
                     f"Argument 'ranks' must be a list of 'int' or 'float' values, "
                     f"not '{ranks.__class__.__name__}'."
                 )
+
+            if len(ranks) != len(teams):
+                raise ValueError(
+                    f"Argument 'ranks' must have the same number of elements as 'teams', "
+                    f"not {len(ranks)}."
+                )
+
+            for rank in ranks:
+                if not isinstance(rank, (int, float)):
+                    raise TypeError(
+                        f"Argument 'ranks' must be a list of 'int' or 'float' values, "
+                        f"not '{rank.__class__.__name__}'."
+                    )
 
             # Catch scores and ranks together
             if scores:
@@ -536,61 +517,58 @@ class BradleyTerryFull:
 
         # Catch scores argument errors
         if scores:
-            if isinstance(scores, list):
-                if len(scores) != len(teams):
-                    raise ValueError(
-                        f"Argument 'scores' must have the same number of elements as 'teams', "
-                        f"not {len(scores)}."
-                    )
-
-                for score in scores:
-                    if isinstance(score, (int, float)):
-                        pass
-                    else:
-                        raise TypeError(
-                            f"Argument 'scores' must be a list of 'int' or 'float' values, "
-                            f"not '{score.__class__.__name__}'."
-                        )
-            else:
+            if not isinstance(scores, list):
                 raise TypeError(
                     f"Argument 'scores' must be a list of 'int' or 'float' values, "
                     f"not '{scores.__class__.__name__}'."
                 )
 
-        # Catch weights argument errors
-        if weights:
-            if isinstance(weights, list):
-                if len(weights) != len(teams):
-                    raise ValueError(
-                        f"Argument 'weights' must have the same number of elements as"
-                        f" 'teams', not {len(weights)}."
+            if len(scores) != len(teams):
+                raise ValueError(
+                    f"Argument 'scores' must have the same number of elements as 'teams', "
+                    f"not {len(scores)}."
+                )
+
+            for score in scores:
+                if not isinstance(score, (int, float)):
+                    raise TypeError(
+                        f"Argument 'scores' must be a list of 'int' or 'float' values, "
+                        f"not '{score.__class__.__name__}'."
                     )
 
-                for index, team_weights in enumerate(weights):
-                    if isinstance(team_weights, list):
-                        if len(team_weights) != len(teams[index]):
-                            raise ValueError(
-                                f"Argument 'weights' must have the same number of elements"
-                                f"as each team in 'teams', not {len(team_weights)}."
-                            )
-                        for weight in team_weights:
-                            if isinstance(weight, (int, float)):
-                                pass
-                            else:
-                                raise TypeError(
-                                    f"Argument 'weights' must be a list of lists of 'float' values, "
-                                    f"not '{weight.__class__.__name__}'."
-                                )
-                    else:
-                        raise TypeError(
-                            f"Argument 'weights' must be a list of lists of 'float' values, "
-                            f"not '{team_weights.__class__.__name__}'."
-                        )
-            else:
+        # Catch weights argument errors
+        if weights:
+            if not isinstance(weights, list):
                 raise TypeError(
                     f"Argument 'weights' must be a list of lists of 'float' values, "
                     f"not '{weights.__class__.__name__}'."
                 )
+
+            if len(weights) != len(teams):
+                raise ValueError(
+                    f"Argument 'weights' must have the same number of elements as"
+                    f" 'teams', not {len(weights)}."
+                )
+
+            for index, team_weights in enumerate(weights):
+                if not isinstance(team_weights, list):
+                    raise TypeError(
+                        f"Argument 'weights' must be a list of lists of 'float' values, "
+                        f"not '{team_weights.__class__.__name__}'."
+                    )
+
+                if len(team_weights) != len(teams[index]):
+                    raise ValueError(
+                        f"Argument 'weights' must have the same number of elements"
+                        f"as each team in 'teams', not {len(team_weights)}."
+                    )
+
+                for weight in team_weights:
+                    if not isinstance(weight, (int, float)):
+                        raise TypeError(
+                            f"Argument 'weights' must be a list of lists of 'float' values, "
+                            f"not '{weight.__class__.__name__}'."
+                        )
 
         # Deep Copy Teams
         original_teams = teams
@@ -731,13 +709,7 @@ class BradleyTerryFull:
         :param team_ratings: The whole rating of a list of teams in a game.
         :return: A list of ints.
         """
-        result = list(
-            map(
-                lambda i: len(list(filter(lambda q: i.rank == q.rank, team_ratings))),
-                team_ratings,
-            )
-        )
-        return result
+        return [sum(1 for q in team_ratings if q.rank == i.rank) for i in team_ratings]
 
     def _compute(
         self,
