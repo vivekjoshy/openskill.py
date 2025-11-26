@@ -738,13 +738,7 @@ class ThurstoneMostellerPart:
         :param team_ratings: The whole rating of a list of teams in a game.
         :return: A list of ints.
         """
-        result = list(
-            map(
-                lambda i: len(list(filter(lambda q: i.rank == q.rank, team_ratings))),
-                team_ratings,
-            )
-        )
-        return result
+        return [sum(1 for q in team_ratings if q.rank == i.rank) for i in team_ratings]
 
     def _compute(
         self,
