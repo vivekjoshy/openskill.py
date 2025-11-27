@@ -162,10 +162,10 @@ def test_plackett_luce_team_rating() -> None:
     # Test String
     assert repr(rating) == "PlackettLuceTeamRating(mu=1.0, sigma_squared=2.0)"
     assert str(rating) == (
-        f"PlackettLuceTeamRating Details:\n\n"
-        f"mu: 1.0\n"
-        f"sigma_squared: 2.0\n"
-        f"rank: 3\n"
+        "PlackettLuceTeamRating Details:\n\n"
+        "mu: 1.0\n"
+        "sigma_squared: 2.0\n"
+        "rank: 3\n"
     )
 
 

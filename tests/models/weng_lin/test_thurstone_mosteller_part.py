@@ -174,10 +174,10 @@ def test_thurstone_mosteller_part_team_rating() -> None:
     # Test String
     assert repr(rating) == "ThurstoneMostellerPartTeamRating(mu=1.0, sigma_squared=2.0)"
     assert str(rating) == (
-        f"ThurstoneMostellerPartTeamRating Details:\n\n"
-        f"mu: 1.0\n"
-        f"sigma_squared: 2.0\n"
-        f"rank: 3\n"
+        "ThurstoneMostellerPartTeamRating Details:\n\n"
+        "mu: 1.0\n"
+        "sigma_squared: 2.0\n"
+        "rank: 3\n"
     )
 
 
