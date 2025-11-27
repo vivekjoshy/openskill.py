@@ -8,7 +8,7 @@ import itertools
 import math
 import uuid
 from collections.abc import Callable, Sequence
-from typing import Any, Optional
+from typing import Any
 
 from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import _unwind, phi_major, phi_major_inverse
@@ -27,7 +27,7 @@ class BradleyTerryFullRating:
         self,
         mu: float,
         sigma: float,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -47,7 +47,7 @@ class BradleyTerryFullRating:
 
         # Player Information
         self.id: str = uuid.uuid4().hex.lower()
-        self.name: Optional[str] = name
+        self.name: str | None = name
 
         self.mu: float = mu
         self.sigma: float = sigma
@@ -207,7 +207,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[BradleyTerryFullRating],
     rank: int,
-    weights: Optional[list[float]] = None,
+    weights: list[float] | None = None,
 ) -> float:
     """
     Default gamma function for Bradley-Terry Full Pairing.
@@ -257,7 +257,7 @@ class BradleyTerryFull:
                 float,
                 Sequence[BradleyTerryFullRating],
                 int,
-                Optional[list[float]],
+                list[float] | None,
             ],
             float,
         ] = _gamma,
@@ -325,7 +325,7 @@ class BradleyTerryFull:
                 float,
                 Sequence[BradleyTerryFullRating],
                 int,
-                Optional[list[float]],
+                list[float] | None,
             ],
             float,
         ] = gamma
@@ -352,9 +352,9 @@ class BradleyTerryFull:
 
     def rating(
         self,
-        mu: Optional[float] = None,
-        sigma: Optional[float] = None,
-        name: Optional[str] = None,
+        mu: float | None = None,
+        sigma: float | None = None,
+        name: str | None = None,
     ) -> BradleyTerryFullRating:
         r"""
         Returns a new rating object with your default parameters. The given
@@ -385,7 +385,7 @@ class BradleyTerryFull:
 
     @staticmethod
     def create_rating(
-        rating: list[float], name: Optional[str] = None
+        rating: list[float], name: str | None = None
     ) -> BradleyTerryFullRating:
         """
         Create a :class:`BradleyTerryFullRating` object from a list of `mu`
@@ -455,11 +455,11 @@ class BradleyTerryFull:
     def rate(
         self,
         teams: list[list[BradleyTerryFullRating]],
-        ranks: Optional[list[float]] = None,
-        scores: Optional[list[float]] = None,
-        weights: Optional[list[list[float]]] = None,
-        tau: Optional[float] = None,
-        limit_sigma: Optional[bool] = None,
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+        tau: float | None = None,
+        limit_sigma: bool | None = None,
     ) -> list[list[BradleyTerryFullRating]]:
         """
         Calculate the new ratings based on the given teams and parameters.
@@ -715,9 +715,9 @@ class BradleyTerryFull:
     def _compute(
         self,
         teams: Sequence[Sequence[BradleyTerryFullRating]],
-        ranks: Optional[list[float]] = None,
-        scores: Optional[list[float]] = None,
-        weights: Optional[list[list[float]]] = None,
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
     ) -> list[list[BradleyTerryFullRating]]:
         # Initialize Constants
         original_teams = teams
@@ -975,8 +975,8 @@ class BradleyTerryFull:
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[BradleyTerryFullRating]],
-        ranks: Optional[list[float]] = None,
-        weights: Optional[list[list[float]]] = None,
+        ranks: list[float] | None = None,
+        weights: list[list[float]] | None = None,
     ) -> list[BradleyTerryFullTeamRating]:
         """
         Get the team ratings of a game.
@@ -1023,7 +1023,7 @@ class BradleyTerryFull:
     def _calculate_rankings(
         self,
         game: Sequence[Sequence[BradleyTerryFullRating]],
-        ranks: Optional[list[float]] = None,
+        ranks: list[float] | None = None,
     ) -> list[float]:
         """
         Calculates the rankings based on the scores or ranks of the teams.

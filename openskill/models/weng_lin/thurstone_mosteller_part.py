@@ -8,7 +8,7 @@ import itertools
 import math
 import uuid
 from collections.abc import Callable, Sequence
-from typing import Any, Optional
+from typing import Any
 
 from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import (
@@ -35,7 +35,7 @@ class ThurstoneMostellerPartRating:
         self,
         mu: float,
         sigma: float,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -55,7 +55,7 @@ class ThurstoneMostellerPartRating:
 
         # Player Information
         self.id: str = uuid.uuid4().hex.lower()
-        self.name: Optional[str] = name
+        self.name: str | None = name
 
         self.mu: float = mu
         self.sigma: float = sigma
@@ -217,7 +217,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[ThurstoneMostellerPartRating],
     rank: int,
-    weights: Optional[list[float]] = None,
+    weights: list[float] | None = None,
 ) -> float:
     """
     Default gamma function for Thurstone-Mosteller Partial Pairing.
@@ -270,7 +270,7 @@ class ThurstoneMostellerPart:
                 float,
                 Sequence[ThurstoneMostellerPartRating],
                 int,
-                Optional[list[float]],
+                list[float] | None,
             ],
             float,
         ] = _gamma,
@@ -347,7 +347,7 @@ class ThurstoneMostellerPart:
                 float,
                 Sequence[ThurstoneMostellerPartRating],
                 int,
-                Optional[list[float]],
+                list[float] | None,
             ],
             float,
         ] = gamma
@@ -375,9 +375,9 @@ class ThurstoneMostellerPart:
 
     def rating(
         self,
-        mu: Optional[float] = None,
-        sigma: Optional[float] = None,
-        name: Optional[str] = None,
+        mu: float | None = None,
+        sigma: float | None = None,
+        name: str | None = None,
     ) -> ThurstoneMostellerPartRating:
         r"""
         Returns a new rating object with your default parameters. The given
@@ -408,7 +408,7 @@ class ThurstoneMostellerPart:
 
     @staticmethod
     def create_rating(
-        rating: list[float], name: Optional[str] = None
+        rating: list[float], name: str | None = None
     ) -> ThurstoneMostellerPartRating:
         """
         Create a :class:`ThurstoneMostellerPartRating` object from a list of `mu`
@@ -482,11 +482,11 @@ class ThurstoneMostellerPart:
     def rate(
         self,
         teams: list[list[ThurstoneMostellerPartRating]],
-        ranks: Optional[list[float]] = None,
-        scores: Optional[list[float]] = None,
-        weights: Optional[list[list[float]]] = None,
-        tau: Optional[float] = None,
-        limit_sigma: Optional[bool] = None,
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+        tau: float | None = None,
+        limit_sigma: bool | None = None,
     ) -> list[list[ThurstoneMostellerPartRating]]:
         """
         Calculate the new ratings based on the given teams and parameters.
@@ -744,9 +744,9 @@ class ThurstoneMostellerPart:
     def _compute(
         self,
         teams: list[list[ThurstoneMostellerPartRating]],
-        ranks: Optional[list[float]] = None,
-        scores: Optional[list[float]] = None,
-        weights: Optional[list[list[float]]] = None,
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
     ) -> list[list[ThurstoneMostellerPartRating]]:
         # Initialize constants
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
@@ -1013,8 +1013,8 @@ class ThurstoneMostellerPart:
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[ThurstoneMostellerPartRating]],
-        ranks: Optional[list[float]] = None,
-        weights: Optional[list[list[float]]] = None,
+        ranks: list[float] | None = None,
+        weights: list[list[float]] | None = None,
     ) -> list[ThurstoneMostellerPartTeamRating]:
         """
         Get the team ratings of a game.
@@ -1061,7 +1061,7 @@ class ThurstoneMostellerPart:
     def _calculate_rankings(
         self,
         game: Sequence[Sequence[ThurstoneMostellerPartRating]],
-        ranks: Optional[list[float]] = None,
+        ranks: list[float] | None = None,
     ) -> list[float]:
         """
         Calculates the rankings based on the scores or ranks of the teams.

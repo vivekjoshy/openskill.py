@@ -16,7 +16,7 @@ import gc
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Union, cast
+from typing import Any, cast
 
 import jsonlines
 import numpy as np
@@ -280,7 +280,7 @@ class RatingSystemBenchmark:
 
     def run_benchmark(
         self,
-    ) -> dict[str, dict[float, dict[str, list[Union[int, float]]]]]:
+    ) -> dict[str, dict[float, dict[str, list[int | float]]]]:
         """
         Run the benchmark using cross-validation to compare all rating systems
         with different margin values.
@@ -294,7 +294,7 @@ class RatingSystemBenchmark:
         kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=self.random_state)
 
         # Results storage - model_name -> margin -> metrics
-        results: dict[str, dict[float, dict[str, list[Union[int, float]]]]] = {}
+        results: dict[str, dict[float, dict[str, list[int | float]]]] = {}
         for model_name in self.models:
             results[model_name] = {}
             for margin in self.margins:
@@ -344,7 +344,7 @@ class RatingSystemBenchmark:
 
     @staticmethod
     def calculate_metrics(
-        results: dict[str, list[Union[int, float]]],
+        results: dict[str, list[int | float]],
     ) -> tuple[int, int, float, float, float]:
         """
         Calculate aggregate metrics from benchmark results.
@@ -374,7 +374,7 @@ class RatingSystemBenchmark:
         )
 
     def display_results(
-        self, results: dict[str, dict[float, dict[str, list[Union[int, float]]]]]
+        self, results: dict[str, dict[float, dict[str, list[int | float]]]]
     ) -> Table:
         """
         Create and display a table of benchmark results comparing different margin values.
