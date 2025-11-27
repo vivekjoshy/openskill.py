@@ -7,7 +7,8 @@ import copy
 import itertools
 import math
 import uuid
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
+from collections.abc import Callable, Sequence
+from typing import Any, Optional
 
 from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import (
@@ -20,7 +21,7 @@ from openskill.models.weng_lin.common import (
     wt,
 )
 
-__all__: List[str] = ["ThurstoneMostellerFull", "ThurstoneMostellerFullRating"]
+__all__: list[str] = ["ThurstoneMostellerFull", "ThurstoneMostellerFullRating"]
 
 
 class ThurstoneMostellerFullRating:
@@ -83,7 +84,7 @@ class ThurstoneMostellerFullRating:
         return hash((self.id, self.mu, self.sigma))
 
     def __deepcopy__(
-        self, memodict: Dict[Any, Any] = {}
+        self, memodict: dict[Any, Any] = {}
     ) -> "ThurstoneMostellerFullRating":
         tmf = ThurstoneMostellerFullRating(self.mu, self.sigma, self.name)
         tmf.id = self.id
@@ -216,7 +217,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[ThurstoneMostellerFullRating],
     rank: int,
-    weights: Optional[List[float]] = None,
+    weights: Optional[list[float]] = None,
 ) -> float:
     """
     Default gamma function for Thurstone-Mosteller Full Pairing.
@@ -268,7 +269,7 @@ class ThurstoneMostellerFull:
                 float,
                 Sequence[ThurstoneMostellerFullRating],
                 int,
-                Optional[List[float]],
+                Optional[list[float]],
             ],
             float,
         ] = _gamma,
@@ -341,7 +342,7 @@ class ThurstoneMostellerFull:
                 float,
                 Sequence[ThurstoneMostellerFullRating],
                 int,
-                Optional[List[float]],
+                Optional[list[float]],
             ],
             float,
         ] = gamma
@@ -352,7 +353,7 @@ class ThurstoneMostellerFull:
         self.balance: bool = balance
 
         # Model Data Container
-        self.ThurstoneMostellerFullRating: Type[ThurstoneMostellerFullRating] = (
+        self.ThurstoneMostellerFullRating: type[ThurstoneMostellerFullRating] = (
             ThurstoneMostellerFullRating
         )
 
@@ -401,7 +402,7 @@ class ThurstoneMostellerFull:
 
     @staticmethod
     def create_rating(
-        rating: List[float], name: Optional[str] = None
+        rating: list[float], name: Optional[str] = None
     ) -> ThurstoneMostellerFullRating:
         """
         Create a :class:`ThurstoneMostellerFullRating` object from a list of `mu`
@@ -435,7 +436,7 @@ class ThurstoneMostellerFull:
             raise TypeError(f"Cannot accept '{rating.__class__.__name__}' type.")
 
     @staticmethod
-    def _check_teams(teams: List[List[ThurstoneMostellerFullRating]]) -> None:
+    def _check_teams(teams: list[list[ThurstoneMostellerFullRating]]) -> None:
         """
         Ensure teams argument is valid.
 
@@ -474,13 +475,13 @@ class ThurstoneMostellerFull:
 
     def rate(
         self,
-        teams: List[List[ThurstoneMostellerFullRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
+        teams: list[list[ThurstoneMostellerFullRating]],
+        ranks: Optional[list[float]] = None,
+        scores: Optional[list[float]] = None,
+        weights: Optional[list[list[float]]] = None,
         tau: Optional[float] = None,
         limit_sigma: Optional[bool] = None,
-    ) -> List[List[ThurstoneMostellerFullRating]]:
+    ) -> list[list[ThurstoneMostellerFullRating]]:
         """
         Calculate the new ratings based on the given teams and parameters.
 
@@ -664,7 +665,7 @@ class ThurstoneMostellerFull:
                 final_result.append(final_team)
         return final_result
 
-    def _c(self, team_ratings: List[ThurstoneMostellerFullTeamRating]) -> float:
+    def _c(self, team_ratings: list[ThurstoneMostellerFullTeamRating]) -> float:
         r"""
         Calculate the square root of the collective team sigma.
 
@@ -687,8 +688,8 @@ class ThurstoneMostellerFull:
 
     @staticmethod
     def _sum_q(
-        team_ratings: List[ThurstoneMostellerFullTeamRating], c: float
-    ) -> List[float]:
+        team_ratings: list[ThurstoneMostellerFullTeamRating], c: float
+    ) -> list[float]:
         r"""
         Sum up all the values of :code:`mu / c` raised to :math:`e`.
 
@@ -707,7 +708,7 @@ class ThurstoneMostellerFull:
         :return: A list of floats.
         """
 
-        sum_q: Dict[int, float] = {}
+        sum_q: dict[int, float] = {}
         for i, team_i in enumerate(team_ratings):
             summed = math.exp(team_i.mu / c)
             for q, team_q in enumerate(team_ratings):
@@ -719,7 +720,7 @@ class ThurstoneMostellerFull:
         return list(sum_q.values())
 
     @staticmethod
-    def _a(team_ratings: List[ThurstoneMostellerFullTeamRating]) -> List[int]:
+    def _a(team_ratings: list[ThurstoneMostellerFullTeamRating]) -> list[int]:
         r"""
         Count the number of times a rank appears in the list of team ratings.
 
@@ -737,10 +738,10 @@ class ThurstoneMostellerFull:
     def _compute(
         self,
         teams: Sequence[Sequence[ThurstoneMostellerFullRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[List[ThurstoneMostellerFullRating]]:
+        ranks: Optional[list[float]] = None,
+        scores: Optional[list[float]] = None,
+        weights: Optional[list[list[float]]] = None,
+    ) -> list[list[ThurstoneMostellerFullRating]]:
         # Initialize Constants
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
@@ -875,8 +876,8 @@ class ThurstoneMostellerFull:
         return result
 
     def predict_win(
-        self, teams: List[List[ThurstoneMostellerFullRating]]
-    ) -> List[float]:
+        self, teams: list[list[ThurstoneMostellerFullRating]]
+    ) -> list[float]:
         r"""
         Predict how likely a match up against teams of one or more players
         will go. This algorithm has a time complexity of
@@ -928,7 +929,7 @@ class ThurstoneMostellerFull:
         total_probability = sum(win_probabilities)
         return [probability / total_probability for probability in win_probabilities]
 
-    def predict_draw(self, teams: List[List[ThurstoneMostellerFullRating]]) -> float:
+    def predict_draw(self, teams: list[list[ThurstoneMostellerFullRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of
@@ -970,8 +971,8 @@ class ThurstoneMostellerFull:
         return sum(pairwise_probabilities) / len(pairwise_probabilities)
 
     def predict_rank(
-        self, teams: List[List[ThurstoneMostellerFullRating]]
-    ) -> List[Tuple[int, float]]:
+        self, teams: list[list[ThurstoneMostellerFullRating]]
+    ) -> list[tuple[int, float]]:
         r"""
         Predict the shape of a match outcome. This algorithm has a time
         complexity of :math:`\mathcal{0}(n^2)` where 'n' is the
@@ -1020,9 +1021,9 @@ class ThurstoneMostellerFull:
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[ThurstoneMostellerFullRating]],
-        ranks: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[ThurstoneMostellerFullTeamRating]:
+        ranks: Optional[list[float]] = None,
+        weights: Optional[list[list[float]]] = None,
+    ) -> list[ThurstoneMostellerFullTeamRating]:
         """
         Get the team ratings of a game.
 
@@ -1068,8 +1069,8 @@ class ThurstoneMostellerFull:
     def _calculate_rankings(
         self,
         game: Sequence[Sequence[ThurstoneMostellerFullRating]],
-        ranks: Optional[List[float]] = None,
-    ) -> List[float]:
+        ranks: Optional[list[float]] = None,
+    ) -> list[float]:
         """
         Calculates the rankings based on the scores or ranks of the teams.
 

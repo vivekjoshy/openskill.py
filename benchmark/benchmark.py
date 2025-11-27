@@ -16,7 +16,7 @@ import gc
 import time
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union, cast
+from typing import Any, Union, cast
 
 import jsonlines
 import numpy as np
@@ -67,7 +67,7 @@ class RatingSystemBenchmark:
         self.minimum_matches = minimum_matches
         self.random_state = random_state
         self.console = Console()
-        self.verified_matches: List[Dict[str, Any]] = []
+        self.verified_matches: list[dict[str, Any]] = []
 
         # Define the models to test
         self.models = {
@@ -168,7 +168,7 @@ class RatingSystemBenchmark:
 
         return True
 
-    def _extract_teams(self, match: Dict[str, Any]) -> Tuple[List[Any], List[Any]]:
+    def _extract_teams(self, match: dict[str, Any]) -> tuple[list[Any], list[Any]]:
         """
         Extract team data from a match.
 
@@ -184,8 +184,8 @@ class RatingSystemBenchmark:
         return [], []
 
     def train_model(
-        self, model_class: Any, matches: List[Dict[str, Any]], margin: float
-    ) -> Tuple[Dict[str, Any], Any]:
+        self, model_class: Any, matches: list[dict[str, Any]], margin: float
+    ) -> tuple[dict[str, Any], Any]:
         """
         Train a rating system model on the provided matches.
 
@@ -194,7 +194,7 @@ class RatingSystemBenchmark:
         :param margin: Margin value to use for the model
         :return: Tuple of (player ratings dictionary, model)
         """
-        players: Dict[str, Any] = {}
+        players: dict[str, Any] = {}
         model = model_class(margin=margin)
 
         for match in matches:
@@ -209,8 +209,8 @@ class RatingSystemBenchmark:
             blue_score = float(compositions.get("blue_won_fights"))
             red_score = float(compositions.get("red_won_fights"))
 
-            blue_players: Dict[str, Any] = {}
-            red_players: Dict[str, Any] = {}
+            blue_players: dict[str, Any] = {}
+            red_players: dict[str, Any] = {}
 
             # Initialize ratings
             r = model.rating
@@ -239,9 +239,9 @@ class RatingSystemBenchmark:
     def evaluate_model(
         self,
         model: Any,
-        players: Dict[str, Any],
-        matches: List[Dict[str, Any]],
-    ) -> Tuple[int, int]:
+        players: dict[str, Any],
+        matches: list[dict[str, Any]],
+    ) -> tuple[int, int]:
         """
         Evaluate model predictions on test matches.
 
@@ -280,7 +280,7 @@ class RatingSystemBenchmark:
 
     def run_benchmark(
         self,
-    ) -> Dict[str, Dict[float, Dict[str, List[Union[int, float]]]]]:
+    ) -> dict[str, dict[float, dict[str, list[Union[int, float]]]]]:
         """
         Run the benchmark using cross-validation to compare all rating systems
         with different margin values.
@@ -294,7 +294,7 @@ class RatingSystemBenchmark:
         kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=self.random_state)
 
         # Results storage - model_name -> margin -> metrics
-        results: Dict[str, Dict[float, Dict[str, List[Union[int, float]]]]] = {}
+        results: dict[str, dict[float, dict[str, list[Union[int, float]]]]] = {}
         for model_name in self.models:
             results[model_name] = {}
             for margin in self.margins:
@@ -344,17 +344,17 @@ class RatingSystemBenchmark:
 
     @staticmethod
     def calculate_metrics(
-        results: Dict[str, List[Union[int, float]]],
-    ) -> Tuple[int, int, float, float, float]:
+        results: dict[str, list[Union[int, float]]],
+    ) -> tuple[int, int, float, float, float]:
         """
         Calculate aggregate metrics from benchmark results.
 
         :param results: Dictionary of benchmark results
         :return: Tuple of (correct, total, accuracy, avg_time, std_acc)
         """
-        correct_list = cast(List[int], results["correct"])
-        total_list = cast(List[int], results["total"])
-        time_list = cast(List[float], results["time"])
+        correct_list = cast(list[int], results["correct"])
+        total_list = cast(list[int], results["total"])
+        time_list = cast(list[float], results["time"])
 
         correct = np.sum(correct_list)
         total = np.sum(total_list)
@@ -374,7 +374,7 @@ class RatingSystemBenchmark:
         )
 
     def display_results(
-        self, results: Dict[str, Dict[float, Dict[str, List[Union[int, float]]]]]
+        self, results: dict[str, dict[float, dict[str, list[Union[int, float]]]]]
     ) -> Table:
         """
         Create and display a table of benchmark results comparing different margin values.

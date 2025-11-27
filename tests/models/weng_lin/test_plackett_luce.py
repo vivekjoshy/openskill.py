@@ -4,7 +4,6 @@ All tests for the PlackettLuce model are located here.
 
 import json
 import pathlib
-from typing import List
 
 import pytest
 
@@ -282,7 +281,7 @@ def test_gamma() -> None:
 
 
 def check_expected(
-    data, data_key: str, results: List[List[PlackettLuceRating]]
+    data, data_key: str, results: list[list[PlackettLuceRating]]
 ) -> None:
     """
     Checks the expected results against the results from the model.
@@ -310,7 +309,7 @@ def test_rate() -> None:
     file_path = (
         pathlib.Path(__file__).parent.parent.resolve() / "data" / "plackettluce.json"
     )
-    with open(file_path, "r") as f:
+    with open(file_path) as f:
         data = json.load(f)
 
     mu = data["model"]["mu"]
