@@ -67,9 +67,6 @@ def test_calculate_rankings(model) -> None:
     model = model()
     r = model.rating
 
-    # Generate a 5 player team
-    team_1 = [r(), r(), r(), r(), r()]
-
     # Generate 5 players overall for single player teams
     a = [r()]
     b = [r()]

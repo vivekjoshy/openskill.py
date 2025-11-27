@@ -7,7 +7,6 @@ import copy
 import itertools
 import math
 import uuid
-from itertools import permutations
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
 from openskill.models.common import _normalize
@@ -985,7 +984,6 @@ class ThurstoneMostellerFull:
         self._check_teams(teams)
 
         n = len(teams)
-        total_player_count = sum(len(team) for team in teams)
         team_ratings = self._calculate_team_ratings(teams)
 
         win_probabilities = []

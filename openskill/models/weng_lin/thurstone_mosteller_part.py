@@ -748,7 +748,6 @@ class ThurstoneMostellerPart:
         weights: Optional[List[List[float]]] = None,
     ) -> List[List[ThurstoneMostellerPartRating]]:
         # Initialize constants
-        original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         beta = self.beta
         num_teams = len(team_ratings)
