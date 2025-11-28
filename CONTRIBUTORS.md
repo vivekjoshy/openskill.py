@@ -19,6 +19,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/retrooper"><img src="https://avatars.githubusercontent.com/u/49798017?v=4?s=100" width="100px;" alt="retrooper"/><br /><sub><b>retrooper</b></sub></a><br /><a href="https://github.com/vivekjoshy/openskill.py/commits?author=retrooper" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/xelandernt"><img src="https://avatars.githubusercontent.com/u/60134319?v=4?s=100" width="100px;" alt="Alex"/><br /><sub><b>Alex</b></sub></a><br /><a href="https://github.com/vivekjoshy/openskill.py/commits?author=xelandernt" title="Code">💻</a> <a href="https://github.com/vivekjoshy/openskill.py/issues?q=author%3Axelandernt" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Perlence"><img src="https://avatars.githubusercontent.com/u/1044300?v=4?s=100" width="100px;" alt="Sviatoslav Abakumov"/><br /><sub><b>Sviatoslav Abakumov</b></sub></a><br /><a href="https://github.com/vivekjoshy/openskill.py/commits?author=Perlence" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
