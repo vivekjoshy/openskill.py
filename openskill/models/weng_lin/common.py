@@ -5,14 +5,14 @@ Common functions for the Weng-Lin models.
 import sys
 from itertools import zip_longest
 from statistics import NormalDist
-from typing import Any, List, Tuple
+from typing import Any
 
 from openskill.models.common import _matrix_transpose
 
 _normal = NormalDist()
 
 
-def _unwind(tenet: List[float], objects: List[Any]) -> Tuple[List[Any], List[float]]:
+def _unwind(tenet: list[float], objects: list[Any]) -> tuple[list[Any], list[float]]:
     """
     Retain the stochastic tenet of a sort to revert original sort order.
 
@@ -22,7 +22,7 @@ def _unwind(tenet: List[float], objects: List[Any]) -> Tuple[List[Any], List[flo
     :return: Ordered objects and their tenets.
     """
 
-    def _pick_zeroth_index(item: Tuple[float, Any]) -> float:
+    def _pick_zeroth_index(item: tuple[float, Any]) -> float:
         """
         Returns the first item in a list.
 
@@ -32,8 +32,8 @@ def _unwind(tenet: List[float], objects: List[Any]) -> Tuple[List[Any], List[flo
         return item[0]
 
     def _sorter(
-        objects_to_sort: List[Any],
-    ) -> Tuple[List[Any], List[float]]:
+        objects_to_sort: list[Any],
+    ) -> tuple[list[Any], list[float]]:
         """
         Sorts a list of objects based on a tenet.
 
@@ -148,16 +148,16 @@ def wt(x: float, t: float) -> float:
     ) * vt(x, t)
 
 
-def _ladder_pairs(teams: List[Any]) -> List[List[Any]]:
+def _ladder_pairs(teams: list[Any]) -> list[list[Any]]:
     """
     Returns a list of pairs of ranks that are adjacent in the ladder.
 
     :param teams: A list of teams.
     :return: A list of pairs of teams that are adjacent in the ladder.
     """
-    left: List[Any] = [None]
+    left: list[Any] = [None]
     left.extend(teams[:-1])
-    right: List[Any] = list(teams[1:])
+    right: list[Any] = list(teams[1:])
     right.append(None)
     zipped_lr = zip_longest(left, right)
     result = []

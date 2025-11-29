@@ -7,7 +7,6 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import sys
 from pathlib import Path
-from typing import List
 
 import openskill
 
@@ -26,7 +25,7 @@ release: str = version
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions: List[str] = [
+extensions: list[str] = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
@@ -43,8 +42,8 @@ extensions: List[str] = [
     "sphinx_docsearch",
 ]
 
-templates_path: List[str] = ["_templates"]
-exclude_patterns: List[str] = ["_build", "Thumbs.db", ".DS_Store"]
+templates_path: list[str] = ["_templates"]
+exclude_patterns: list[str] = ["_build", "Thumbs.db", ".DS_Store"]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),

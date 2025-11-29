@@ -3,7 +3,7 @@ All tests common for Weng-Lin models are located here.
 """
 
 import random
-from typing import Any, List
+from typing import Any
 
 import pytest
 
@@ -67,9 +67,6 @@ def test_calculate_rankings(model) -> None:
     model = model()
     r = model.rating
 
-    # Generate a 5 player team
-    team_1 = [r(), r(), r(), r(), r()]
-
     # Generate 5 players overall for single player teams
     a = [r()]
     b = [r()]
@@ -100,8 +97,8 @@ def test_unwind() -> None:
     Tests the :code:`_unwind` function.
     """
     # Zero Items
-    source: List[Any] = []
-    rank: List[Any] = []
+    source: list[Any] = []
+    rank: list[Any] = []
     output, tenet = _unwind(rank, source)
     assert output == []
     assert tenet == []

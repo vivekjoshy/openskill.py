@@ -2,7 +2,7 @@
 Common functions for all models.
 """
 
-from typing import Any, List
+from typing import Any
 
 
 def _unary_minus(number: float) -> float:
@@ -15,7 +15,7 @@ def _unary_minus(number: float) -> float:
     return -number
 
 
-def _matrix_transpose(matrix: List[List[Any]]) -> List[List[Any]]:
+def _matrix_transpose(matrix: list[list[Any]]) -> list[list[Any]]:
     """
     Transpose a matrix.
 
@@ -26,8 +26,8 @@ def _matrix_transpose(matrix: List[List[Any]]) -> List[List[Any]]:
 
 
 def _normalize(
-    vector: List[float], target_minimum: float, target_maximum: float
-) -> List[float]:
+    vector: list[float], target_minimum: float, target_maximum: float
+) -> list[float]:
     """
     Normalizes a vector to a target range of values.
 

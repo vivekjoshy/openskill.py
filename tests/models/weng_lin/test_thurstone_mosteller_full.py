@@ -4,7 +4,6 @@ All tests for the ThurstoneMostellerFull model are located here.
 
 import json
 import pathlib
-from typing import List
 
 import pytest
 
@@ -173,10 +172,10 @@ def test_thurstone_mosteller_full_team_rating() -> None:
     # Test String
     assert repr(rating) == "ThurstoneMostellerFullTeamRating(mu=1.0, sigma_squared=2.0)"
     assert str(rating) == (
-        f"ThurstoneMostellerFullTeamRating Details:\n\n"
-        f"mu: 1.0\n"
-        f"sigma_squared: 2.0\n"
-        f"rank: 3\n"
+        "ThurstoneMostellerFullTeamRating Details:\n\n"
+        "mu: 1.0\n"
+        "sigma_squared: 2.0\n"
+        "rank: 3\n"
     )
 
 
@@ -293,7 +292,7 @@ def test_gamma() -> None:
 
 
 def check_expected(
-    data, data_key: str, results: List[List[ThurstoneMostellerFullRating]]
+    data, data_key: str, results: list[list[ThurstoneMostellerFullRating]]
 ) -> None:
     """
     Checks the expected results against the results from the model.
@@ -320,7 +319,7 @@ def test_rate() -> None:
         / "data"
         / "thurstonemostellerfull.json"
     )
-    with open(file_path, "r") as f:
+    with open(file_path) as f:
         data = json.load(f)
 
     mu = data["model"]["mu"]

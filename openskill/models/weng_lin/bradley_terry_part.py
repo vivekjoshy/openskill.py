@@ -7,7 +7,8 @@ import copy
 import itertools
 import math
 import uuid
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import (
@@ -16,7 +17,7 @@ from openskill.models.weng_lin.common import (
     phi_major_inverse,
 )
 
-__all__: List[str] = ["BradleyTerryPart", "BradleyTerryPartRating"]
+__all__: list[str] = ["BradleyTerryPart", "BradleyTerryPartRating"]
 
 
 class BradleyTerryPartRating:
@@ -30,7 +31,7 @@ class BradleyTerryPartRating:
         self,
         mu: float,
         sigma: float,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -50,7 +51,7 @@ class BradleyTerryPartRating:
 
         # Player Information
         self.id: str = uuid.uuid4().hex.lower()
-        self.name: Optional[str] = name
+        self.name: str | None = name
 
         self.mu: float = mu
         self.sigma: float = sigma
@@ -78,7 +79,7 @@ class BradleyTerryPartRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
-    def __deepcopy__(self, memodict: Dict[Any, Any] = {}) -> "BradleyTerryPartRating":
+    def __deepcopy__(self, memodict: dict[Any, Any] = {}) -> "BradleyTerryPartRating":
         blp = BradleyTerryPartRating(self.mu, self.sigma, self.name)
         blp.id = self.id
         return blp
@@ -210,7 +211,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[BradleyTerryPartRating],
     rank: int,
-    weights: Optional[List[float]] = None,
+    weights: list[float] | None = None,
 ) -> float:
     """
     Default gamma function for Bradley-Terry Partial Pairing.
@@ -260,7 +261,7 @@ class BradleyTerryPart:
                 float,
                 Sequence[BradleyTerryPartRating],
                 int,
-                Optional[List[float]],
+                list[float] | None,
             ],
             float,
         ] = _gamma,
@@ -333,7 +334,7 @@ class BradleyTerryPart:
                 float,
                 Sequence[BradleyTerryPartRating],
                 int,
-                Optional[List[float]],
+                list[float] | None,
             ],
             float,
         ] = gamma
@@ -345,7 +346,7 @@ class BradleyTerryPart:
         self.balance: bool = balance
 
         # Model Data Container
-        self.BradleyTerryPartRating: Type[BradleyTerryPartRating] = (
+        self.BradleyTerryPartRating: type[BradleyTerryPartRating] = (
             BradleyTerryPartRating
         )
 
@@ -361,9 +362,9 @@ class BradleyTerryPart:
 
     def rating(
         self,
-        mu: Optional[float] = None,
-        sigma: Optional[float] = None,
-        name: Optional[str] = None,
+        mu: float | None = None,
+        sigma: float | None = None,
+        name: str | None = None,
     ) -> BradleyTerryPartRating:
         r"""
         Returns a new rating object with your default parameters. The given
@@ -394,7 +395,7 @@ class BradleyTerryPart:
 
     @staticmethod
     def create_rating(
-        rating: List[float], name: Optional[str] = None
+        rating: list[float], name: str | None = None
     ) -> BradleyTerryPartRating:
         """
         Create a :class:`BradleyTerryPartRating` object from a list of `mu`
@@ -424,7 +425,7 @@ class BradleyTerryPart:
             raise TypeError(f"Cannot accept '{rating.__class__.__name__}' type.")
 
     @staticmethod
-    def _check_teams(teams: List[List[BradleyTerryPartRating]]) -> None:
+    def _check_teams(teams: list[list[BradleyTerryPartRating]]) -> None:
         """
         Ensure teams argument is valid.
 
@@ -463,13 +464,13 @@ class BradleyTerryPart:
 
     def rate(
         self,
-        teams: List[List[BradleyTerryPartRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-        tau: Optional[float] = None,
-        limit_sigma: Optional[bool] = None,
-    ) -> List[List[BradleyTerryPartRating]]:
+        teams: list[list[BradleyTerryPartRating]],
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+        tau: float | None = None,
+        limit_sigma: bool | None = None,
+    ) -> list[list[BradleyTerryPartRating]]:
         """
         Calculate the new ratings based on the given teams and parameters.
 
@@ -653,7 +654,7 @@ class BradleyTerryPart:
                 final_result.append(final_team)
         return final_result
 
-    def _c(self, team_ratings: List[BradleyTerryPartTeamRating]) -> float:
+    def _c(self, team_ratings: list[BradleyTerryPartTeamRating]) -> float:
         r"""
         Calculate the square root of the collective team sigma.
 
@@ -675,7 +676,7 @@ class BradleyTerryPart:
         return math.sqrt(collective_team_sigma)
 
     @staticmethod
-    def _sum_q(team_ratings: List[BradleyTerryPartTeamRating], c: float) -> List[float]:
+    def _sum_q(team_ratings: list[BradleyTerryPartTeamRating], c: float) -> list[float]:
         r"""
         Sum up all the values of :code:`mu / c` raised to :math:`e`.
 
@@ -694,7 +695,7 @@ class BradleyTerryPart:
         :return: A list of floats.
         """
 
-        sum_q: Dict[int, float] = {}
+        sum_q: dict[int, float] = {}
         for i, team_i in enumerate(team_ratings):
             summed = math.exp(team_i.mu / c)
             for q, team_q in enumerate(team_ratings):
@@ -706,7 +707,7 @@ class BradleyTerryPart:
         return list(sum_q.values())
 
     @staticmethod
-    def _a(team_ratings: List[BradleyTerryPartTeamRating]) -> List[int]:
+    def _a(team_ratings: list[BradleyTerryPartTeamRating]) -> list[int]:
         r"""
         Count the number of times a rank appears in the list of team ratings.
 
@@ -723,11 +724,11 @@ class BradleyTerryPart:
 
     def _compute(
         self,
-        teams: List[List[BradleyTerryPartRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[List[BradleyTerryPartRating]]:
+        teams: list[list[BradleyTerryPartRating]],
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+    ) -> list[list[BradleyTerryPartRating]]:
         # Initialize Constants
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
@@ -827,7 +828,7 @@ class BradleyTerryPart:
 
         return result
 
-    def predict_win(self, teams: List[List[BradleyTerryPartRating]]) -> List[float]:
+    def predict_win(self, teams: list[list[BradleyTerryPartRating]]) -> list[float]:
         r"""
         Predict how likely a match up against teams of one or more players
         will go. This algorithm has a time complexity of
@@ -879,7 +880,7 @@ class BradleyTerryPart:
         total_probability = sum(win_probabilities)
         return [probability / total_probability for probability in win_probabilities]
 
-    def predict_draw(self, teams: List[List[BradleyTerryPartRating]]) -> float:
+    def predict_draw(self, teams: list[list[BradleyTerryPartRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of
@@ -921,8 +922,8 @@ class BradleyTerryPart:
         return sum(pairwise_probabilities) / len(pairwise_probabilities)
 
     def predict_rank(
-        self, teams: List[List[BradleyTerryPartRating]]
-    ) -> List[Tuple[int, float]]:
+        self, teams: list[list[BradleyTerryPartRating]]
+    ) -> list[tuple[int, float]]:
         r"""
         Predict the shape of a match outcome. This algorithm has a time
         complexity of :math:`\mathcal{0}(n^2)` where 'n' is the
@@ -970,9 +971,9 @@ class BradleyTerryPart:
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[BradleyTerryPartRating]],
-        ranks: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[BradleyTerryPartTeamRating]:
+        ranks: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+    ) -> list[BradleyTerryPartTeamRating]:
         """
         Get the team ratings of a game.
 
@@ -1018,8 +1019,8 @@ class BradleyTerryPart:
     def _calculate_rankings(
         self,
         game: Sequence[Sequence[BradleyTerryPartRating]],
-        ranks: Optional[List[float]] = None,
-    ) -> List[float]:
+        ranks: list[float] | None = None,
+    ) -> list[float]:
         """
         Calculates the rankings based on the scores or ranks of the teams.
 

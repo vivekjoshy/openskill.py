@@ -7,7 +7,8 @@ import copy
 import itertools
 import math
 import uuid
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import (
@@ -20,7 +21,7 @@ from openskill.models.weng_lin.common import (
     wt,
 )
 
-__all__: List[str] = ["ThurstoneMostellerPart", "ThurstoneMostellerPartRating"]
+__all__: list[str] = ["ThurstoneMostellerPart", "ThurstoneMostellerPartRating"]
 
 
 class ThurstoneMostellerPartRating:
@@ -34,7 +35,7 @@ class ThurstoneMostellerPartRating:
         self,
         mu: float,
         sigma: float,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -54,7 +55,7 @@ class ThurstoneMostellerPartRating:
 
         # Player Information
         self.id: str = uuid.uuid4().hex.lower()
-        self.name: Optional[str] = name
+        self.name: str | None = name
 
         self.mu: float = mu
         self.sigma: float = sigma
@@ -83,7 +84,7 @@ class ThurstoneMostellerPartRating:
         return hash((self.id, self.mu, self.sigma))
 
     def __deepcopy__(
-        self, memodict: Dict[Any, Any] = {}
+        self, memodict: dict[Any, Any] = {}
     ) -> "ThurstoneMostellerPartRating":
         tmp = ThurstoneMostellerPartRating(self.mu, self.sigma, self.name)
         tmp.id = self.id
@@ -216,7 +217,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[ThurstoneMostellerPartRating],
     rank: int,
-    weights: Optional[List[float]] = None,
+    weights: list[float] | None = None,
 ) -> float:
     """
     Default gamma function for Thurstone-Mosteller Partial Pairing.
@@ -269,7 +270,7 @@ class ThurstoneMostellerPart:
                 float,
                 Sequence[ThurstoneMostellerPartRating],
                 int,
-                Optional[List[float]],
+                list[float] | None,
             ],
             float,
         ] = _gamma,
@@ -346,7 +347,7 @@ class ThurstoneMostellerPart:
                 float,
                 Sequence[ThurstoneMostellerPartRating],
                 int,
-                Optional[List[float]],
+                list[float] | None,
             ],
             float,
         ] = gamma
@@ -358,7 +359,7 @@ class ThurstoneMostellerPart:
         self.balance: bool = balance
 
         # Model Data Container
-        self.ThurstoneMostellerPartRating: Type[ThurstoneMostellerPartRating] = (
+        self.ThurstoneMostellerPartRating: type[ThurstoneMostellerPartRating] = (
             ThurstoneMostellerPartRating
         )
 
@@ -374,9 +375,9 @@ class ThurstoneMostellerPart:
 
     def rating(
         self,
-        mu: Optional[float] = None,
-        sigma: Optional[float] = None,
-        name: Optional[str] = None,
+        mu: float | None = None,
+        sigma: float | None = None,
+        name: str | None = None,
     ) -> ThurstoneMostellerPartRating:
         r"""
         Returns a new rating object with your default parameters. The given
@@ -407,7 +408,7 @@ class ThurstoneMostellerPart:
 
     @staticmethod
     def create_rating(
-        rating: List[float], name: Optional[str] = None
+        rating: list[float], name: str | None = None
     ) -> ThurstoneMostellerPartRating:
         """
         Create a :class:`ThurstoneMostellerPartRating` object from a list of `mu`
@@ -441,7 +442,7 @@ class ThurstoneMostellerPart:
             raise TypeError(f"Cannot accept '{rating.__class__.__name__}' type.")
 
     @staticmethod
-    def _check_teams(teams: List[List[ThurstoneMostellerPartRating]]) -> None:
+    def _check_teams(teams: list[list[ThurstoneMostellerPartRating]]) -> None:
         """
         Ensure teams argument is valid.
 
@@ -480,13 +481,13 @@ class ThurstoneMostellerPart:
 
     def rate(
         self,
-        teams: List[List[ThurstoneMostellerPartRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-        tau: Optional[float] = None,
-        limit_sigma: Optional[bool] = None,
-    ) -> List[List[ThurstoneMostellerPartRating]]:
+        teams: list[list[ThurstoneMostellerPartRating]],
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+        tau: float | None = None,
+        limit_sigma: bool | None = None,
+    ) -> list[list[ThurstoneMostellerPartRating]]:
         """
         Calculate the new ratings based on the given teams and parameters.
 
@@ -670,7 +671,7 @@ class ThurstoneMostellerPart:
                 final_result.append(final_team)
         return final_result
 
-    def _c(self, team_ratings: List[ThurstoneMostellerPartTeamRating]) -> float:
+    def _c(self, team_ratings: list[ThurstoneMostellerPartTeamRating]) -> float:
         r"""
         Calculate the square root of the collective team sigma.
 
@@ -693,8 +694,8 @@ class ThurstoneMostellerPart:
 
     @staticmethod
     def _sum_q(
-        team_ratings: List[ThurstoneMostellerPartTeamRating], c: float
-    ) -> List[float]:
+        team_ratings: list[ThurstoneMostellerPartTeamRating], c: float
+    ) -> list[float]:
         r"""
         Sum up all the values of :code:`mu / c` raised to :math:`e`.
 
@@ -713,7 +714,7 @@ class ThurstoneMostellerPart:
         :return: A list of floats.
         """
 
-        sum_q: Dict[int, float] = {}
+        sum_q: dict[int, float] = {}
         for i, team_i in enumerate(team_ratings):
             summed = math.exp(team_i.mu / c)
             for q, team_q in enumerate(team_ratings):
@@ -725,7 +726,7 @@ class ThurstoneMostellerPart:
         return list(sum_q.values())
 
     @staticmethod
-    def _a(team_ratings: List[ThurstoneMostellerPartTeamRating]) -> List[int]:
+    def _a(team_ratings: list[ThurstoneMostellerPartTeamRating]) -> list[int]:
         r"""
         Count the number of times a rank appears in the list of team ratings.
 
@@ -742,13 +743,12 @@ class ThurstoneMostellerPart:
 
     def _compute(
         self,
-        teams: List[List[ThurstoneMostellerPartRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[List[ThurstoneMostellerPartRating]]:
+        teams: list[list[ThurstoneMostellerPartRating]],
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+    ) -> list[list[ThurstoneMostellerPartRating]]:
         # Initialize constants
-        original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
         beta = self.beta
         num_teams = len(team_ratings)
@@ -869,8 +869,8 @@ class ThurstoneMostellerPart:
         return result
 
     def predict_win(
-        self, teams: List[List[ThurstoneMostellerPartRating]]
-    ) -> List[float]:
+        self, teams: list[list[ThurstoneMostellerPartRating]]
+    ) -> list[float]:
         r"""
         Predict how likely a match up against teams of one or more players
         will go. This algorithm has a time complexity of
@@ -922,7 +922,7 @@ class ThurstoneMostellerPart:
         total_probability = sum(win_probabilities)
         return [probability / total_probability for probability in win_probabilities]
 
-    def predict_draw(self, teams: List[List[ThurstoneMostellerPartRating]]) -> float:
+    def predict_draw(self, teams: list[list[ThurstoneMostellerPartRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of
@@ -964,8 +964,8 @@ class ThurstoneMostellerPart:
         return sum(pairwise_probabilities) / len(pairwise_probabilities)
 
     def predict_rank(
-        self, teams: List[List[ThurstoneMostellerPartRating]]
-    ) -> List[Tuple[int, float]]:
+        self, teams: list[list[ThurstoneMostellerPartRating]]
+    ) -> list[tuple[int, float]]:
         r"""
         Predict the shape of a match outcome. This algorithm has a time
         complexity of :math:`\mathcal{0}(n^2)` where 'n' is the
@@ -1013,9 +1013,9 @@ class ThurstoneMostellerPart:
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[ThurstoneMostellerPartRating]],
-        ranks: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[ThurstoneMostellerPartTeamRating]:
+        ranks: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+    ) -> list[ThurstoneMostellerPartTeamRating]:
         """
         Get the team ratings of a game.
 
@@ -1061,8 +1061,8 @@ class ThurstoneMostellerPart:
     def _calculate_rankings(
         self,
         game: Sequence[Sequence[ThurstoneMostellerPartRating]],
-        ranks: Optional[List[float]] = None,
-    ) -> List[float]:
+        ranks: list[float] | None = None,
+    ) -> list[float]:
         """
         Calculates the rankings based on the scores or ranks of the teams.
 

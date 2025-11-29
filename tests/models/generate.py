@@ -5,7 +5,7 @@ CLI utility to generate expected test data for the Weng-Lin models.
 import json
 import pathlib
 from statistics import NormalDist
-from typing import Any, Dict, List
+from typing import Any
 
 from openskill.models import MODELS
 
@@ -14,7 +14,7 @@ mu_normal = NormalDist(mu=25.0, sigma=25.0 / 3.0)
 sigma_normal = NormalDist(mu=25.0 / 3.0, sigma=25.0 / 9.0)
 
 
-def generate_model_data(game_result: List[List[Any]]) -> Dict[str, Any]:
+def generate_model_data(game_result: list[list[Any]]) -> dict[str, Any]:
     """
     Generates the expected rating data for the Weng-Lin models.
 

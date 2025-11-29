@@ -4,8 +4,6 @@ module. Some convenience and original methods are also provided to make it
 easier to instantiate and use the models.
 """
 
-from typing import List
-
 from openskill.models.weng_lin.bradley_terry_full import (
     BradleyTerryFull,
     BradleyTerryFullRating,
@@ -24,7 +22,7 @@ from openskill.models.weng_lin.thurstone_mosteller_part import (
     ThurstoneMostellerPartRating,
 )
 
-__all__: List[str] = [
+__all__: list[str] = [
     "BradleyTerryFull",
     "BradleyTerryFullRating",
     "BradleyTerryPart",

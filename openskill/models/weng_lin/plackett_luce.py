@@ -7,12 +7,13 @@ import copy
 import itertools
 import math
 import uuid
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from openskill.models.common import _normalize
 from openskill.models.weng_lin.common import _unwind, phi_major, phi_major_inverse
 
-__all__: List[str] = ["PlackettLuce", "PlackettLuceRating"]
+__all__: list[str] = ["PlackettLuce", "PlackettLuceRating"]
 
 
 class PlackettLuceRating:
@@ -26,7 +27,7 @@ class PlackettLuceRating:
         self,
         mu: float,
         sigma: float,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -46,7 +47,7 @@ class PlackettLuceRating:
 
         # Player Information
         self.id: str = uuid.uuid4().hex.lower()
-        self.name: Optional[str] = name
+        self.name: str | None = name
 
         self.mu: float = mu
         self.sigma: float = sigma
@@ -74,7 +75,7 @@ class PlackettLuceRating:
     def __hash__(self) -> int:
         return hash((self.id, self.mu, self.sigma))
 
-    def __deepcopy__(self, memodict: Dict[Any, Any] = {}) -> "PlackettLuceRating":
+    def __deepcopy__(self, memodict: dict[Any, Any] = {}) -> "PlackettLuceRating":
         plr = PlackettLuceRating(self.mu, self.sigma, self.name)
         plr.id = self.id
         return plr
@@ -208,7 +209,7 @@ def _gamma(
     sigma_squared: float,
     team: Sequence[PlackettLuceRating],
     rank: int,
-    weights: Optional[List[float]] = None,
+    weights: list[float] | None = None,
 ) -> float:
     """
     Default gamma function for Plackett-Luce.
@@ -259,7 +260,7 @@ class PlackettLuce:
                 float,
                 Sequence[PlackettLuceRating],
                 int,
-                Optional[List[float]],
+                list[float] | None,
             ],
             float,
         ] = _gamma,
@@ -327,7 +328,7 @@ class PlackettLuce:
                 float,
                 Sequence[PlackettLuceRating],
                 int,
-                Optional[List[float]],
+                list[float] | None,
             ],
             float,
         ] = gamma
@@ -338,7 +339,7 @@ class PlackettLuce:
         self.balance: bool = balance
 
         # Model Data Container
-        self.PlackettLuceRating: Type[PlackettLuceRating] = PlackettLuceRating
+        self.PlackettLuceRating: type[PlackettLuceRating] = PlackettLuceRating
 
     def __repr__(self) -> str:
         return f"PlackettLuce(mu={self.mu}, sigma={self.sigma})"
@@ -352,9 +353,9 @@ class PlackettLuce:
 
     def rating(
         self,
-        mu: Optional[float] = None,
-        sigma: Optional[float] = None,
-        name: Optional[str] = None,
+        mu: float | None = None,
+        sigma: float | None = None,
+        name: str | None = None,
     ) -> PlackettLuceRating:
         r"""
         Returns a new rating object with your default parameters. The given
@@ -385,7 +386,7 @@ class PlackettLuce:
 
     @staticmethod
     def create_rating(
-        rating: List[float], name: Optional[str] = None
+        rating: list[float], name: str | None = None
     ) -> PlackettLuceRating:
         """
         Create a :class:`PlackettLuceRating` object from a list of `mu`
@@ -415,7 +416,7 @@ class PlackettLuce:
             raise TypeError(f"Cannot accept '{rating.__class__.__name__}' type.")
 
     @staticmethod
-    def _check_teams(teams: List[List[PlackettLuceRating]]) -> None:
+    def _check_teams(teams: list[list[PlackettLuceRating]]) -> None:
         """
         Ensure teams argument is valid.
 
@@ -454,13 +455,13 @@ class PlackettLuce:
 
     def rate(
         self,
-        teams: List[List[PlackettLuceRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-        tau: Optional[float] = None,
-        limit_sigma: Optional[bool] = None,
-    ) -> List[List[PlackettLuceRating]]:
+        teams: list[list[PlackettLuceRating]],
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+        tau: float | None = None,
+        limit_sigma: bool | None = None,
+    ) -> list[list[PlackettLuceRating]]:
         """
         Calculate the new ratings based on the given teams and parameters.
 
@@ -644,7 +645,7 @@ class PlackettLuce:
                 final_result.append(final_team)
         return final_result
 
-    def _c(self, team_ratings: List[PlackettLuceTeamRating]) -> float:
+    def _c(self, team_ratings: list[PlackettLuceTeamRating]) -> float:
         r"""
         Calculate the square root of the collective team sigma.
 
@@ -667,10 +668,10 @@ class PlackettLuce:
 
     def _sum_q(
         self,
-        team_ratings: List[PlackettLuceTeamRating],
+        team_ratings: list[PlackettLuceTeamRating],
         c: float,
-        scores: Optional[List[float]] = None,
-    ) -> List[float]:
+        scores: list[float] | None = None,
+    ) -> list[float]:
         r"""
         Sum up all the values of :code:`mu / c` raised to :math:`e`.
 
@@ -696,7 +697,7 @@ class PlackettLuce:
             for i, team in enumerate(team_ratings):
                 score_mapping[i] = scores[i]
 
-        sum_q: Dict[int, float] = {}
+        sum_q: dict[int, float] = {}
         for i, team_i in enumerate(team_ratings):
             adjusted_mu = team_i.mu
 
@@ -739,7 +740,7 @@ class PlackettLuce:
         return list(sum_q.values())
 
     @staticmethod
-    def _a(team_ratings: List[PlackettLuceTeamRating]) -> List[int]:
+    def _a(team_ratings: list[PlackettLuceTeamRating]) -> list[int]:
         r"""
         Count the number of times a rank appears in the list of team ratings.
 
@@ -757,10 +758,10 @@ class PlackettLuce:
     def _compute(
         self,
         teams: Sequence[Sequence[PlackettLuceRating]],
-        ranks: Optional[List[float]] = None,
-        scores: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[List[PlackettLuceRating]]:
+        ranks: list[float] | None = None,
+        scores: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+    ) -> list[list[PlackettLuceRating]]:
         # Initialize Constants
         original_teams = teams
         team_ratings = self._calculate_team_ratings(teams, ranks=ranks)
@@ -895,7 +896,7 @@ class PlackettLuce:
 
         return result
 
-    def predict_win(self, teams: List[List[PlackettLuceRating]]) -> List[float]:
+    def predict_win(self, teams: list[list[PlackettLuceRating]]) -> list[float]:
         r"""
         Predict how likely a match up against teams of one or more players
         will go. This algorithm has a time complexity of
@@ -947,7 +948,7 @@ class PlackettLuce:
         total_probability = sum(win_probabilities)
         return [probability / total_probability for probability in win_probabilities]
 
-    def predict_draw(self, teams: List[List[PlackettLuceRating]]) -> float:
+    def predict_draw(self, teams: list[list[PlackettLuceRating]]) -> float:
         r"""
         Predict how likely a match up against teams of one or more players
         will draw. This algorithm has a time complexity of
@@ -989,8 +990,8 @@ class PlackettLuce:
         return sum(pairwise_probabilities) / len(pairwise_probabilities)
 
     def predict_rank(
-        self, teams: List[List[PlackettLuceRating]]
-    ) -> List[Tuple[int, float]]:
+        self, teams: list[list[PlackettLuceRating]]
+    ) -> list[tuple[int, float]]:
         r"""
         Predict the shape of a match outcome. This algorithm has a time
         complexity of :math:`\mathcal{0}(n^2)` where 'n' is the
@@ -1038,9 +1039,9 @@ class PlackettLuce:
     def _calculate_team_ratings(
         self,
         game: Sequence[Sequence[PlackettLuceRating]],
-        ranks: Optional[List[float]] = None,
-        weights: Optional[List[List[float]]] = None,
-    ) -> List[PlackettLuceTeamRating]:
+        ranks: list[float] | None = None,
+        weights: list[list[float]] | None = None,
+    ) -> list[PlackettLuceTeamRating]:
         """
         Get the team ratings of a game.
 
@@ -1084,8 +1085,8 @@ class PlackettLuce:
     def _calculate_rankings(
         self,
         game: Sequence[Sequence[PlackettLuceRating]],
-        ranks: Optional[List[float]] = None,
-    ) -> List[float]:
+        ranks: list[float] | None = None,
+    ) -> list[float]:
         """
         Calculates the rankings based on the scores of the teams.
 

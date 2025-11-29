@@ -2,8 +2,6 @@
 All objects specific to each model.
 """
 
-from typing import List
-
 from openskill.models.weng_lin import (
     BradleyTerryFull,
     BradleyTerryFullRating,
@@ -17,7 +15,7 @@ from openskill.models.weng_lin import (
     ThurstoneMostellerPartRating,
 )
 
-__all__: List[str] = [
+__all__: list[str] = [
     "BradleyTerryFull",
     "BradleyTerryFullRating",
     "BradleyTerryPart",
