@@ -104,6 +104,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "Perlence",
+      "name": "Sviatoslav Abakumov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1044300?v=4",
+      "profile": "https://github.com/Perlence",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
