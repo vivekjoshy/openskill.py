@@ -98,7 +98,7 @@ tests = [
     "pytest~=8.3",
     "codecov~=2.1",
     "coverage~=7.6",
-    "pytest-cov~=6.0",
+    "pytest-cov~=7.0",
 ]
 build = [
     "twine~=6.1",
