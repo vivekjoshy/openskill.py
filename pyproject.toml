@@ -106,7 +106,7 @@ build = [
     "isort~=6.0",
     "mypy[mypyc]~=1.15",
     "black[jupyter]~=25.1",
-    "towncrier~=24.8",
+    "towncrier~=25.8",
     "bump-my-version~=1.1",
 ]
 benchmark = [
