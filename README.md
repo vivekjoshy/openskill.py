@@ -154,3 +154,4 @@ This project is originally based off the [openskill.js](https://github.com/phili
 - [Java](https://github.com/pocketcombats/openskill-java)
 - [Kotlin](https://github.com/brezinajn/openskill.kt)
 - [Lua](https://github.com/bstummer/openskill.lua)
+- [Ruby](https://github.com/erdostom/openskill-ruby)
