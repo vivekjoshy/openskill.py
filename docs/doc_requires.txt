@@ -1,4 +1,4 @@
-sphinx~=8.1
+sphinx~=9.1
 nbsphinx~=0.9
 pygments~=2.19
 shibuya~=2025.2
