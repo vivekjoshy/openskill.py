@@ -42,7 +42,7 @@ strict = true
 
 [project]
 name = "openskill"
-version = "6.1.3"
+version = "6.2.0"
 authors = [
     {name = "Vivek Joshy", email = "git@vivekjoshy.com"},
 ]
