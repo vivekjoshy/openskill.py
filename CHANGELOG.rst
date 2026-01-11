@@ -4,6 +4,23 @@ This file is updated every release since v1.0.0 with the use of towncrier from t
 
 .. towncrier release notes start
 
+openskill 6.2.0 (2026-01-11)
+============================
+
+Features
+--------
+
+- Added ``weight_bounds`` parameter to all models for customizing player weight normalization bounds. Set to ``None`` to disable normalization entirely. (`#192 <https://github.com/vivekjoshy/openskill.py/issues/192>`_)
+
+
+Bugfixes
+--------
+
+- Fix rank calculation for ties. (`#174 <https://github.com/vivekjoshy/openskill.py/issues/174>`_)
+- Fix PlackettLuce rating adjustment for ties. (`#176 <https://github.com/vivekjoshy/openskill.py/issues/176>`_)
+- Fixed margin-of-victory logic being inverted in all Weng-Lin models. Larger score differences now correctly produce larger rating changes instead of smaller ones. (`#191 <https://github.com/vivekjoshy/openskill.py/issues/191>`_)
+
+
 Openskill 6.1.3 (2025-06-20)
 ============================
 

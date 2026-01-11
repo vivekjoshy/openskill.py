@@ -3,7 +3,7 @@ __all__: list[str] = ["models"]
 
 
 # Metadata
-__version__ = "6.1.3"
+__version__ = "6.2.0"
 __author__ = "Vivek Joshy"
 __email__ = "git@vivekjoshy.com"
 __copyright__ = "Copyright 2023 - 2025, Vivek Joshy"

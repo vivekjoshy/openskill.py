@@ -1,1 +1,0 @@
-Added ``weight_bounds`` parameter to all models for customizing player weight normalization bounds. Set to ``None`` to disable normalization entirely.

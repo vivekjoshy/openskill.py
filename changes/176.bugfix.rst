@@ -1,1 +1,0 @@
-Fix PlackettLuce rating adjustment for ties.

@@ -77,7 +77,7 @@ Tracker = "https://github.com/vivekjoshy/openskill.py/issues"
 
 [project.optional-dependencies]
 docs = [
-    "sphinx~=9.1",
+    "sphinx~=8.1",
     "nbsphinx~=0.9",
     "pygments~=2.19",
     "shibuya~=2026.1",
