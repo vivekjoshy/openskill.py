@@ -1,4 +1,4 @@
-name: Release
+name: Build & Release
 
 on:
   workflow_dispatch:
@@ -11,11 +11,44 @@ on:
       - published
 
 jobs:
+  # Quick universal wheel build + test on every push/PR
+  Universal:
+    name: Build Universal Wheel
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: 'pip'
+
+      - name: Build Wheel
+        run: |
+           python -m pip install --upgrade build pytest~=9.0
+           python -m build --wheel --outdir wheelhouse
+
+      - name: Test Universal Wheel
+        run: |
+           pip install wheelhouse/*.whl
+           pytest tests/ -v
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openskill-universal-wheel
+          path: wheelhouse/*.whl
+
+  # Full compiled wheels - only on release
   Compiled:
-    name: Build Compiled Wheels
+    name: Build Compiled Wheels (${{ matrix.os }})
+    if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: ${{ matrix.os }}
     permissions: write-all
     strategy:
+        fail-fast: false
         matrix:
           os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-15-intel, macos-latest]
 
@@ -51,8 +84,10 @@ jobs:
           name: openskill-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
 
+  # Source distribution - only on release
   Source:
     name: Build Source Distribution
+    if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -69,25 +104,7 @@ jobs:
           name: openskill-sdist
           path: wheelhouse/*.tar.gz
 
-  Universal:
-    name: Build Universal Wheels
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Build Wheel
-        run: |
-           python -m pip install --upgrade build
-           python -m build --wheel --outdir wheelhouse
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: openskill-universal-wheel
-          path: wheelhouse/*.whl
-
-
+  # Upload to PyPI - only on release
   Upload:
     name: Upload Wheels to PyPi
     needs: [Compiled, Source]
