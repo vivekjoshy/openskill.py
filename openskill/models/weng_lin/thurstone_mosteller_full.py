@@ -621,6 +621,9 @@ class ThurstoneMostellerFull:
             if weights:
                 weights, _ = _unwind(ranks, weights)
 
+            if scores:
+                scores, _ = _unwind(ranks, scores)
+
             ordered_teams = rank_teams_unwound[0]
             tenet = rank_teams_unwound[1]
             teams = ordered_teams
@@ -793,42 +796,42 @@ class ThurstoneMostellerFull:
                         None,
                     )
 
-                margin_factor = 1.0
+                margin_divisor = 1.0
                 if scores and i in score_mapping and q in score_mapping and i != q:
                     score_diff = abs(score_mapping[i] - score_mapping[q])
-                    if score_diff > 0 and team_q.rank < team_i.rank:
+                    if score_diff > 0:
                         if score_diff > self.margin and self.margin > 0.0:
-                            margin_factor = math.log1p(score_diff / self.margin)
+                            margin_divisor = math.log1p(score_diff / self.margin)
 
                 if team_q.rank > team_i.rank:
                     omega += sigma_squared_to_ciq * v(
-                        delta_mu * margin_factor, self.epsilon / c_iq
+                        delta_mu / margin_divisor, self.epsilon / c_iq
                     )
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * w(delta_mu * margin_factor, self.epsilon / c_iq)
+                        * w(delta_mu / margin_divisor, self.epsilon / c_iq)
                     )
                 elif team_q.rank < team_i.rank:
                     omega += -sigma_squared_to_ciq * v(
-                        -delta_mu * margin_factor, self.epsilon / c_iq
+                        -delta_mu / margin_divisor, self.epsilon / c_iq
                     )
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * w(-delta_mu * margin_factor, self.epsilon / c_iq)
+                        * w(-delta_mu / margin_divisor, self.epsilon / c_iq)
                     )
                 else:
                     omega += sigma_squared_to_ciq * vt(
-                        delta_mu * margin_factor, self.epsilon / c_iq
+                        delta_mu / margin_divisor, self.epsilon / c_iq
                     )
                     delta += (
                         gamma_value
                         * sigma_squared_to_ciq
                         / c_iq
-                        * wt(delta_mu * margin_factor, self.epsilon / c_iq)
+                        * wt(delta_mu / margin_divisor, self.epsilon / c_iq)
                     )
 
             intermediate_result_per_team = []

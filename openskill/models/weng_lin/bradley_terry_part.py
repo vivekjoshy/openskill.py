@@ -11,11 +11,7 @@ from collections.abc import Callable, Sequence
 from typing import Any
 
 from openskill.models.common import _normalize
-from openskill.models.weng_lin.common import (
-    _unwind,
-    phi_major,
-    phi_major_inverse,
-)
+from openskill.models.weng_lin.common import _unwind, phi_major, phi_major_inverse
 
 __all__: list[str] = ["BradleyTerryPart", "BradleyTerryPartRating"]
 
@@ -610,6 +606,9 @@ class BradleyTerryPart:
             if weights:
                 weights, _ = _unwind(ranks, weights)
 
+            if scores:
+                scores, _ = _unwind(ranks, scores)
+
             ordered_teams = rank_teams_unwound[0]
             tenet = rank_teams_unwound[1]
             teams = ordered_teams
@@ -755,18 +754,18 @@ class BradleyTerryPart:
 
                 team_q = team_ratings[q]
 
-                margin_factor = 1.0
+                margin_divisor = 1.0
                 if scores and i in score_mapping and q in score_mapping and i != q:
                     score_diff = abs(score_mapping[i] - score_mapping[q])
-                    if score_diff > 0 and team_q.rank < team_i.rank:
+                    if score_diff > 0:
                         if score_diff > self.margin and self.margin > 0.0:
-                            margin_factor = math.log1p(score_diff / self.margin)
+                            margin_divisor = math.log1p(score_diff / self.margin)
 
                 c_iq = math.sqrt(
                     team_i.sigma_squared + team_q.sigma_squared + (2 * beta**2)
                 )
                 p_iq = 1 / (
-                    1 + math.exp(((team_q.mu - team_i.mu) * margin_factor) / c_iq)
+                    1 + math.exp(((team_q.mu - team_i.mu) / margin_divisor) / c_iq)
                 )
                 sigma_to_ciq = team_i.sigma_squared / c_iq
 
