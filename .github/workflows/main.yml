@@ -24,7 +24,7 @@ jobs:
         architecture: ["x64"]
         experimental: [false]
         include:
-          # x86 only available on Ubuntu and Windows
+          # x86 testing on Ubuntu, Windows, and macOS Intel
           - os: ubuntu-latest
             python-version: "3.12"
             architecture: "x86"
@@ -32,6 +32,10 @@ jobs:
           - os: windows-latest
             python-version: "3.12"
             architecture: "x86"
+            experimental: false
+          - os: macos-15-intel
+            python-version: "3.12"
+            architecture: "x64"
             experimental: false
     defaults:
       run:
