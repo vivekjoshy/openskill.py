@@ -580,3 +580,61 @@ def test_predict_rank():
 
     with pytest.raises(ValueError):
         model.predict_rank(teams=[team_1])
+
+
+def test_weight_bounds_default() -> None:
+    """
+    Ensures default weight_bounds is (1.0, 2.0).
+    """
+    model = PlackettLuce()
+    assert model.weight_bounds == (1.0, 2.0)
+
+
+def test_weight_bounds_custom() -> None:
+    """
+    Tests that custom weight_bounds affects rating changes differently.
+    """
+    # Default bounds (1.0, 2.0) - max performer gets 2x the base update
+    model_default = PlackettLuce(weight_bounds=(1.0, 2.0))
+    team1 = [model_default.rating() for _ in range(3)]
+    team2 = [model_default.rating() for _ in range(3)]
+    weights = [[0.5, 1.0, 2.0], [1.0, 1.0, 1.0]]
+
+    result_default = model_default.rate(
+        teams=[team1, team2], ranks=[1, 2], weights=weights
+    )
+
+    # Narrow bounds (0.9, 1.1) - max performer gets only 1.1x the base update
+    model_narrow = PlackettLuce(weight_bounds=(0.9, 1.1))
+    team1_narrow = [model_narrow.rating() for _ in range(3)]
+    team2_narrow = [model_narrow.rating() for _ in range(3)]
+
+    result_narrow = model_narrow.rate(
+        teams=[team1_narrow, team2_narrow], ranks=[1, 2], weights=weights
+    )
+
+    # With narrow bounds, the difference between min and max performer should be smaller
+    default_spread = result_default[0][2].mu - result_default[0][0].mu
+    narrow_spread = result_narrow[0][2].mu - result_narrow[0][0].mu
+
+    assert narrow_spread < default_spread
+
+
+def test_weight_bounds_none_disables_normalization() -> None:
+    """
+    Tests that weight_bounds=None disables weight normalization.
+    """
+    model = PlackettLuce(weight_bounds=None)
+    assert model.weight_bounds is None
+
+    team1 = [model.rating() for _ in range(3)]
+    team2 = [model.rating() for _ in range(3)]
+
+    # Raw weights passed directly without normalization
+    weights = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+    result = model.rate(teams=[team1, team2], ranks=[1, 2], weights=weights)
+
+    # All players on winning team should get the same mu change
+    mu_changes = [r.mu - 25.0 for r in result[0]]
+    assert mu_changes[0] == pytest.approx(mu_changes[1])
+    assert mu_changes[1] == pytest.approx(mu_changes[2])

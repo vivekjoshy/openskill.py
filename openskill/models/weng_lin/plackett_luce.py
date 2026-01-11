@@ -268,6 +268,7 @@ class PlackettLuce:
         margin: float = 0.0,
         limit_sigma: bool = False,
         balance: bool = False,
+        weight_bounds: tuple[float, float] = (1.0, 2.0),
     ):
         r"""
         :param mu: Represents the initial belief about the skill of
@@ -314,6 +315,11 @@ class PlackettLuce:
 
         :param balance: Boolean that determines whether to emphasize
                         rating outliers.
+
+        :param weight_bounds: Tuple of (min, max) bounds for normalizing player
+                              weights within a team. Weights are scaled to this
+                              range. Default is (1.0, 2.0). Set to None to
+                              disable weight normalization.
         """
         # Model Parameters
         self.mu: float = float(mu)
@@ -337,6 +343,7 @@ class PlackettLuce:
         self.margin: float = float(margin)
         self.limit_sigma: bool = limit_sigma
         self.balance: bool = balance
+        self.weight_bounds: tuple[float, float] | None = weight_bounds
 
         # Model Data Container
         self.PlackettLuceRating: type[PlackettLuceRating] = PlackettLuceRating
@@ -591,8 +598,11 @@ class PlackettLuce:
             ranks = self._calculate_rankings(teams, ranks)
 
         # Normalize Weights
-        if weights:
-            weights = [_normalize(team_weights, 1, 2) for team_weights in weights]
+        if weights and self.weight_bounds is not None:
+            weights = [
+                _normalize(team_weights, self.weight_bounds[0], self.weight_bounds[1])
+                for team_weights in weights
+            ]
 
         tenet = None
         if ranks:
