@@ -1,0 +1,1 @@
+Fixed margin-of-victory logic being inverted in all Weng-Lin models. Larger score differences now correctly produce larger rating changes instead of smaller ones.

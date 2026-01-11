@@ -601,6 +601,9 @@ class PlackettLuce:
             if weights:
                 weights, _ = _unwind(ranks, weights)
 
+            if scores:
+                scores, _ = _unwind(ranks, scores)
+
             ordered_teams = rank_teams_unwound[0]
             tenet = rank_teams_unwound[1]
             teams = ordered_teams
@@ -715,11 +718,11 @@ class PlackettLuce:
 
                             # Apply Margin Factor to the Skill Difference
                             if score_mapping[i] > score_mapping[j]:  # Performed Better
-                                margin_adjustment += (team_i.mu - team_j.mu) * (
+                                margin_adjustment -= (team_i.mu - team_j.mu) * (
                                     margin_factor - 1.0
                                 )
                             else:  # Performed Worse
-                                margin_adjustment -= (team_j.mu - team_i.mu) * (
+                                margin_adjustment += (team_j.mu - team_i.mu) * (
                                     margin_factor - 1.0
                                 )
                             comparison_count += 1
@@ -799,11 +802,11 @@ class PlackettLuce:
                                 margin_factor = math.log1p(score_diff / self.margin)
 
                             if score_mapping[i] > score_mapping[j]:
-                                margin_adjustment += (team_i.mu - team_j.mu) * (
+                                margin_adjustment -= (team_i.mu - team_j.mu) * (
                                     margin_factor - 1.0
                                 )
                             else:
-                                margin_adjustment -= (team_j.mu - team_i.mu) * (
+                                margin_adjustment += (team_j.mu - team_i.mu) * (
                                     margin_factor - 1.0
                                 )
                             comparison_count += 1

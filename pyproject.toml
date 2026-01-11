@@ -77,11 +77,11 @@ Tracker = "https://github.com/vivekjoshy/openskill.py/issues"
 
 [project.optional-dependencies]
 docs = [
-    "sphinx~=8.1",
+    "sphinx~=9.1",
     "nbsphinx~=0.9",
     "pygments~=2.19",
-    "shibuya~=2025.2",
-    "ipykernel~=6.29",
+    "shibuya~=2026.1",
+    "ipykernel~=7.1",
     "matplotlib~=3.10",
     "myst-parser~=4.0",
     "sphinx-intl~=2.3",
@@ -95,18 +95,18 @@ docs = [
 tests = [
     "tox~=4.24",
     "mypy~=1.15",
-    "pytest~=8.3",
+    "pytest~=9.0",
     "codecov~=2.1",
     "coverage~=7.6",
-    "pytest-cov~=6.0",
+    "pytest-cov~=7.0",
 ]
 build = [
     "twine~=6.1",
     "build~=1.2",
-    "isort~=6.0",
+    "isort~=7.0",
     "mypy[mypyc]~=1.15",
     "black[jupyter]~=25.1",
-    "towncrier~=24.8",
+    "towncrier~=25.8",
     "bump-my-version~=1.1",
 ]
 benchmark = [
