@@ -109,6 +109,9 @@ build = [
     "towncrier~=25.8",
     "bump-my-version~=1.1",
 ]
+cython = [
+    "cython>=3.0",
+]
 benchmark = [
     "rich~=14.0",
     "tqdm~=4.67",

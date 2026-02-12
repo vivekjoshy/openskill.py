@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Cython generated files
+*.c
+!openskill/_cfast.pyx
+
 # Distribution / packaging
 .Python
 build/

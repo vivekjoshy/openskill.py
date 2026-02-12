@@ -22,6 +22,7 @@ With the rise of varying team sizes in matches - known as asymmetric multi-team 
    License </license.rst>
    Installation </installation.rst>
    User Manual </manual.rst>
+   Bulk Rating </bulk_rating.rst>
    Ordinals Explained <ordinal>
    FAQ </faq.rst>
    Contributors <contributors>
