@@ -54,6 +54,7 @@ from typing import Any
 __all__ = [
     "Game",
     "BatchProcessor",
+    "_FastRating",
     "partition_waves",
     "MAX_TEAM_SIZE",
     "MAX_ENTITIES",
@@ -73,6 +74,36 @@ C/Cython hot-loop (32 players × 2 floats × 8 bytes = 512 B, fits in L1)."""
 MAX_ENTITIES: int = 16_000
 """Maximum tracked entities.  The two flat arrays (mu, sigma) at this size
 consume 16 000 × 2 × 8 = 256 KB — comfortably within L2 cache."""
+
+
+# ---------------------------------------------------------------------------
+# _FastRating — minimal duck-type for _compute()
+# ---------------------------------------------------------------------------
+
+class _FastRating:
+    """Disposable Rating substitute for ``_compute()``.
+
+    ``model.rating()`` generates a UUID via ``/dev/urandom`` and
+    allocates a ``__dict__`` on every call.  ``_FastRating`` avoids
+    both: ``__slots__`` eliminates the dict, and there is no UUID.
+
+    ``_compute()`` only reads/writes ``.mu``, ``.sigma``, and calls
+    ``.ordinal()``.  This class satisfies that contract at minimal cost.
+    """
+
+    __slots__ = ("mu", "sigma")
+
+    def __init__(self, mu: float, sigma: float) -> None:
+        self.mu = mu
+        self.sigma = sigma
+
+    def ordinal(
+        self,
+        z: float = 3.0,
+        alpha: float = 1,
+        target: float = 0,
+    ) -> float:
+        return alpha * ((self.mu - z * self.sigma) + (target / alpha))
 
 
 # ---------------------------------------------------------------------------
@@ -252,7 +283,7 @@ def _worker_rate_game(
     teams: list[list[Any]] = []
     for t_mus, t_sigs in zip(team_mus, team_sigmas):
         team = [
-            model.rating(mu=m, sigma=math.sqrt(s * s + tau_sq))
+            _FastRating(m, math.sqrt(s * s + tau_sq))
             for m, s in zip(t_mus, t_sigs)
         ]
         teams.append(team)
@@ -586,13 +617,8 @@ class BatchProcessor:
             indices: list[int] = []
             for eid in team_ids:
                 idx: int = entity_to_idx[eid]
-                # Create Rating with tau pre-applied — disposable object,
-                # no deepcopy needed.
                 team.append(
-                    model.rating(
-                        mu=mus[idx],
-                        sigma=math.sqrt(sigmas[idx] ** 2 + tau_sq),
-                    )
+                    _FastRating(mus[idx], math.sqrt(sigmas[idx] ** 2 + tau_sq))
                 )
                 indices.append(idx)
             teams.append(team)

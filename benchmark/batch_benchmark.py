@@ -1,29 +1,30 @@
 #!/usr/bin/env python
 """
-Batch Processing Benchmark
+Batch Processing Benchmark — Shootout
 
-Generates tournament datasets and compares:
-  1. Old approach: sequential model.rate() with dict-based player registry
-  2. New approach: BatchProcessor with wave-based parallel processing
+Compares ALL execution models head-to-head:
 
-Two dataset modes:
-  - "swiss": Swiss-format tournament — every player plays every round,
-    paired without replacement.  High parallelism within each round.
-  - "power_law": Power-law activity — realistic online matchmaking where
-    some players are far more active than others.  Low parallelism due
-    to long dependency chains.
+  1. **Old**       — sequential model.rate() with dict (baseline)
+  2. **Batch(1w)** — BatchProcessor, 1 worker, fast path (no deepcopy)
+  3. **Batch(2w)** — BatchProcessor, 2 workers, multiprocess pipeline
+  4. **Ladder**    — Ladder.rate() per game, array-backed, pure Python
+  5. **Ladder+Cy** — Ladder.rate() per game, Cython fast path
+  6. **LadBatch**  — Ladder.rate_batch(), wave-ordered sequential
 
-Measures wall-clock time, per-game throughput, and verifies numerical
-accuracy (the two approaches must produce identical ratings).
+Two datasets:
+  - Swiss tournament (high parallelism, 1v1, no replacement)
+  - Power-law matchmaking (low parallelism, variable team size)
+
+Every approach is accuracy-verified against the Old baseline.
 """
 
 import math
 import random
 import sys
 import time
-from dataclasses import dataclass
 
 from openskill.batch import BatchProcessor, Game, partition_waves
+from openskill.ladder import Ladder, _HAS_CYTHON
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,
@@ -37,62 +38,9 @@ from openskill.models import (
 # ---------------------------------------------------------------------------
 
 NUM_PLAYERS = 3000
-NUM_ROUNDS = 9       # Swiss rounds (log2(3000) ≈ 12, 9 is typical)
-TEAM_SIZE = 1        # 1v1 Swiss pairings
+NUM_ROUNDS = 9
+TEAM_SIZE = 1
 SEED = 42
-
-
-# ---------------------------------------------------------------------------
-# Data generation — Swiss tournament (without replacement per round)
-# ---------------------------------------------------------------------------
-
-
-def generate_swiss_games(
-    num_players: int,
-    num_rounds: int,
-    seed: int,
-    team_size: int = TEAM_SIZE,
-) -> list[Game]:
-    """
-    Generate a Swiss-format tournament.
-
-    Every round, all players are paired without replacement into 1v1
-    matches (or small teams).  Each player plays exactly once per round.
-    This gives high parallelism within a round (all games independent)
-    but sequential dependency between rounds (same player can't appear
-    in round N+1 until round N is processed).
-
-    :param num_players: Total players in the tournament.
-    :param num_rounds: Number of Swiss rounds.
-    :param seed: Random seed for reproducibility.
-    :param team_size: Players per team (1 = 1v1, 2 = 2v2, etc.).
-    :return: Flat list of Game objects in round order.
-    """
-    rng = random.Random(seed)
-    player_ids = [f"p{i}" for i in range(num_players)]
-    players_per_game = 2 * team_size
-    games_per_round = num_players // players_per_game
-
-    games: list[Game] = []
-    for _ in range(num_rounds):
-        # Shuffle all players, pair them off without replacement
-        shuffled = list(player_ids)
-        rng.shuffle(shuffled)
-
-        for g in range(games_per_round):
-            start = g * players_per_game
-            team_a = shuffled[start : start + team_size]
-            team_b = shuffled[start + team_size : start + players_per_game]
-            # Random outcome
-            ranks = [1, 2] if rng.random() < 0.5 else [2, 1]
-            games.append(Game(teams=[team_a, team_b], ranks=ranks))
-
-    return games
-
-
-# ---------------------------------------------------------------------------
-# Data generation — power-law matchmaking (high overlap)
-# ---------------------------------------------------------------------------
 
 POWER_LAW_GAMES = 5000
 POWER_LAW_TEAM_SIZE_MAX = 6
@@ -100,17 +48,39 @@ POWER_LAW_TEAMS_MIN = 2
 POWER_LAW_TEAMS_MAX = 4
 
 
-def generate_power_law_games(
-    num_players: int,
-    num_games: int,
-    seed: int,
-    team_size_max: int = POWER_LAW_TEAM_SIZE_MAX,
+# ---------------------------------------------------------------------------
+# Data generation
+# ---------------------------------------------------------------------------
+
+def generate_swiss_games(
+    num_players: int, num_rounds: int, seed: int, team_size: int = TEAM_SIZE,
 ) -> list[Game]:
-    """Generate games with power-law player activity (online matchmaking)."""
+    """Swiss-format tournament: every player once per round, no replacement."""
     rng = random.Random(seed)
     player_ids = [f"p{i}" for i in range(num_players)]
+    players_per_game = 2 * team_size
+    games_per_round = num_players // players_per_game
 
-    # Power-law activity: some players play a LOT, most play a few.
+    games: list[Game] = []
+    for _ in range(num_rounds):
+        shuffled = list(player_ids)
+        rng.shuffle(shuffled)
+        for g in range(games_per_round):
+            start = g * players_per_game
+            team_a = shuffled[start : start + team_size]
+            team_b = shuffled[start + team_size : start + players_per_game]
+            ranks = [1, 2] if rng.random() < 0.5 else [2, 1]
+            games.append(Game(teams=[team_a, team_b], ranks=ranks))
+    return games
+
+
+def generate_power_law_games(
+    num_players: int, num_games: int, seed: int,
+    team_size_max: int = POWER_LAW_TEAM_SIZE_MAX,
+) -> list[Game]:
+    """Power-law activity: some players play a LOT, most play a few."""
+    rng = random.Random(seed)
+    player_ids = [f"p{i}" for i in range(num_players)]
     weights = [1.0 / (i + 1) ** 0.6 for i in range(num_players)]
     total = sum(weights)
     weights = [w / total for w in weights]
@@ -119,9 +89,8 @@ def generate_power_law_games(
     for _ in range(num_games):
         n_teams = rng.randint(POWER_LAW_TEAMS_MIN, POWER_LAW_TEAMS_MAX)
         t_size = rng.randint(1, min(team_size_max, 32))
-        total_players_needed = n_teams * t_size
-
-        chosen = _weighted_sample(rng, player_ids, weights, total_players_needed)
+        total_needed = n_teams * t_size
+        chosen = _weighted_sample(rng, player_ids, weights, total_needed)
 
         teams: list[list[str]] = []
         for t in range(n_teams):
@@ -131,17 +100,10 @@ def generate_power_law_games(
         rank_order = list(range(1, n_teams + 1))
         rng.shuffle(rank_order)
         games.append(Game(teams=teams, ranks=rank_order))
-
     return games
 
 
-def _weighted_sample(
-    rng: random.Random,
-    population: list[str],
-    weights: list[float],
-    k: int,
-) -> list[str]:
-    """Weighted sampling without replacement (exponential sort trick)."""
+def _weighted_sample(rng, population, weights, k):
     if k >= len(population):
         result = list(population)
         rng.shuffle(result)
@@ -152,21 +114,16 @@ def _weighted_sample(
 
 
 # ---------------------------------------------------------------------------
-# Old approach: sequential dict-based processing
+# Execution strategies
 # ---------------------------------------------------------------------------
 
-
-def old_approach(model, games: list[Game]) -> dict[str, tuple[float, float]]:
-    """The traditional sequential approach: maintain a dict of Rating objects."""
-    players: dict[str, object] = {}
-
+def run_old(model, games):
+    """Baseline: model.rate() with dict."""
+    players = {}
     for game in games:
-        # Build teams from current ratings
-        team_objs = []
-        team_keys: list[list[str]] = []
+        team_objs, team_keys = [], []
         for team_ids in game.teams:
-            team = []
-            keys = []
+            team, keys = [], []
             for pid in team_ids:
                 if pid not in players:
                     players[pid] = model.rating()
@@ -174,156 +131,131 @@ def old_approach(model, games: list[Game]) -> dict[str, tuple[float, float]]:
                 keys.append(pid)
             team_objs.append(team)
             team_keys.append(keys)
-
-        # Rate
         kwargs = {}
         if game.ranks is not None:
             kwargs["ranks"] = list(game.ranks)
         if game.scores is not None:
             kwargs["scores"] = list(game.scores)
-
         result = model.rate(team_objs, **kwargs)
-
-        # Update
-        for team_idx, team in enumerate(result):
-            for player_idx, player in enumerate(team):
-                players[team_keys[team_idx][player_idx]] = player
-
+        for ti, team in enumerate(result):
+            for pi, player in enumerate(team):
+                players[team_keys[ti][pi]] = player
     return {pid: (r.mu, r.sigma) for pid, r in players.items()}
+
+
+def run_batch(model, games, n_workers=1, pipeline=True):
+    proc = BatchProcessor(model, n_workers=n_workers, pipeline=pipeline)
+    return proc.process(games)
+
+
+def run_ladder(model, games, use_cython=False):
+    lad = Ladder(model, use_cython=use_cython)
+    for game in games:
+        lad.rate(game.teams, ranks=game.ranks, scores=game.scores)
+    return lad.to_dict()
+
+
+def run_ladder_batch(model, games):
+    lad = Ladder(model, use_cython=False)
+    lad.rate_batch(games)
+    return lad.to_dict()
+
+
+# ---------------------------------------------------------------------------
+# Comparison helpers
+# ---------------------------------------------------------------------------
+
+def compare_ratings(old, new):
+    max_mu = max_sigma = 0.0
+    mismatches = 0
+    for pid in old:
+        if pid not in new:
+            mismatches += 1
+            continue
+        md = abs(old[pid][0] - new[pid][0])
+        sd = abs(old[pid][1] - new[pid][1])
+        if md > 1e-9 or sd > 1e-9:
+            mismatches += 1
+        max_mu = max(max_mu, md)
+        max_sigma = max(max_sigma, sd)
+    mismatches += len(set(new) - set(old))
+    return max_mu, max_sigma, mismatches
+
+
+def fmt(seconds):
+    return f"{seconds * 1000:.0f}ms" if seconds < 1.0 else f"{seconds:.2f}s"
 
 
 # ---------------------------------------------------------------------------
 # Benchmark runner
 # ---------------------------------------------------------------------------
 
+def benchmark_dataset(label, games, model_name, model):
+    """Run all approaches for one model+dataset, return result row."""
+    approaches = {}
 
-def compare_ratings(
-    old: dict[str, tuple[float, float]],
-    new: dict[str, tuple[float, float]],
-    label: str,
-) -> tuple[float, float, int]:
-    """Compare two rating dicts. Returns (max_mu_diff, max_sigma_diff, mismatches)."""
-    max_mu = 0.0
-    max_sigma = 0.0
-    mismatches = 0
-    for pid in old:
-        if pid not in new:
-            mismatches += 1
-            continue
-        mu_diff = abs(old[pid][0] - new[pid][0])
-        sigma_diff = abs(old[pid][1] - new[pid][1])
-        if mu_diff > 1e-9 or sigma_diff > 1e-9:
-            mismatches += 1
-        max_mu = max(max_mu, mu_diff)
-        max_sigma = max(max_sigma, sigma_diff)
-    missing_in_old = len(set(new.keys()) - set(old.keys()))
-    mismatches += missing_in_old
-    return max_mu, max_sigma, mismatches
-
-
-def format_time(seconds: float) -> str:
-    if seconds < 1.0:
-        return f"{seconds * 1000:.1f}ms"
-    return f"{seconds:.2f}s"
-
-
-def analyze_waves(label: str, games: list[Game]) -> None:
-    """Print wave structure analysis for a game list."""
+    # 1. Old
     t0 = time.perf_counter()
-    waves = partition_waves(games)
-    wave_time = time.perf_counter() - t0
-    wave_sizes = [len(w) for w in waves]
-    entities_per_game = []
-    for g in games:
-        ents = set()
-        for t in g.teams:
-            ents.update(t)
-        entities_per_game.append(len(ents))
+    old_ratings = run_old(model, games)
+    approaches["Old"] = (time.perf_counter() - t0, old_ratings)
 
-    print(f"\n  [{label}] Wave structure:")
-    print(f"    Games: {len(games)}, Waves: {len(waves)} "
-          f"(built in {format_time(wave_time)})")
-    print(f"    Wave sizes: min={min(wave_sizes)}, max={max(wave_sizes)}, "
-          f"avg={sum(wave_sizes)/len(wave_sizes):.1f}")
-    print(f"    Entities/game: min={min(entities_per_game)}, "
-          f"max={max(entities_per_game)}, "
-          f"avg={sum(entities_per_game)/len(entities_per_game):.1f}")
-    print(f"    Parallelism: {max(wave_sizes)} games in largest wave "
-          f"({max(wave_sizes)/len(games)*100:.1f}% of total)")
+    # 2. Batch(1w)
+    t0 = time.perf_counter()
+    approaches["Batch1w"] = (
+        time.perf_counter() - t0,
+        None,  # placeholder
+    )
+    r = run_batch(model, games, n_workers=1)
+    approaches["Batch1w"] = (time.perf_counter() - t0, r)
 
+    # 3. Batch(2w)
+    t0 = time.perf_counter()
+    r = run_batch(model, games, n_workers=2, pipeline=True)
+    approaches["Batch2w"] = (time.perf_counter() - t0, r)
 
-def benchmark_dataset(
-    label: str,
-    games: list[Game],
-    models: list[tuple[str, type]],
-) -> list[dict]:
-    """Run benchmarks on a dataset and return results."""
-    print(f"\n  Benchmarking {label}...")
-    print("  " + "-" * 70)
-    print(f"  {'Model':<26} {'Old (seq)':<12} {'Batch(1w)':<12} "
-          f"{'Batch(2w)':<12} {'Match?':<8} {'Speedup'}")
-    print("  " + "-" * 70)
+    # 4. Ladder (Python)
+    t0 = time.perf_counter()
+    r = run_ladder(model, games, use_cython=False)
+    approaches["Ladder"] = (time.perf_counter() - t0, r)
 
-    results = []
-    for model_name, model_class in models:
-        model = model_class()
-
-        # --- Old approach ---
+    # 5. Ladder (Cython) — if available
+    if _HAS_CYTHON:
         t0 = time.perf_counter()
-        old_ratings = old_approach(model, games)
-        old_time = time.perf_counter() - t0
+        r = run_ladder(model, games, use_cython=True)
+        approaches["LadCy"] = (time.perf_counter() - t0, r)
 
-        # --- Batch sequential (1 worker, fast path — no deepcopy) ---
-        proc1 = BatchProcessor(model, n_workers=1)
-        t0 = time.perf_counter()
-        batch1_ratings = proc1.process(games)
-        batch1_time = time.perf_counter() - t0
+    # 6. Ladder batch
+    t0 = time.perf_counter()
+    r = run_ladder_batch(model, games)
+    approaches["LadBatch"] = (time.perf_counter() - t0, r)
 
-        # --- Batch parallel (2 workers) ---
-        proc2 = BatchProcessor(model, n_workers=2, pipeline=True)
-        t0 = time.perf_counter()
-        batch2_ratings = proc2.process(games)
-        batch2_time = time.perf_counter() - t0
+    # Accuracy vs Old baseline
+    old_time = approaches["Old"][0]
+    mismatches = []
+    for name, (t, ratings) in approaches.items():
+        if name == "Old":
+            continue
+        _, _, mis = compare_ratings(old_ratings, ratings)
+        mismatches.append(mis)
 
-        # --- Accuracy check ---
-        mu1, sig1, mis1 = compare_ratings(old_ratings, batch1_ratings, "seq")
-        mu2, sig2, mis2 = compare_ratings(old_ratings, batch2_ratings, "par")
-        match_str = "EXACT" if mis1 == 0 and mis2 == 0 else f"DIFF({mis1},{mis2})"
+    all_exact = all(m == 0 for m in mismatches)
+    match_str = "EXACT" if all_exact else f"DIFF"
 
-        # --- Speedup ---
-        speedup_1 = old_time / batch1_time if batch1_time > 0 else float("inf")
-        speedup_2 = old_time / batch2_time if batch2_time > 0 else float("inf")
-
-        print(
-            f"  {model_name:<26} "
-            f"{format_time(old_time):<12} "
-            f"{format_time(batch1_time):<12} "
-            f"{format_time(batch2_time):<12} "
-            f"{match_str:<8} "
-            f"{speedup_1:.2f}x / {speedup_2:.2f}x"
-        )
-
-        results.append({
-            "model": model_name,
-            "old_time": old_time,
-            "batch1_time": batch1_time,
-            "batch2_time": batch2_time,
-            "match": match_str,
-            "speedup_1": speedup_1,
-            "speedup_2": speedup_2,
-            "max_mu_diff": max(mu1, mu2),
-            "max_sigma_diff": max(sig1, sig2),
-        })
-
-    return results
+    return {
+        "model": model_name,
+        "label": label,
+        "approaches": {k: v[0] for k, v in approaches.items()},
+        "match": match_str,
+        "old_time": old_time,
+    }
 
 
-def run_benchmark() -> None:
-    print("=" * 72)
-    print("  Batch Processing Benchmark")
-    print(f"  {NUM_PLAYERS} players, seed={SEED}")
-    print(f"  Python {sys.version.split()[0]}")
-    print("=" * 72)
+def run_benchmark():
+    print("=" * 80)
+    print("  Batch Processing Benchmark — SHOOTOUT")
+    print(f"  {NUM_PLAYERS} players, seed={SEED}, Python {sys.version.split()[0]}")
+    print(f"  Cython: {'YES' if _HAS_CYTHON else 'NO (pip install cython && python build_cfast.py)'}")
+    print("=" * 80)
 
     models = [
         ("PlackettLuce", PlackettLuce),
@@ -333,121 +265,144 @@ def run_benchmark() -> None:
         ("ThurstoneMostellerPart", ThurstoneMostellerPart),
     ]
 
-    # ---------------------------------------------------------------
-    # Dataset 1: Swiss tournament (high parallelism)
-    # ---------------------------------------------------------------
-    print(f"\n[1/3] Swiss tournament: {NUM_PLAYERS} players, "
-          f"{NUM_ROUNDS} rounds, {TEAM_SIZE}v{TEAM_SIZE}")
-    t0 = time.perf_counter()
-    swiss_games = generate_swiss_games(NUM_PLAYERS, NUM_ROUNDS, SEED, TEAM_SIZE)
-    gen_time = time.perf_counter() - t0
-    print(f"  Generated {len(swiss_games)} games in {format_time(gen_time)}")
-    analyze_waves("Swiss", swiss_games)
-    swiss_results = benchmark_dataset("Swiss", swiss_games, models)
+    # Build the approach column headers
+    cols = ["Old", "Batch1w", "Batch2w", "Ladder"]
+    if _HAS_CYTHON:
+        cols.append("LadCy")
+    cols.append("LadBatch")
 
-    # ---------------------------------------------------------------
-    # Dataset 2: Power-law matchmaking (low parallelism)
-    # ---------------------------------------------------------------
-    print(f"\n[2/3] Power-law matchmaking: {NUM_PLAYERS} players, "
-          f"{POWER_LAW_GAMES} games")
-    t0 = time.perf_counter()
-    pl_games = generate_power_law_games(
-        NUM_PLAYERS, POWER_LAW_GAMES, SEED
-    )
-    gen_time = time.perf_counter() - t0
-    print(f"  Generated {len(pl_games)} games in {format_time(gen_time)}")
-    analyze_waves("PowerLaw", pl_games)
-    pl_results = benchmark_dataset("Power-law", pl_games, models)
+    all_results = []
 
-    # ---------------------------------------------------------------
-    # Profile breakdown for PlackettLuce
-    # ---------------------------------------------------------------
-    num_profile_games = len(swiss_games)
-    print(f"\n[3/3] Profiling PlackettLuce breakdown ({num_profile_games} games)...")
-    print("-" * 72)
-    model = PlackettLuce()
+    for ds_label, games, ds_desc in [
+        ("Swiss", generate_swiss_games(NUM_PLAYERS, NUM_ROUNDS, SEED, TEAM_SIZE),
+         f"{NUM_PLAYERS} players, {NUM_ROUNDS} rounds, {TEAM_SIZE}v{TEAM_SIZE}"),
+        ("PowerLaw", generate_power_law_games(NUM_PLAYERS, POWER_LAW_GAMES, SEED),
+         f"{NUM_PLAYERS} players, {POWER_LAW_GAMES} games, mixed teams"),
+    ]:
+        print(f"\n{'─' * 80}")
+        print(f"  Dataset: {ds_label} — {ds_desc} ({len(games)} games)")
+        print(f"{'─' * 80}")
 
-    # Time just Rating object creation
-    t0 = time.perf_counter()
-    for _ in range(num_profile_games * 2):  # 2 players per 1v1 game
-        model.rating(mu=25.0, sigma=8.333)
-    rating_create_time = time.perf_counter() - t0
+        # Wave analysis
+        waves = partition_waves(games)
+        wsizes = [len(w) for w in waves]
+        print(f"  Waves: {len(waves)}, max wave: {max(wsizes)}, "
+              f"avg: {sum(wsizes)/len(wsizes):.1f}")
 
-    # Time deepcopy overhead (simulate what rate() does)
+        # Header
+        col_w = 10
+        hdr = f"  {'Model':<22}"
+        for c in cols:
+            hdr += f" {c:>{col_w}}"
+        hdr += "  Match?  Best speedup"
+        print(hdr)
+        print("  " + "-" * (len(hdr) - 2))
+
+        for model_name, model_class in models:
+            model = model_class()
+            row = benchmark_dataset(ds_label, games, model_name, model)
+            all_results.append(row)
+
+            old_t = row["approaches"]["Old"]
+            line = f"  {model_name:<22}"
+            best_name = "Old"
+            best_time = old_t
+            for c in cols:
+                t = row["approaches"].get(c, 0)
+                line += f" {fmt(t):>{col_w}}"
+                if c != "Old" and t < best_time:
+                    best_time = t
+                    best_name = c
+            speedup = old_t / best_time if best_time > 0 else float("inf")
+            line += f"  {row['match']:<7} {best_name} {speedup:.2f}x"
+            print(line)
+
+    # ──────────────────────────────────────────────────────────────
+    # Profile breakdown
+    # ──────────────────────────────────────────────────────────────
+    print(f"\n{'─' * 80}")
+    print("  Profile breakdown: PlackettLuce 1v1 (13500 iterations)")
+    print(f"{'─' * 80}")
     import copy
-    sample_teams = [
-        [model.rating()],
-        [model.rating()],
-    ]
-    t0 = time.perf_counter()
-    for _ in range(num_profile_games):
-        copy.deepcopy(sample_teams)
-    deepcopy_time = time.perf_counter() - t0
+    model = PlackettLuce()
+    N = 13500
 
-    # Time the actual math (single rate call, 1v1)
     team_a = [model.rating()]
     team_b = [model.rating()]
     t0 = time.perf_counter()
-    for _ in range(num_profile_games):
+    for _ in range(N):
         model.rate([team_a, team_b], ranks=[1, 2])
-    rate_call_time = time.perf_counter() - t0
+    rate_time = time.perf_counter() - t0
 
-    # Time _compute directly (no deepcopy, no validation)
-    team_a_tau = [model.rating(mu=25.0, sigma=math.sqrt(8.333**2 + model.tau**2))]
-    team_b_tau = [model.rating(mu=25.0, sigma=math.sqrt(8.333**2 + model.tau**2))]
     t0 = time.perf_counter()
-    for _ in range(num_profile_games):
-        model._compute(teams=[team_a_tau, team_b_tau], ranks=[0, 1])
+    for _ in range(N):
+        copy.deepcopy([team_a, team_b])
+    dc_time = time.perf_counter() - t0
+
+    tau_sig = math.sqrt(model.sigma ** 2 + model.tau ** 2)
+    ta = [model.rating(mu=model.mu, sigma=tau_sig)]
+    tb = [model.rating(mu=model.mu, sigma=tau_sig)]
+    t0 = time.perf_counter()
+    for _ in range(N):
+        model._compute(teams=[ta, tb], ranks=[0, 1])
     compute_time = time.perf_counter() - t0
 
-    # Wave partitioning time
     t0 = time.perf_counter()
-    for _ in range(10):
-        partition_waves(swiss_games)
-    wave_avg = (time.perf_counter() - t0) / 10
+    for _ in range(N * 2):
+        model.rating(mu=25.0, sigma=8.333)
+    rating_time = time.perf_counter() - t0
 
-    print(f"  Rating creation ({num_profile_games*2} objs):  "
-          f"{format_time(rating_create_time)}")
-    print(f"  deepcopy ({num_profile_games} x 1v1):          "
-          f"{format_time(deepcopy_time)}")
-    print(f"  rate() full ({num_profile_games} x 1v1):       "
-          f"{format_time(rate_call_time)}")
-    print(f"  _compute() only ({num_profile_games} x 1v1):   "
-          f"{format_time(compute_time)}")
-    print(f"  Wave partition ({len(swiss_games)} games, avg): "
-          f"{format_time(wave_avg)}")
-    print(f"  deepcopy as %% of rate():  "
-          f"{deepcopy_time/rate_call_time*100:.1f}%")
-    print(f"  _compute as %% of rate():  "
-          f"{compute_time/rate_call_time*100:.1f}%")
+    lad = Ladder(model, use_cython=False)
+    lad.add("a"); lad.add("b")
+    t0 = time.perf_counter()
+    for _ in range(N):
+        lad.rate([["a"], ["b"]], ranks=[1, 2])
+    ladder_time = time.perf_counter() - t0
 
-    # ---------------------------------------------------------------
-    # Summary
-    # ---------------------------------------------------------------
-    print("\n" + "=" * 72)
-    print("  Summary")
-    print("=" * 72)
+    if _HAS_CYTHON:
+        lad_cy = Ladder(model, use_cython=True)
+        lad_cy.add("a"); lad_cy.add("b")
+        t0 = time.perf_counter()
+        for _ in range(N):
+            lad_cy.rate([["a"], ["b"]], ranks=[1, 2])
+        ladder_cy_time = time.perf_counter() - t0
 
-    for label, results in [("Swiss", swiss_results), ("Power-law", pl_results)]:
-        print(f"\n  {label}:")
-        for r in results:
-            print(f"    {r['model']:<26} Old={format_time(r['old_time']):<10} "
-                  f"Batch1w={format_time(r['batch1_time']):<10} "
-                  f"Batch2w={format_time(r['batch2_time']):<10} "
-                  f"Accuracy={r['match']}")
+    print(f"  model.rate()     {fmt(rate_time):>10}  (baseline = deepcopy + validate + compute)")
+    print(f"  copy.deepcopy()  {fmt(dc_time):>10}  ({dc_time/rate_time*100:.0f}% of rate)")
+    print(f"  model._compute() {fmt(compute_time):>10}  ({compute_time/rate_time*100:.0f}% of rate) — pure math")
+    print(f"  model.rating()   {fmt(rating_time):>10}  ({N*2} objects)")
+    print(f"  Ladder.rate()    {fmt(ladder_time):>10}  ({ladder_time/rate_time:.2f}x vs rate)")
+    if _HAS_CYTHON:
+        print(f"  Ladder+Cy.rate() {fmt(ladder_cy_time):>10}  ({ladder_cy_time/rate_time:.2f}x vs rate)")
 
-    all_results = swiss_results + pl_results
+    # ──────────────────────────────────────────────────────────────
+    # Summary & recommendation
+    # ──────────────────────────────────────────────────────────────
+    print(f"\n{'=' * 80}")
+    print("  RESULTS SUMMARY")
+    print(f"{'=' * 80}")
+
     any_mismatch = any(r["match"] != "EXACT" for r in all_results)
     if any_mismatch:
-        print("\n  WARNING: Some results differ between old and new approach!")
-        for r in all_results:
-            if r["match"] != "EXACT":
-                print(f"    {r['model']}: max mu diff={r['max_mu_diff']:.2e}, "
-                      f"max sigma diff={r['max_sigma_diff']:.2e}")
+        print("\n  WARNING: Some approaches differ from baseline!")
     else:
-        print("\n  All models produce EXACT same ratings (within 1e-10 tolerance)")
+        print("\n  Accuracy: ALL approaches EXACT vs baseline (within 1e-9)\n")
 
-    print()
+    # Find overall winners
+    for ds in ["Swiss", "PowerLaw"]:
+        ds_rows = [r for r in all_results if r["label"] == ds]
+        print(f"  {ds}:")
+        for r in ds_rows:
+            old_t = r["approaches"]["Old"]
+            best_name = min(
+                (k for k in r["approaches"] if k != "Old"),
+                key=lambda k: r["approaches"][k],
+            )
+            best_t = r["approaches"][best_name]
+            speedup = old_t / best_t if best_t > 0 else 0
+            print(f"    {r['model']:<26} winner={best_name:<10} "
+                  f"{speedup:.2f}x faster than Old")
+        print()
 
 
 if __name__ == "__main__":
