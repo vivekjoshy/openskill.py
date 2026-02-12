@@ -93,6 +93,7 @@ class RatingView:
 
     @property
     def mu(self) -> float:
+        """Mean skill estimate, read directly from the backing array."""
         result: float = self._mus[self._idx]
         return result
 
@@ -102,6 +103,7 @@ class RatingView:
 
     @property
     def sigma(self) -> float:
+        """Uncertainty (standard deviation), read directly from the backing array."""
         result: float = self._sigmas[self._idx]
         return result
 
@@ -111,10 +113,15 @@ class RatingView:
 
     @property
     def entity_id(self) -> str:
+        """The unique entity identifier string."""
         return self._id
 
     def ordinal(self, z: float = 3.0) -> float:
-        """Conservative skill estimate (mu - z*sigma)."""
+        """Conservative skill estimate (mu - z * sigma).
+
+        :param z: Number of standard deviations below the mean.
+        :return: The ordinal skill estimate.
+        """
         mu: float = self._mus[self._idx]
         sigma: float = self._sigmas[self._idx]
         return mu - z * sigma
@@ -362,7 +369,6 @@ class Ladder:
     def rate_batch(
         self,
         games: list[Game],
-        n_workers: int = 1,
     ) -> None:
         """Process many games with wave-based ordering.
 
@@ -371,8 +377,6 @@ class Ladder:
         sequentially.  Ratings are updated in-place.
 
         :param games: Games in chronological order.
-        :param n_workers: Currently only 1 is supported (sequential).
-            Parallel wave processing may be added in the future.
         """
         # Pre-register all entities so _rate_py doesn't need to
         # check on every call.
@@ -406,4 +410,5 @@ class Ladder:
 
     @property
     def model(self) -> Any:
+        """The underlying openskill model instance."""
         return self._model

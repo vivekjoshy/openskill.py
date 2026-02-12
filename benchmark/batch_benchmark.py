@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-Batch Processing Benchmark — Shootout
+Batch Processing Benchmark
 
 Compares ALL execution models head-to-head:
 
-  1. **Old**       — sequential model.rate() with dict (baseline)
-  2. **Batch(1w)** — BatchProcessor, 1 worker, fast path (no deepcopy)
-  3. **Batch(2w)** — BatchProcessor, 2 workers, multiprocess pipeline
-  4. **Ladder**    — Ladder.rate() per game, array-backed, pure Python
-  5. **Ladder+Cy** — Ladder.rate() per game, Cython fast path
-  6. **LadBatch**  — Ladder.rate_batch(), wave-ordered sequential
+  1. Old        -- sequential model.rate() with dict (baseline)
+  2. Batch(1w)  -- BatchProcessor, 1 worker, fast path (no deepcopy)
+  3. Batch(2w)  -- BatchProcessor, 2 workers, multiprocess pipeline
+  4. Ladder     -- Ladder.rate() per game, array-backed, pure Python
+  5. Ladder+Cy  -- Ladder.rate() per game, Cython fast path
+  6. Ladder.rate_batch() -- wave-ordered sequential
 
 Two datasets:
   - Swiss tournament (high parallelism, 1v1, no replacement)
@@ -18,10 +18,15 @@ Two datasets:
 Every approach is accuracy-verified against the Old baseline.
 """
 
+import copy
 import math
 import random
 import sys
 import time
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
 
 from openskill.batch import BatchProcessor, Game, partition_waves
 from openskill.ladder import _HAS_CYTHON, Ladder
@@ -32,6 +37,8 @@ from openskill.models import (
     ThurstoneMostellerFull,
     ThurstoneMostellerPart,
 )
+
+console = Console()
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -210,36 +217,31 @@ def benchmark_dataset(label, games, model_name, model):
 
     # 2. Batch(1w)
     t0 = time.perf_counter()
-    approaches["Batch1w"] = (
-        time.perf_counter() - t0,
-        None,  # placeholder
-    )
     r = run_batch(model, games, n_workers=1)
-    approaches["Batch1w"] = (time.perf_counter() - t0, r)
+    approaches["Batch(1w)"] = (time.perf_counter() - t0, r)
 
     # 3. Batch(2w)
     t0 = time.perf_counter()
     r = run_batch(model, games, n_workers=2, pipeline=True)
-    approaches["Batch2w"] = (time.perf_counter() - t0, r)
+    approaches["Batch(2w)"] = (time.perf_counter() - t0, r)
 
     # 4. Ladder (Python)
     t0 = time.perf_counter()
     r = run_ladder(model, games, use_cython=False)
     approaches["Ladder"] = (time.perf_counter() - t0, r)
 
-    # 5. Ladder (Cython) — if available
+    # 5. Ladder (Cython)
     if _HAS_CYTHON:
         t0 = time.perf_counter()
         r = run_ladder(model, games, use_cython=True)
-        approaches["LadCy"] = (time.perf_counter() - t0, r)
+        approaches["Ladder+Cy"] = (time.perf_counter() - t0, r)
 
-    # 6. Ladder batch
+    # 6. Ladder.rate_batch()
     t0 = time.perf_counter()
     r = run_ladder_batch(model, games)
-    approaches["LadBatch"] = (time.perf_counter() - t0, r)
+    approaches["rate_batch()"] = (time.perf_counter() - t0, r)
 
     # Accuracy vs Old baseline
-    old_time = approaches["Old"][0]
     mismatches = []
     for name, (t, ratings) in approaches.items():
         if name == "Old":
@@ -248,25 +250,32 @@ def benchmark_dataset(label, games, model_name, model):
         mismatches.append(mis)
 
     all_exact = all(m == 0 for m in mismatches)
-    match_str = "EXACT" if all_exact else f"DIFF"
+    match_str = "EXACT" if all_exact else "DIFF"
 
     return {
         "model": model_name,
         "label": label,
         "approaches": {k: v[0] for k, v in approaches.items()},
         "match": match_str,
-        "old_time": old_time,
     }
 
 
 def run_benchmark():
-    print("=" * 80)
-    print("  Batch Processing Benchmark — SHOOTOUT")
-    print(f"  {NUM_PLAYERS} players, seed={SEED}, Python {sys.version.split()[0]}")
-    print(
-        f"  Cython: {'YES' if _HAS_CYTHON else 'NO (pip install cython && python build_cfast.py)'}"
+    cython_status = (
+        "[green]YES[/green]"
+        if _HAS_CYTHON
+        else "[yellow]NO[/yellow] (pip install 'openskill[cython]')"
     )
-    print("=" * 80)
+    console.print(
+        Panel(
+            f"[bold]Batch Processing Benchmark[/bold]\n"
+            f"{NUM_PLAYERS} players, seed={SEED}, "
+            f"Python {sys.version.split()[0]}\n"
+            f"Cython: {cython_status}",
+            title="OpenSkill Benchmark",
+            border_style="blue",
+        )
+    )
 
     models = [
         ("PlackettLuce", PlackettLuce),
@@ -276,11 +285,10 @@ def run_benchmark():
         ("ThurstoneMostellerPart", ThurstoneMostellerPart),
     ]
 
-    # Build the approach column headers
-    cols = ["Old", "Batch1w", "Batch2w", "Ladder"]
+    cols = ["Old", "Batch(1w)", "Batch(2w)", "Ladder"]
     if _HAS_CYTHON:
-        cols.append("LadCy")
-    cols.append("LadBatch")
+        cols.append("Ladder+Cy")
+    cols.append("rate_batch()")
 
     all_results = []
 
@@ -288,7 +296,7 @@ def run_benchmark():
         (
             "Swiss",
             generate_swiss_games(NUM_PLAYERS, NUM_ROUNDS, SEED, TEAM_SIZE),
-            f"{NUM_PLAYERS} players, {NUM_ROUNDS} rounds, {TEAM_SIZE}v{TEAM_SIZE}",
+            f"{NUM_PLAYERS} players, {NUM_ROUNDS} rounds, " f"{TEAM_SIZE}v{TEAM_SIZE}",
         ),
         (
             "PowerLaw",
@@ -296,26 +304,23 @@ def run_benchmark():
             f"{NUM_PLAYERS} players, {POWER_LAW_GAMES} games, mixed teams",
         ),
     ]:
-        print(f"\n{'─' * 80}")
-        print(f"  Dataset: {ds_label} — {ds_desc} ({len(games)} games)")
-        print(f"{'─' * 80}")
-
         # Wave analysis
         waves = partition_waves(games)
         wsizes = [len(w) for w in waves]
-        print(
-            f"  Waves: {len(waves)}, max wave: {max(wsizes)}, "
-            f"avg: {sum(wsizes)/len(wsizes):.1f}"
+
+        console.print()
+        console.rule(
+            f"[bold]{ds_label}[/bold] -- {ds_desc} "
+            f"({len(games)} games, {len(waves)} waves, "
+            f"max {max(wsizes)}, avg {sum(wsizes) / len(wsizes):.1f})"
         )
 
-        # Header
-        col_w = 10
-        hdr = f"  {'Model':<22}"
+        table = Table(show_header=True, header_style="bold cyan")
+        table.add_column("Model", style="bold")
         for c in cols:
-            hdr += f" {c:>{col_w}}"
-        hdr += "  Match?  Best speedup"
-        print(hdr)
-        print("  " + "-" * (len(hdr) - 2))
+            table.add_column(c, justify="right")
+        table.add_column("Match?", justify="center")
+        table.add_column("Best", justify="right", style="bold green")
 
         for model_name, model_class in models:
             model = model_class()
@@ -323,26 +328,34 @@ def run_benchmark():
             all_results.append(row)
 
             old_t = row["approaches"]["Old"]
-            line = f"  {model_name:<22}"
             best_name = "Old"
             best_time = old_t
+
+            cells = [model_name]
             for c in cols:
                 t = row["approaches"].get(c, 0)
-                line += f" {fmt(t):>{col_w}}"
+                cells.append(fmt(t))
                 if c != "Old" and t < best_time:
                     best_time = t
                     best_name = c
-            speedup = old_t / best_time if best_time > 0 else float("inf")
-            line += f"  {row['match']:<7} {best_name} {speedup:.2f}x"
-            print(line)
 
-    # ──────────────────────────────────────────────────────────────
+            match_style = "green" if row["match"] == "EXACT" else "red bold"
+            cells.append(f"[{match_style}]{row['match']}[/{match_style}]")
+
+            speedup = old_t / best_time if best_time > 0 else float("inf")
+            cells.append(f"{best_name} {speedup:.1f}x")
+
+            table.add_row(*cells)
+
+        console.print(table)
+
+    # ------------------------------------------------------------------
     # Profile breakdown
-    # ──────────────────────────────────────────────────────────────
-    print(f"\n{'─' * 80}")
-    print("  Profile breakdown: PlackettLuce 1v1 (13500 iterations)")
-    print(f"{'─' * 80}")
-    import copy
+    # ------------------------------------------------------------------
+    console.print()
+    console.rule(
+        "[bold]Profile Breakdown[/bold] -- PlackettLuce 1v1 (13500 iterations)"
+    )
 
     model = PlackettLuce()
     N = 13500
@@ -380,6 +393,29 @@ def run_benchmark():
         lad.rate([["a"], ["b"]], ranks=[1, 2])
     ladder_time = time.perf_counter() - t0
 
+    profile = Table(show_header=True, header_style="bold cyan")
+    profile.add_column("Component", style="bold")
+    profile.add_column("Time", justify="right")
+    profile.add_column("Note", style="dim")
+
+    profile.add_row(
+        "model.rate()", fmt(rate_time), "baseline = deepcopy + validate + compute"
+    )
+    profile.add_row(
+        "copy.deepcopy()", fmt(dc_time), f"{dc_time / rate_time * 100:.0f}% of rate"
+    )
+    profile.add_row(
+        "model._compute()",
+        fmt(compute_time),
+        f"{compute_time / rate_time * 100:.0f}% of rate -- pure math",
+    )
+    profile.add_row("model.rating()", fmt(rating_time), f"{N * 2} objects")
+    profile.add_row(
+        "Ladder.rate()",
+        fmt(ladder_time),
+        f"{ladder_time / rate_time:.2f}x vs rate",
+    )
+
     if _HAS_CYTHON:
         lad_cy = Ladder(model, use_cython=True)
         lad_cy.add("a")
@@ -388,42 +424,40 @@ def run_benchmark():
         for _ in range(N):
             lad_cy.rate([["a"], ["b"]], ranks=[1, 2])
         ladder_cy_time = time.perf_counter() - t0
-
-    print(
-        f"  model.rate()     {fmt(rate_time):>10}  (baseline = deepcopy + validate + compute)"
-    )
-    print(
-        f"  copy.deepcopy()  {fmt(dc_time):>10}  ({dc_time/rate_time*100:.0f}% of rate)"
-    )
-    print(
-        f"  model._compute() {fmt(compute_time):>10}  ({compute_time/rate_time*100:.0f}% of rate) — pure math"
-    )
-    print(f"  model.rating()   {fmt(rating_time):>10}  ({N*2} objects)")
-    print(
-        f"  Ladder.rate()    {fmt(ladder_time):>10}  ({ladder_time/rate_time:.2f}x vs rate)"
-    )
-    if _HAS_CYTHON:
-        print(
-            f"  Ladder+Cy.rate() {fmt(ladder_cy_time):>10}  ({ladder_cy_time/rate_time:.2f}x vs rate)"
+        profile.add_row(
+            "Ladder+Cy.rate()",
+            fmt(ladder_cy_time),
+            f"{ladder_cy_time / rate_time:.2f}x vs rate",
         )
 
-    # ──────────────────────────────────────────────────────────────
-    # Summary & recommendation
-    # ──────────────────────────────────────────────────────────────
-    print(f"\n{'=' * 80}")
-    print("  RESULTS SUMMARY")
-    print(f"{'=' * 80}")
+    console.print(profile)
 
+    # ------------------------------------------------------------------
+    # Summary
+    # ------------------------------------------------------------------
+    console.print()
     any_mismatch = any(r["match"] != "EXACT" for r in all_results)
     if any_mismatch:
-        print("\n  WARNING: Some approaches differ from baseline!")
+        console.print(
+            "[red bold]WARNING: Some approaches differ from baseline![/red bold]"
+        )
     else:
-        print("\n  Accuracy: ALL approaches EXACT vs baseline (within 1e-9)\n")
+        console.print(
+            "[green]Accuracy: ALL approaches EXACT vs baseline (within 1e-9)[/green]"
+        )
 
-    # Find overall winners
+    summary = Table(
+        title="Results Summary",
+        show_header=True,
+        header_style="bold cyan",
+    )
+    summary.add_column("Dataset", style="bold")
+    summary.add_column("Model")
+    summary.add_column("Winner", style="green bold")
+    summary.add_column("Speedup", justify="right", style="bold")
+
     for ds in ["Swiss", "PowerLaw"]:
         ds_rows = [r for r in all_results if r["label"] == ds]
-        print(f"  {ds}:")
         for r in ds_rows:
             old_t = r["approaches"]["Old"]
             best_name = min(
@@ -432,11 +466,9 @@ def run_benchmark():
             )
             best_t = r["approaches"][best_name]
             speedup = old_t / best_t if best_t > 0 else 0
-            print(
-                f"    {r['model']:<26} winner={best_name:<10} "
-                f"{speedup:.2f}x faster than Old"
-            )
-        print()
+            summary.add_row(ds, r["model"], best_name, f"{speedup:.2f}x")
+
+    console.print(summary)
 
 
 if __name__ == "__main__":

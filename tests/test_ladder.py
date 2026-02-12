@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import math
 import random
 
 import pytest
@@ -120,6 +119,31 @@ class TestRatingView:
         v = lad["x"]
         assert not hasattr(v, "__dict__")
 
+    def test_eq_same_ratings(self):
+        lad = Ladder(PlackettLuce())
+        v1 = lad.add("a", mu=25.0, sigma=8.0)
+        v2 = lad.add("b", mu=25.0, sigma=8.0)
+        assert v1 == v2
+
+    def test_eq_different_ratings(self):
+        lad = Ladder(PlackettLuce())
+        v1 = lad.add("a", mu=25.0, sigma=8.0)
+        v2 = lad.add("b", mu=30.0, sigma=8.0)
+        assert v1 != v2
+
+    def test_eq_non_ratingview(self):
+        lad = Ladder(PlackettLuce())
+        v = lad.add("a")
+        assert v != "not a rating view"
+        assert v.__eq__("not a rating view") is NotImplemented
+
+    def test_lt(self):
+        lad = Ladder(PlackettLuce())
+        v_low = lad.add("low", mu=10.0, sigma=3.0)
+        v_high = lad.add("high", mu=40.0, sigma=3.0)
+        assert v_low < v_high
+        assert not v_high < v_low
+
 
 # ---------------------------------------------------------------------------
 # TestLadder
@@ -147,6 +171,14 @@ class TestLadder:
         v = lad["a"]
         assert v.mu == 30.0
         assert v.sigma == 6.0  # unchanged
+
+    def test_add_update_sigma(self):
+        lad = Ladder(PlackettLuce())
+        lad.add("a", mu=20.0, sigma=6.0)
+        lad.add("a", sigma=3.0)
+        v = lad["a"]
+        assert v.mu == 20.0  # unchanged
+        assert v.sigma == 3.0
 
     def test_contains(self):
         lad = Ladder(PlackettLuce())
@@ -313,6 +345,36 @@ class TestLadder:
             assert lad[pid].mu == pytest.approx(old[pid][0], abs=1e-12)
             assert lad[pid].sigma == pytest.approx(old[pid][1], abs=1e-12)
 
+    def test_keys(self):
+        lad = Ladder(PlackettLuce())
+        lad["a"]
+        lad["b"]
+        lad["c"]
+        assert set(lad.keys()) == {"a", "b", "c"}
+
+    def test_model_property(self):
+        model = PlackettLuce()
+        lad = Ladder(model)
+        assert lad.model is model
+
+    def test_rate_no_ranks_no_scores(self):
+        """Rate with neither ranks nor scores uses default ordering."""
+        model = PlackettLuce()
+        lad = Ladder(model, use_cython=False)
+        lad.rate([["a"], ["b"]])
+        # Both entities should exist with modified ratings
+        assert "a" in lad
+        assert "b" in lad
+
+    def test_rate_limit_sigma(self):
+        """limit_sigma prevents sigma from increasing."""
+        model = PlackettLuce(limit_sigma=True)
+        lad = Ladder(model, use_cython=False)
+        lad.rate([["a"], ["b"]], ranks=[1, 2])
+        # Sigma should not exceed the default
+        assert lad["a"].sigma <= model.sigma
+        assert lad["b"].sigma <= model.sigma
+
 
 # ---------------------------------------------------------------------------
 # TestLadderCython (skip if not available)
@@ -374,3 +436,27 @@ class TestLadderCython:
         lad = Ladder(model, use_cython=True)
         lad.rate([["a"], ["b"]], scores=[10, 20])
         assert lad["b"].mu > lad["a"].mu
+
+
+class TestLadderNoCython:
+    """Tests for fallback when Cython is not available."""
+
+    def test_use_cython_false_explicit(self):
+        """use_cython=False disables Cython even when available."""
+        lad = Ladder(PlackettLuce(), use_cython=False)
+        assert lad._use_cython is False
+
+    def test_cython_fallback(self):
+        """When Cython not available, use_cython=True still works (falls back)."""
+        import openskill.ladder as ladder_mod
+
+        orig = ladder_mod._HAS_CYTHON
+        try:
+            ladder_mod._HAS_CYTHON = False
+            lad = Ladder(PlackettLuce(), use_cython=True)
+            assert lad._use_cython is False
+            # Should still work via Python path
+            lad.rate([["a"], ["b"]], ranks=[1, 2])
+            assert lad["a"].mu > lad["b"].mu
+        finally:
+            ladder_mod._HAS_CYTHON = orig

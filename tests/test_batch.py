@@ -5,6 +5,10 @@ import pytest
 from openskill.batch import (
     BatchProcessor,
     Game,
+    _extract_model_config,
+    _FastRating,
+    _init_worker,
+    _worker_rate_game,
     partition_waves,
 )
 from openskill.models import (
@@ -463,3 +467,323 @@ class TestBatchProcessor:
 
         # Results should differ due to weights
         assert r_no["a"][0] != r_with["a"][0] or r_no["b"][0] != r_with["b"][0]
+
+    def test_limit_sigma(self) -> None:
+        """limit_sigma=True prevents sigma from increasing."""
+        model = PlackettLuce(limit_sigma=True)
+
+        games = [
+            Game(teams=[["a"], ["b"]], ranks=[1, 2]),
+        ]
+
+        processor = BatchProcessor(model, n_workers=1)
+        ratings = processor.process(games)
+
+        # With limit_sigma, sigma should not exceed the default
+        assert ratings["a"][1] <= model.sigma
+        assert ratings["b"][1] <= model.sigma
+
+    def test_no_ranks_no_scores(self) -> None:
+        """Games with neither ranks nor scores use default ordering."""
+        model = PlackettLuce()
+
+        games = [
+            Game(teams=[["a"], ["b"]]),
+        ]
+
+        processor = BatchProcessor(model, n_workers=1)
+        ratings = processor.process(games)
+
+        # Both should have ratings (default rank ordering applied)
+        assert "a" in ratings
+        assert "b" in ratings
+
+    def test_multiprocess_path_pipelined(self) -> None:
+        """Force ProcessPoolExecutor path in pipelined mode."""
+        model = PlackettLuce()
+
+        games = [
+            Game(teams=[["a"], ["b"]], ranks=[1, 2]),
+            Game(teams=[["c"], ["d"]], ranks=[2, 1]),
+            Game(teams=[["e"], ["f"]], ranks=[1, 2]),
+            Game(teams=[["a"], ["c"]], ranks=[1, 2]),
+        ]
+
+        seq = BatchProcessor(model, n_workers=1)
+        mp = BatchProcessor(model, n_workers=2, pipeline=True)
+        mp._use_threads = False  # Force multiprocess path
+
+        seq_ratings = seq.process(games)
+        mp_ratings = mp.process(games)
+
+        for eid in seq_ratings:
+            assert abs(seq_ratings[eid][0] - mp_ratings[eid][0]) < 1e-10
+            assert abs(seq_ratings[eid][1] - mp_ratings[eid][1]) < 1e-10
+
+    def test_multiprocess_path_non_pipelined(self) -> None:
+        """Force ProcessPoolExecutor path in non-pipelined mode."""
+        model = PlackettLuce()
+
+        games = [
+            Game(teams=[["a"], ["b"]], ranks=[1, 2]),
+            Game(teams=[["c"], ["d"]], ranks=[2, 1]),
+            Game(teams=[["e"], ["f"]], ranks=[1, 2]),
+            Game(teams=[["a"], ["c"]], ranks=[1, 2]),
+        ]
+
+        seq = BatchProcessor(model, n_workers=1)
+        mp = BatchProcessor(model, n_workers=2, pipeline=False)
+        mp._use_threads = False
+
+        seq_ratings = seq.process(games)
+        mp_ratings = mp.process(games)
+
+        for eid in seq_ratings:
+            assert abs(seq_ratings[eid][0] - mp_ratings[eid][0]) < 1e-10
+            assert abs(seq_ratings[eid][1] - mp_ratings[eid][1]) < 1e-10
+
+    def test_multiprocess_large_wave(self) -> None:
+        """Force ProcessPoolExecutor with waves having >2 games."""
+        model = PlackettLuce()
+
+        # Many independent games -> single large wave, triggers the
+        # executor.map path (wave > 2 games)
+        games = [
+            Game(teams=[[f"p{i*2}"], [f"p{i*2+1}"]], ranks=[1, 2]) for i in range(10)
+        ]
+
+        seq = BatchProcessor(model, n_workers=1)
+        mp = BatchProcessor(model, n_workers=2, pipeline=False)
+        mp._use_threads = False
+
+        seq_ratings = seq.process(games)
+        mp_ratings = mp.process(games)
+
+        for eid in seq_ratings:
+            assert abs(seq_ratings[eid][0] - mp_ratings[eid][0]) < 1e-10
+
+    def test_multiprocess_scores_and_weights(self) -> None:
+        """ProcessPoolExecutor path with scores and weights."""
+        model = PlackettLuce()
+
+        games = [
+            Game(
+                teams=[["a", "b"], ["c", "d"]],
+                scores=[10.0, 5.0],
+                weights=[[1.0, 0.5], [0.5, 1.0]],
+            ),
+            Game(
+                teams=[["e", "f"], ["g", "h"]],
+                scores=[3.0, 7.0],
+                weights=[[1.0, 1.0], [1.0, 1.0]],
+            ),
+            # Third game to ensure wave has >2 games for executor.map
+            Game(
+                teams=[["i", "j"], ["k", "l"]],
+                scores=[8.0, 2.0],
+            ),
+        ]
+
+        seq = BatchProcessor(model, n_workers=1)
+        mp = BatchProcessor(model, n_workers=2, pipeline=False)
+        mp._use_threads = False
+
+        seq_ratings = seq.process(games)
+        mp_ratings = mp.process(games)
+
+        for eid in seq_ratings:
+            assert abs(seq_ratings[eid][0] - mp_ratings[eid][0]) < 1e-10
+
+    def test_multiprocess_limit_sigma(self) -> None:
+        """ProcessPoolExecutor path respects limit_sigma."""
+        model = PlackettLuce(limit_sigma=True)
+
+        games = [
+            Game(teams=[[f"p{i*2}"], [f"p{i*2+1}"]], ranks=[1, 2]) for i in range(5)
+        ]
+
+        seq = BatchProcessor(model, n_workers=1)
+        mp = BatchProcessor(model, n_workers=2, pipeline=False)
+        mp._use_threads = False
+
+        seq_ratings = seq.process(games)
+        mp_ratings = mp.process(games)
+
+        for eid in seq_ratings:
+            assert abs(seq_ratings[eid][0] - mp_ratings[eid][0]) < 1e-10
+            assert abs(seq_ratings[eid][1] - mp_ratings[eid][1]) < 1e-10
+
+
+class TestFastRating:
+    """Tests for _FastRating."""
+
+    def test_basic(self) -> None:
+        r = _FastRating(25.0, 8.333)
+        assert r.mu == 25.0
+        assert r.sigma == 8.333
+
+    def test_ordinal_default(self) -> None:
+        r = _FastRating(25.0, 8.333)
+        assert r.ordinal() == pytest.approx(25.0 - 3.0 * 8.333)
+
+    def test_ordinal_custom_params(self) -> None:
+        r = _FastRating(25.0, 8.333)
+        result = r.ordinal(z=2.0, alpha=0.5, target=10.0)
+        expected = 0.5 * ((25.0 - 2.0 * 8.333) + (10.0 / 0.5))
+        assert result == pytest.approx(expected)
+
+
+class TestExtractModelConfig:
+    """Tests for _extract_model_config."""
+
+    def test_basic_model(self) -> None:
+        model = PlackettLuce()
+        module, class_name, kwargs = _extract_model_config(model)
+        assert "PlackettLuce" in module or class_name == "PlackettLuce"
+        assert "mu" in kwargs
+        assert "sigma" in kwargs
+
+    def test_model_with_margin_balance(self) -> None:
+        """ThurstoneMostellerFull has margin, balance, and weight_bounds."""
+        model = ThurstoneMostellerFull()
+        module, class_name, kwargs = _extract_model_config(model)
+        assert class_name == "ThurstoneMostellerFull"
+        assert "gamma" in kwargs
+        assert "margin" in kwargs
+        assert "balance" in kwargs
+
+    def test_model_with_weight_bounds(self) -> None:
+        """BradleyTerryFull has weight_bounds."""
+        model = BradleyTerryFull()
+        _, _, kwargs = _extract_model_config(model)
+        if hasattr(model, "weight_bounds"):
+            assert "weight_bounds" in kwargs
+
+
+class TestWorkerFunctions:
+    """Tests for _init_worker and _worker_rate_game."""
+
+    def test_init_worker(self) -> None:
+        model = PlackettLuce()
+        module, class_name, kwargs = _extract_model_config(model)
+        _init_worker(module, class_name, kwargs)
+
+        import openskill.batch as batch_mod
+
+        assert batch_mod._worker_model is not None
+        assert batch_mod._worker_tau_sq == model.tau**2
+
+    def test_worker_rate_game(self) -> None:
+        """_worker_rate_game produces correct results."""
+        model = PlackettLuce()
+        module, class_name, kwargs = _extract_model_config(model)
+        _init_worker(module, class_name, kwargs)
+
+        args = (
+            [[0, 1], [2, 3]],  # team_indices
+            [[25.0, 25.0], [25.0, 25.0]],  # team_mus
+            [[8.333, 8.333], [8.333, 8.333]],  # team_sigmas
+            [1.0, 2.0],  # ranks
+            None,  # scores
+            None,  # weights
+        )
+        updates = _worker_rate_game(args)
+        assert len(updates) == 4
+        for idx, mu, sigma in updates:
+            assert isinstance(idx, int)
+            assert isinstance(mu, float)
+            assert isinstance(sigma, float)
+
+    def test_worker_rate_game_with_scores(self) -> None:
+        """_worker_rate_game works with scores instead of ranks."""
+        model = PlackettLuce()
+        module, class_name, kwargs = _extract_model_config(model)
+        _init_worker(module, class_name, kwargs)
+
+        args = (
+            [[0], [1]],
+            [[25.0], [25.0]],
+            [[8.333], [8.333]],
+            None,  # ranks
+            [10.0, 5.0],  # scores
+            None,  # weights
+        )
+        updates = _worker_rate_game(args)
+        assert len(updates) == 2
+
+    def test_worker_rate_game_with_weights(self) -> None:
+        """_worker_rate_game works with weights."""
+        model = PlackettLuce()
+        module, class_name, kwargs = _extract_model_config(model)
+        _init_worker(module, class_name, kwargs)
+
+        args = (
+            [[0, 1], [2, 3]],
+            [[25.0, 25.0], [25.0, 25.0]],
+            [[8.333, 8.333], [8.333, 8.333]],
+            [1.0, 2.0],  # ranks
+            None,  # scores
+            [[1.0, 0.5], [0.5, 1.0]],  # weights
+        )
+        updates = _worker_rate_game(args)
+        assert len(updates) == 4
+
+    def test_worker_rate_game_limit_sigma(self) -> None:
+        """_worker_rate_game respects limit_sigma."""
+        model = PlackettLuce(limit_sigma=True)
+        module, class_name, kwargs = _extract_model_config(model)
+        _init_worker(module, class_name, kwargs)
+
+        args = (
+            [[0], [1]],
+            [[25.0], [25.0]],
+            [[8.333], [8.333]],
+            [1.0, 2.0],
+            None,
+            None,
+        )
+        updates = _worker_rate_game(args)
+        for _, _, sigma in updates:
+            assert sigma <= 8.333
+
+    def test_worker_rate_game_no_ranks_no_scores(self) -> None:
+        """_worker_rate_game with neither ranks nor scores."""
+        model = PlackettLuce()
+        module, class_name, kwargs = _extract_model_config(model)
+        _init_worker(module, class_name, kwargs)
+
+        args = (
+            [[0], [1]],
+            [[25.0], [25.0]],
+            [[8.333], [8.333]],
+            None,  # ranks
+            None,  # scores
+            None,  # weights
+        )
+        updates = _worker_rate_game(args)
+        assert len(updates) == 2
+
+
+class TestPartitionWavesEdgeCases:
+    """Additional edge cases for partition_waves."""
+
+    def test_wave_scan_skips_occupied_waves(self) -> None:
+        """Force the inner loop to scan past occupied waves.
+
+        Game 0: {a, b} -> wave 0
+        Game 1: {a, c} -> wave 1 (a in wave 0)
+        Game 2: {b, c} -> must scan: wave 0 has b, wave 1 has c -> wave 2
+        """
+        games = [
+            Game(teams=[["a"], ["b"]]),
+            Game(teams=[["a"], ["c"]]),
+            Game(teams=[["b"], ["c"]]),
+        ]
+        waves = partition_waves(games)
+        assert len(waves) == 3
+        wave_indices = {
+            idx: w_idx for w_idx, wave in enumerate(waves) for idx, _ in wave
+        }
+        assert wave_indices[0] == 0
+        assert wave_indices[1] == 1
+        assert wave_indices[2] == 2

@@ -95,8 +95,8 @@ class _FastRating:
     __slots__ = ("mu", "sigma")
 
     def __init__(self, mu: float, sigma: float) -> None:
-        self.mu = mu
-        self.sigma = sigma
+        self.mu: float = mu
+        self.sigma: float = sigma
 
     def ordinal(
         self,
@@ -104,6 +104,13 @@ class _FastRating:
         alpha: float = 1,
         target: float = 0,
     ) -> float:
+        """Conservative skill estimate.
+
+        :param z: Number of standard deviations below the mean.
+        :param alpha: Scaling factor.
+        :param target: Offset target.
+        :return: The ordinal skill estimate.
+        """
         return alpha * ((self.mu - z * self.sigma) + (target / alpha))
 
 
@@ -114,7 +121,8 @@ class _FastRating:
 
 def _is_free_threaded() -> bool:
     """Check if running on free-threaded Python with GIL disabled."""
-    build_supports = sysconfig.get_config_var("Py_GIL_DISABLED") == 1
+    raw = sysconfig.get_config_var("Py_GIL_DISABLED")
+    build_supports = raw is not None and int(raw) == 1
     gil_disabled = hasattr(sys, "_is_gil_enabled") and not sys._is_gil_enabled()
     return build_supports and gil_disabled
 

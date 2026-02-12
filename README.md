@@ -141,11 +141,11 @@ True
 For processing many games, `Ladder` provides an in-place rating registry
 backed by contiguous arrays. It bypasses the overhead of `model.rate()`
 (deep copies, UUID generation) and is typically 2-3x faster. An optional
-Cython extension provides an additional 10-15% speedup:
+Cython extension provides an additional ~10-15% speedup and is
+compiled automatically when Cython is present at install time:
 
 ```shell
-pip install cython
-python build_cfast.py
+uv pip install "openskill[cython]"   # or: pip install "openskill[cython]"
 ```
 
 Ladder will auto-detect the compiled extension at runtime and use it
