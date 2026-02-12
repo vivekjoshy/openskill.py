@@ -140,8 +140,8 @@ class TestPartitionWavesOrdering:
         games = [
             Game(teams=[["a", "b"], ["c", "d"]]),  # 0
             Game(teams=[["a", "c"], ["e", "f"]]),  # 1: shares a,c with 0
-            Game(teams=[["e"], ["g"]]),             # 2: shares e with 1
-            Game(teams=[["b"], ["h"]]),             # 3: shares b with 0
+            Game(teams=[["e"], ["g"]]),  # 2: shares e with 1
+            Game(teams=[["b"], ["h"]]),  # 3: shares b with 0
         ]
         waves = partition_waves(games)
         game_wave: dict[int, int] = {}
@@ -305,9 +305,9 @@ class TestBatchProcessor:
         processor = BatchProcessor(model, n_workers=1)
 
         assert processor.process([]) == {}
-        assert processor.process(
-            [], initial_ratings={"a": (25.0, 8.33)}
-        ) == {"a": (25.0, 8.33)}
+        assert processor.process([], initial_ratings={"a": (25.0, 8.33)}) == {
+            "a": (25.0, 8.33)
+        }
 
     def test_scores_mode(self) -> None:
         """Batch processing works with scores instead of ranks."""
@@ -348,8 +348,12 @@ class TestBatchProcessor:
             assert "c" in ratings
             assert "d" in ratings
             # Winner should have higher mu
-            assert ratings["a"][0] > ratings["b"][0], f"Failed for {model_class.__name__}"
-            assert ratings["d"][0] > ratings["c"][0], f"Failed for {model_class.__name__}"
+            assert (
+                ratings["a"][0] > ratings["b"][0]
+            ), f"Failed for {model_class.__name__}"
+            assert (
+                ratings["d"][0] > ratings["c"][0]
+            ), f"Failed for {model_class.__name__}"
 
     def test_reproducibility(self) -> None:
         """Multiple runs produce identical results."""
@@ -401,8 +405,7 @@ class TestBatchProcessor:
 
         # p0 plays in every game - forces fully sequential processing
         games = [
-            Game(teams=[["p0"], [f"opponent_{i}"]], ranks=[1, 2])
-            for i in range(10)
+            Game(teams=[["p0"], [f"opponent_{i}"]], ranks=[1, 2]) for i in range(10)
         ]
 
         seq = BatchProcessor(model, n_workers=1)
@@ -447,9 +450,7 @@ class TestBatchProcessor:
         model = PlackettLuce()
 
         # Game with weights vs without should produce different results
-        game_no_weights = Game(
-            teams=[["a", "b"], ["c", "d"]], ranks=[1, 2]
-        )
+        game_no_weights = Game(teams=[["a", "b"], ["c", "d"]], ranks=[1, 2])
         game_with_weights = Game(
             teams=[["a", "b"], ["c", "d"]],
             ranks=[1, 2],

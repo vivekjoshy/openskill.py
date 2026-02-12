@@ -11,6 +11,7 @@ from cpython cimport array
 from libc.math cimport sqrt
 
 import array
+
 from openskill.batch import _FastRating
 
 

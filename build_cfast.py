@@ -12,6 +12,7 @@ import cy_rate_game`` works without installation.
 import os
 import sys
 
+
 def build() -> bool:
     try:
         from Cython.Build import cythonize

@@ -47,7 +47,7 @@ import queue
 import sys
 import sysconfig
 import threading
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import Executor, ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Any
 
@@ -80,6 +80,7 @@ consume 16 000 × 2 × 8 = 256 KB — comfortably within L2 cache."""
 # _FastRating — minimal duck-type for _compute()
 # ---------------------------------------------------------------------------
 
+
 class _FastRating:
     """Disposable Rating substitute for ``_compute()``.
 
@@ -110,6 +111,7 @@ class _FastRating:
 # Runtime detection
 # ---------------------------------------------------------------------------
 
+
 def _is_free_threaded() -> bool:
     """Check if running on free-threaded Python with GIL disabled."""
     build_supports = sysconfig.get_config_var("Py_GIL_DISABLED") == 1
@@ -127,6 +129,7 @@ _worker_tau_sq: float = 0.0
 # ---------------------------------------------------------------------------
 # Game descriptor
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class Game:
@@ -150,6 +153,7 @@ class Game:
 # ---------------------------------------------------------------------------
 # Wave partitioning
 # ---------------------------------------------------------------------------
+
 
 def partition_waves(games: list[Game]) -> list[list[tuple[int, Game]]]:
     """
@@ -213,6 +217,7 @@ def partition_waves(games: list[Game]) -> list[list[tuple[int, Game]]]:
 # Model serialisation helpers (for multiprocessing)
 # ---------------------------------------------------------------------------
 
+
 def _extract_model_config(model: Any) -> tuple[str, str, dict[str, Any]]:
     """
     Extract picklable model constructor arguments.
@@ -253,7 +258,7 @@ def _init_worker(
     mod = importlib.import_module(module_name)
     model_class = getattr(mod, class_name)
     _worker_model = model_class(**model_kwargs)
-    _worker_tau_sq = _worker_model.tau ** 2
+    _worker_tau_sq = _worker_model.tau**2
 
 
 def _worker_rate_game(
@@ -283,8 +288,7 @@ def _worker_rate_game(
     teams: list[list[Any]] = []
     for t_mus, t_sigs in zip(team_mus, team_sigmas):
         team = [
-            _FastRating(m, math.sqrt(s * s + tau_sq))
-            for m, s in zip(t_mus, t_sigs)
+            _FastRating(m, math.sqrt(s * s + tau_sq)) for m, s in zip(t_mus, t_sigs)
         ]
         teams.append(team)
 
@@ -301,9 +305,8 @@ def _worker_rate_game(
 
     # Sort teams by rank before _compute (PlackettLuce requires this).
     if ranks_list is not None:
-        order: list[int] = sorted(
-            range(len(ranks_list)), key=lambda i: ranks_list[i]
-        )
+        _rl = ranks_list  # local binding for lambda closure
+        order: list[int] = sorted(range(len(_rl)), key=lambda i: _rl[i])
         teams = [teams[i] for i in order]
         team_indices = [team_indices[i] for i in order]
         team_sigmas = [team_sigmas[i] for i in order]
@@ -314,7 +317,10 @@ def _worker_rate_game(
             weight_lists = [weight_lists[i] for i in order]
 
     result = model._compute(
-        teams=teams, ranks=ranks_list, scores=scores_list, weights=weight_lists,
+        teams=teams,
+        ranks=ranks_list,
+        scores=scores_list,
+        weights=weight_lists,
     )
 
     updates: list[tuple[int, float, float]] = []
@@ -332,6 +338,7 @@ def _worker_rate_game(
 # ---------------------------------------------------------------------------
 # BatchProcessor
 # ---------------------------------------------------------------------------
+
 
 class BatchProcessor:
     """
@@ -357,10 +364,10 @@ class BatchProcessor:
         self.n_workers: int = n_workers or multiprocessing.cpu_count()
         self.pipeline: bool = pipeline
         self._use_threads: bool = _FREE_THREADED
-        self._model_config: tuple[str, str, dict[str, Any]] = (
-            _extract_model_config(model)
+        self._model_config: tuple[str, str, dict[str, Any]] = _extract_model_config(
+            model
         )
-        self._tau_sq: float = model.tau ** 2
+        self._tau_sq: float = model.tau**2
         self._limit_sigma: bool = model.limit_sigma
 
     def process(
@@ -452,9 +459,7 @@ class BatchProcessor:
 
         try:
             if self._use_threads:
-                with ThreadPoolExecutor(
-                    max_workers=self.n_workers
-                ) as executor:
+                with ThreadPoolExecutor(max_workers=self.n_workers) as executor:
                     while True:
                         wave = wave_q.get()
                         if wave is None:
@@ -468,13 +473,13 @@ class BatchProcessor:
                     max_workers=self.n_workers,
                     initializer=_init_worker,
                     initargs=(module, class_name, model_kwargs),
-                ) as executor:
+                ) as proc_executor:
                     while True:
                         wave = wave_q.get()
                         if wave is None:
                             break
                         self._execute_wave_multiprocess(
-                            wave, entity_to_idx, mus, sigmas, executor
+                            wave, entity_to_idx, mus, sigmas, proc_executor
                         )
         finally:
             builder.join()
@@ -499,10 +504,10 @@ class BatchProcessor:
                 max_workers=self.n_workers,
                 initializer=_init_worker,
                 initargs=(module, class_name, model_kwargs),
-            ) as executor:
+            ) as proc_executor:
                 for wave in waves:
                     self._execute_wave_multiprocess(
-                        wave, entity_to_idx, mus, sigmas, executor
+                        wave, entity_to_idx, mus, sigmas, proc_executor
                     )
 
     # ------------------------------------------------------------------
@@ -524,9 +529,7 @@ class BatchProcessor:
             return
 
         futures = [
-            executor.submit(
-                self._rate_game_fast, game, entity_to_idx, mus, sigmas
-            )
+            executor.submit(self._rate_game_fast, game, entity_to_idx, mus, sigmas)
             for _, game in wave
         ]
         for f in futures:
@@ -579,9 +582,7 @@ class BatchProcessor:
             )
 
         chunksize: int = max(1, len(work_items) // (self.n_workers * 4))
-        for updates in executor.map(
-            _worker_rate_game, work_items, chunksize=chunksize
-        ):
+        for updates in executor.map(_worker_rate_game, work_items, chunksize=chunksize):
             for idx, new_mu, new_sigma in updates:
                 mus[idx] = new_mu
                 sigmas[idx] = new_sigma
@@ -617,23 +618,17 @@ class BatchProcessor:
             indices: list[int] = []
             for eid in team_ids:
                 idx: int = entity_to_idx[eid]
-                team.append(
-                    _FastRating(mus[idx], math.sqrt(sigmas[idx] ** 2 + tau_sq))
-                )
+                team.append(_FastRating(mus[idx], math.sqrt(sigmas[idx] ** 2 + tau_sq)))
                 indices.append(idx)
             teams.append(team)
             team_indices.append(indices)
 
-        ranks: list[float] | None = (
-            list(game.ranks) if game.ranks is not None else None
-        )
+        ranks: list[float] | None = list(game.ranks) if game.ranks is not None else None
         scores: list[float] | None = (
             list(game.scores) if game.scores is not None else None
         )
         weights: list[list[float]] | None = (
-            [list(w) for w in game.weights]
-            if game.weights is not None
-            else None
+            [list(w) for w in game.weights] if game.weights is not None else None
         )
 
         # Convert scores → ranks (matches rate() logic exactly).
@@ -646,9 +641,8 @@ class BatchProcessor:
         # PlackettLuce (and potentially future models) requires teams
         # in rank order for its sequential-elimination formula.
         if ranks is not None:
-            order: list[int] = sorted(
-                range(len(ranks)), key=lambda i: ranks[i]
-            )
+            _ranks = ranks  # local binding for lambda closure
+            order: list[int] = sorted(range(len(_ranks)), key=lambda i: _ranks[i])
             teams = [teams[i] for i in order]
             team_indices = [team_indices[i] for i in order]
             ranks = sorted(ranks)
@@ -658,7 +652,10 @@ class BatchProcessor:
                 weights = [weights[i] for i in order]
 
         result = model._compute(
-            teams=teams, ranks=ranks, scores=scores, weights=weights,
+            teams=teams,
+            ranks=ranks,
+            scores=scores,
+            weights=weights,
         )
 
         # Write back to flat arrays (team_indices already sorted to

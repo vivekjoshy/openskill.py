@@ -8,7 +8,7 @@ import random
 import pytest
 
 from openskill.batch import Game
-from openskill.ladder import Ladder, RatingView, _HAS_CYTHON
+from openskill.ladder import _HAS_CYTHON, Ladder, RatingView
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,
@@ -17,10 +17,10 @@ from openskill.models import (
     ThurstoneMostellerPart,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _old_approach(model, games):
     """Baseline sequential model.rate() with dict."""
@@ -65,7 +65,7 @@ def _generate_games(num_players, num_games, seed=42):
         for t in range(n_teams):
             start = t * team_size
             if start + team_size <= len(chosen):
-                teams.append(chosen[start:start + team_size])
+                teams.append(chosen[start : start + team_size])
         if len(teams) < 2:
             continue
         ranks = list(range(1, len(teams) + 1))
@@ -77,6 +77,7 @@ def _generate_games(num_players, num_games, seed=42):
 # ---------------------------------------------------------------------------
 # TestRatingView
 # ---------------------------------------------------------------------------
+
 
 class TestRatingView:
     def test_mu_sigma_read(self):
@@ -123,6 +124,7 @@ class TestRatingView:
 # ---------------------------------------------------------------------------
 # TestLadder
 # ---------------------------------------------------------------------------
+
 
 class TestLadder:
     def test_auto_register(self):
@@ -267,12 +269,12 @@ class TestLadder:
             for pid in old:
                 mu_diff = abs(lad_dict[pid][0] - old[pid][0])
                 sig_diff = abs(lad_dict[pid][1] - old[pid][1])
-                assert mu_diff < 1e-9, (
-                    f"{type(model).__name__} {pid}: mu diff={mu_diff}"
-                )
-                assert sig_diff < 1e-9, (
-                    f"{type(model).__name__} {pid}: sigma diff={sig_diff}"
-                )
+                assert (
+                    mu_diff < 1e-9
+                ), f"{type(model).__name__} {pid}: mu diff={mu_diff}"
+                assert (
+                    sig_diff < 1e-9
+                ), f"{type(model).__name__} {pid}: sigma diff={sig_diff}"
 
     def test_to_dict(self):
         lad = Ladder(PlackettLuce())
@@ -315,6 +317,7 @@ class TestLadder:
 # ---------------------------------------------------------------------------
 # TestLadderCython (skip if not available)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.skipif(not _HAS_CYTHON, reason="Cython extension not built")
 class TestLadderCython:
@@ -359,12 +362,12 @@ class TestLadderCython:
             for pid in old:
                 mu_diff = abs(lad_dict[pid][0] - old[pid][0])
                 sig_diff = abs(lad_dict[pid][1] - old[pid][1])
-                assert mu_diff < 1e-9, (
-                    f"Cython {type(model).__name__} {pid}: mu diff={mu_diff}"
-                )
-                assert sig_diff < 1e-9, (
-                    f"Cython {type(model).__name__} {pid}: sigma diff={sig_diff}"
-                )
+                assert (
+                    mu_diff < 1e-9
+                ), f"Cython {type(model).__name__} {pid}: mu diff={mu_diff}"
+                assert (
+                    sig_diff < 1e-9
+                ), f"Cython {type(model).__name__} {pid}: sigma diff={sig_diff}"
 
     def test_cython_scores_mode(self):
         model = PlackettLuce()

@@ -43,24 +43,29 @@ from __future__ import annotations
 
 import array
 import math
+from collections.abc import Iterator, KeysView
 from typing import Any
 
-from openskill.batch import Game, partition_waves, MAX_ENTITIES, _FastRating
+from openskill.batch import MAX_ENTITIES, Game, _FastRating, partition_waves
 
 __all__ = ["Ladder", "RatingView"]
 
 # Try to import the optional Cython fast path.
 try:
-    from openskill._cfast import cy_rate_game as _cy_rate_game  # type: ignore[import-not-found]
+    from openskill import _cfast  # type: ignore[attr-defined]
+
+    _cy_rate_game = _cfast.cy_rate_game
 
     _HAS_CYTHON: bool = True
 except ImportError:
+    _cy_rate_game = None  # type: ignore[assignment,misc,unused-ignore]
     _HAS_CYTHON = False
 
 
 # ---------------------------------------------------------------------------
 # RatingView — flyweight into backing arrays
 # ---------------------------------------------------------------------------
+
 
 class RatingView:
     """Lightweight view into a Ladder's backing arrays.
@@ -74,8 +79,8 @@ class RatingView:
 
     def __init__(
         self,
-        mus: array.array,  # type: ignore[type-arg]
-        sigmas: array.array,  # type: ignore[type-arg]
+        mus: array.array[float],
+        sigmas: array.array[float],
         idx: int,
         entity_id: str,
     ) -> None:
@@ -88,7 +93,8 @@ class RatingView:
 
     @property
     def mu(self) -> float:
-        return self._mus[self._idx]
+        result: float = self._mus[self._idx]
+        return result
 
     @mu.setter
     def mu(self, value: float) -> None:
@@ -96,7 +102,8 @@ class RatingView:
 
     @property
     def sigma(self) -> float:
-        return self._sigmas[self._idx]
+        result: float = self._sigmas[self._idx]
+        return result
 
     @sigma.setter
     def sigma(self, value: float) -> None:
@@ -108,13 +115,12 @@ class RatingView:
 
     def ordinal(self, z: float = 3.0) -> float:
         """Conservative skill estimate (mu - z*sigma)."""
-        return self._mus[self._idx] - z * self._sigmas[self._idx]
+        mu: float = self._mus[self._idx]
+        sigma: float = self._sigmas[self._idx]
+        return mu - z * sigma
 
     def __repr__(self) -> str:
-        return (
-            f"RatingView({self._id!r}, "
-            f"mu={self.mu:.4f}, sigma={self.sigma:.4f})"
-        )
+        return f"RatingView({self._id!r}, " f"mu={self.mu:.4f}, sigma={self.sigma:.4f})"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, RatingView):
@@ -128,6 +134,7 @@ class RatingView:
 # ---------------------------------------------------------------------------
 # Ladder — the main registry
 # ---------------------------------------------------------------------------
+
 
 class Ladder:
     """In-place rating registry backed by contiguous ``array.array('d')``.
@@ -163,12 +170,12 @@ class Ladder:
         self._model: Any = model
         self._max: int = max_entities
         # Pre-allocated contiguous C-double arrays.
-        self._mus: array.array = array.array("d", bytes(8 * max_entities))  # type: ignore[arg-type]
-        self._sigmas: array.array = array.array("d", bytes(8 * max_entities))  # type: ignore[arg-type]
+        self._mus: array.array[float] = array.array("d", bytes(8 * max_entities))
+        self._sigmas: array.array[float] = array.array("d", bytes(8 * max_entities))
         self._entity_to_idx: dict[str, int] = {}
         self._views: dict[str, RatingView] = {}
         self._size: int = 0
-        self._tau_sq: float = model.tau ** 2
+        self._tau_sq: float = model.tau**2
         self._limit_sigma: bool = model.limit_sigma
         self._default_mu: float = model.mu
         self._default_sigma: float = model.sigma
@@ -191,10 +198,10 @@ class Ladder:
             self._register(entity_id)
         return self._views[entity_id]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         return iter(self._entity_to_idx)
 
-    def keys(self):
+    def keys(self) -> KeysView[str]:
         return self._entity_to_idx.keys()
 
     # ------------------------------------------------------------------
@@ -210,8 +217,7 @@ class Ladder:
         idx = self._size
         if idx >= self._max:
             raise OverflowError(
-                f"Ladder full: {self._max} entities.  "
-                f"Increase max_entities."
+                f"Ladder full: {self._max} entities.  " f"Increase max_entities."
             )
         self._entity_to_idx[entity_id] = idx
         self._mus[idx] = mu if mu is not None else self._default_mu
@@ -310,9 +316,7 @@ class Ladder:
             for eid in team_ids:
                 idx: int = entity_to_idx[eid]
                 s: float = sigmas[idx]
-                team.append(
-                    _FastRating(mus[idx], math.sqrt(s * s + tau_sq))
-                )
+                team.append(_FastRating(mus[idx], math.sqrt(s * s + tau_sq)))
                 indices.append(idx)
             team_objs.append(team)
             team_indices.append(indices)
@@ -324,9 +328,8 @@ class Ladder:
 
         # Sort by rank (PlackettLuce requires rank-ordered input).
         if ranks is not None:
-            order: list[int] = sorted(
-                range(len(ranks)), key=lambda i: ranks[i]
-            )
+            _ranks = ranks  # local binding for lambda closure
+            order: list[int] = sorted(range(len(_ranks)), key=lambda i: _ranks[i])
             team_objs = [team_objs[i] for i in order]
             team_indices = [team_indices[i] for i in order]
             ranks = sorted(ranks)
@@ -336,7 +339,10 @@ class Ladder:
                 weights = [weights[i] for i in order]
 
         result = model._compute(
-            teams=team_objs, ranks=ranks, scores=scores, weights=weights,
+            teams=team_objs,
+            ranks=ranks,
+            scores=scores,
+            weights=weights,
         )
 
         # Write back — direct array mutation, no dict write-back.

@@ -24,7 +24,7 @@ import sys
 import time
 
 from openskill.batch import BatchProcessor, Game, partition_waves
-from openskill.ladder import Ladder, _HAS_CYTHON
+from openskill.ladder import _HAS_CYTHON, Ladder
 from openskill.models import (
     BradleyTerryFull,
     BradleyTerryPart,
@@ -52,8 +52,12 @@ POWER_LAW_TEAMS_MAX = 4
 # Data generation
 # ---------------------------------------------------------------------------
 
+
 def generate_swiss_games(
-    num_players: int, num_rounds: int, seed: int, team_size: int = TEAM_SIZE,
+    num_players: int,
+    num_rounds: int,
+    seed: int,
+    team_size: int = TEAM_SIZE,
 ) -> list[Game]:
     """Swiss-format tournament: every player once per round, no replacement."""
     rng = random.Random(seed)
@@ -75,7 +79,9 @@ def generate_swiss_games(
 
 
 def generate_power_law_games(
-    num_players: int, num_games: int, seed: int,
+    num_players: int,
+    num_games: int,
+    seed: int,
     team_size_max: int = POWER_LAW_TEAM_SIZE_MAX,
 ) -> list[Game]:
     """Power-law activity: some players play a LOT, most play a few."""
@@ -116,6 +122,7 @@ def _weighted_sample(rng, population, weights, k):
 # ---------------------------------------------------------------------------
 # Execution strategies
 # ---------------------------------------------------------------------------
+
 
 def run_old(model, games):
     """Baseline: model.rate() with dict."""
@@ -165,6 +172,7 @@ def run_ladder_batch(model, games):
 # Comparison helpers
 # ---------------------------------------------------------------------------
 
+
 def compare_ratings(old, new):
     max_mu = max_sigma = 0.0
     mismatches = 0
@@ -189,6 +197,7 @@ def fmt(seconds):
 # ---------------------------------------------------------------------------
 # Benchmark runner
 # ---------------------------------------------------------------------------
+
 
 def benchmark_dataset(label, games, model_name, model):
     """Run all approaches for one model+dataset, return result row."""
@@ -254,7 +263,9 @@ def run_benchmark():
     print("=" * 80)
     print("  Batch Processing Benchmark — SHOOTOUT")
     print(f"  {NUM_PLAYERS} players, seed={SEED}, Python {sys.version.split()[0]}")
-    print(f"  Cython: {'YES' if _HAS_CYTHON else 'NO (pip install cython && python build_cfast.py)'}")
+    print(
+        f"  Cython: {'YES' if _HAS_CYTHON else 'NO (pip install cython && python build_cfast.py)'}"
+    )
     print("=" * 80)
 
     models = [
@@ -274,10 +285,16 @@ def run_benchmark():
     all_results = []
 
     for ds_label, games, ds_desc in [
-        ("Swiss", generate_swiss_games(NUM_PLAYERS, NUM_ROUNDS, SEED, TEAM_SIZE),
-         f"{NUM_PLAYERS} players, {NUM_ROUNDS} rounds, {TEAM_SIZE}v{TEAM_SIZE}"),
-        ("PowerLaw", generate_power_law_games(NUM_PLAYERS, POWER_LAW_GAMES, SEED),
-         f"{NUM_PLAYERS} players, {POWER_LAW_GAMES} games, mixed teams"),
+        (
+            "Swiss",
+            generate_swiss_games(NUM_PLAYERS, NUM_ROUNDS, SEED, TEAM_SIZE),
+            f"{NUM_PLAYERS} players, {NUM_ROUNDS} rounds, {TEAM_SIZE}v{TEAM_SIZE}",
+        ),
+        (
+            "PowerLaw",
+            generate_power_law_games(NUM_PLAYERS, POWER_LAW_GAMES, SEED),
+            f"{NUM_PLAYERS} players, {POWER_LAW_GAMES} games, mixed teams",
+        ),
     ]:
         print(f"\n{'─' * 80}")
         print(f"  Dataset: {ds_label} — {ds_desc} ({len(games)} games)")
@@ -286,8 +303,10 @@ def run_benchmark():
         # Wave analysis
         waves = partition_waves(games)
         wsizes = [len(w) for w in waves]
-        print(f"  Waves: {len(waves)}, max wave: {max(wsizes)}, "
-              f"avg: {sum(wsizes)/len(wsizes):.1f}")
+        print(
+            f"  Waves: {len(waves)}, max wave: {max(wsizes)}, "
+            f"avg: {sum(wsizes)/len(wsizes):.1f}"
+        )
 
         # Header
         col_w = 10
@@ -324,6 +343,7 @@ def run_benchmark():
     print("  Profile breakdown: PlackettLuce 1v1 (13500 iterations)")
     print(f"{'─' * 80}")
     import copy
+
     model = PlackettLuce()
     N = 13500
 
@@ -339,7 +359,7 @@ def run_benchmark():
         copy.deepcopy([team_a, team_b])
     dc_time = time.perf_counter() - t0
 
-    tau_sig = math.sqrt(model.sigma ** 2 + model.tau ** 2)
+    tau_sig = math.sqrt(model.sigma**2 + model.tau**2)
     ta = [model.rating(mu=model.mu, sigma=tau_sig)]
     tb = [model.rating(mu=model.mu, sigma=tau_sig)]
     t0 = time.perf_counter()
@@ -353,7 +373,8 @@ def run_benchmark():
     rating_time = time.perf_counter() - t0
 
     lad = Ladder(model, use_cython=False)
-    lad.add("a"); lad.add("b")
+    lad.add("a")
+    lad.add("b")
     t0 = time.perf_counter()
     for _ in range(N):
         lad.rate([["a"], ["b"]], ranks=[1, 2])
@@ -361,19 +382,30 @@ def run_benchmark():
 
     if _HAS_CYTHON:
         lad_cy = Ladder(model, use_cython=True)
-        lad_cy.add("a"); lad_cy.add("b")
+        lad_cy.add("a")
+        lad_cy.add("b")
         t0 = time.perf_counter()
         for _ in range(N):
             lad_cy.rate([["a"], ["b"]], ranks=[1, 2])
         ladder_cy_time = time.perf_counter() - t0
 
-    print(f"  model.rate()     {fmt(rate_time):>10}  (baseline = deepcopy + validate + compute)")
-    print(f"  copy.deepcopy()  {fmt(dc_time):>10}  ({dc_time/rate_time*100:.0f}% of rate)")
-    print(f"  model._compute() {fmt(compute_time):>10}  ({compute_time/rate_time*100:.0f}% of rate) — pure math")
+    print(
+        f"  model.rate()     {fmt(rate_time):>10}  (baseline = deepcopy + validate + compute)"
+    )
+    print(
+        f"  copy.deepcopy()  {fmt(dc_time):>10}  ({dc_time/rate_time*100:.0f}% of rate)"
+    )
+    print(
+        f"  model._compute() {fmt(compute_time):>10}  ({compute_time/rate_time*100:.0f}% of rate) — pure math"
+    )
     print(f"  model.rating()   {fmt(rating_time):>10}  ({N*2} objects)")
-    print(f"  Ladder.rate()    {fmt(ladder_time):>10}  ({ladder_time/rate_time:.2f}x vs rate)")
+    print(
+        f"  Ladder.rate()    {fmt(ladder_time):>10}  ({ladder_time/rate_time:.2f}x vs rate)"
+    )
     if _HAS_CYTHON:
-        print(f"  Ladder+Cy.rate() {fmt(ladder_cy_time):>10}  ({ladder_cy_time/rate_time:.2f}x vs rate)")
+        print(
+            f"  Ladder+Cy.rate() {fmt(ladder_cy_time):>10}  ({ladder_cy_time/rate_time:.2f}x vs rate)"
+        )
 
     # ──────────────────────────────────────────────────────────────
     # Summary & recommendation
@@ -400,8 +432,10 @@ def run_benchmark():
             )
             best_t = r["approaches"][best_name]
             speedup = old_t / best_t if best_t > 0 else 0
-            print(f"    {r['model']:<26} winner={best_name:<10} "
-                  f"{speedup:.2f}x faster than Old")
+            print(
+                f"    {r['model']:<26} winner={best_name:<10} "
+                f"{speedup:.2f}x faster than Old"
+            )
         print()
 
 
