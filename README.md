@@ -136,6 +136,78 @@ PlackettLuceRating(mu=23.035705378196937, sigma=8.177962604389991)
 True
 ```
 
+### Bulk Rating with Ladder
+
+For processing many games, `Ladder` provides an in-place rating registry
+backed by contiguous arrays. It bypasses the overhead of `model.rate()`
+(deep copies, UUID generation) and is typically 2-3x faster. An optional
+Cython extension provides an additional 10-15% speedup:
+
+```shell
+pip install cython
+python build_cfast.py
+```
+
+Ladder will auto-detect the compiled extension at runtime and use it
+if available:
+
+```python
+from openskill.models import PlackettLuce
+from openskill.ladder import Ladder
+
+model = PlackettLuce()
+ladder = Ladder(model)
+
+# Ratings are auto-registered on first use
+ladder.rate([["alice"], ["bob"]], ranks=[1, 2])
+ladder.rate([["bob"], ["carol"]], ranks=[2, 1])
+
+print(ladder["alice"].mu)    # updated in-place
+print(ladder["bob"].sigma)   # no copies, no allocations
+```
+
+For many games at once, `rate_batch` partitions them into conflict-free
+waves that respect chronological ordering:
+
+```python
+from openskill.batch import Game
+
+games = [
+    Game(teams=[["alice"], ["bob"]], ranks=[1, 2]),
+    Game(teams=[["bob"], ["carol"]], ranks=[2, 1]),
+    Game(teams=[["alice"], ["carol"]], scores=[10, 20]),
+]
+
+ladder.rate_batch(games)
+```
+
+### Parallel Batch Processing
+
+`BatchProcessor` processes games in parallel across multiple workers:
+
+```python
+from openskill.batch import BatchProcessor, Game
+
+model = PlackettLuce()
+processor = BatchProcessor(model, n_workers=4)
+
+games = [
+    Game(teams=[["alice"], ["bob"]], ranks=[1, 2]),
+    Game(teams=[["carol"], ["dave"]], ranks=[2, 1]),
+    # ... thousands of games
+]
+
+ratings = processor.process(games)
+# {"alice": (mu, sigma), "bob": (mu, sigma), ...}
+```
+
+> **Note:** Multi-worker batch processing requires free-threaded Python
+> (version 3.13t, 3.14t, or later — note the `t` suffix) to benefit from
+> true parallelism. On standard Python builds with the GIL enabled,
+> multiple workers use separate processes with serialization overhead,
+> which is typically *slower* than a single worker. If you are not on a
+> free-threaded build, use `n_workers=1` or use `Ladder` directly.
+
 # Support
 If you're struggling with any of the concepts, please search the discussions section to see if your question has already been answered.
 If you can't find an answer, please open a new [discussion](https://github.com/vivekjoshy/openskill.py/discussions) and we'll try to help you out.
