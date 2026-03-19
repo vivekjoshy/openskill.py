@@ -13,3 +13,5 @@ precision = 2
 omit = *migrations*
 exclude_lines =
     pragma: no cover
+partial_branches =
+    pragma: no branch
