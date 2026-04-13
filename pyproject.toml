@@ -110,7 +110,7 @@ build = [
     "bump-my-version~=1.1",
 ]
 benchmark = [
-    "rich~=14.0",
+    "rich~=15.0",
     "tqdm~=4.67",
     "pooch~=1.8",
     "jsonlines~=4.0",
