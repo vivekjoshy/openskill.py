@@ -638,3 +638,22 @@ def test_weight_bounds_none_disables_normalization() -> None:
     mu_changes = [r.mu - 25.0 for r in result[0]]
     assert mu_changes[0] == pytest.approx(mu_changes[1])
     assert mu_changes[1] == pytest.approx(mu_changes[2])
+
+
+def test_rate_tau_zero_is_respected() -> None:
+    """
+    Passing tau=0 must suppress sigma inflation entirely.
+    Before the fix, tau=0 was falsy and fell back to self.tau,
+    making it indistinguishable from not passing tau at all.
+    """
+    model = PlackettLuce(tau=0.3)
+    a = model.rating()
+    b = model.rating()
+
+    [[w_zero], [l_zero]] = model.rate([[a], [b]], tau=0)
+    [[w_default], [l_default]] = model.rate([[a], [b]])
+
+    # With tau=0 there is no additive sigma inflation, so resulting sigmas
+    # must be strictly less than or equal to those with tau=0.3.
+    assert w_zero.sigma <= w_default.sigma
+    assert l_zero.sigma <= l_default.sigma

@@ -583,7 +583,7 @@ class BradleyTerryFull:
         teams = copy.deepcopy(original_teams)
 
         # Correct Sigma With Tau
-        tau = tau if tau else self.tau
+        tau = tau if tau is not None else self.tau
         tau_squared = tau * tau
         for team_index, team in enumerate(teams):
             for player_index, player in enumerate(team):
