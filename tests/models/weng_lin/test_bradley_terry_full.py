@@ -462,6 +462,12 @@ def test_rate_errors() -> None:
     assert winner.sigma <= a.sigma
     assert loser.sigma <= b.sigma
 
+    # Ensures limit_sigma passed to rate() does not mutate the model instance
+    a = r()
+    b = r()
+    model.rate([[a], [b]], limit_sigma=True)
+    assert model.limit_sigma is False
+
     # Test ValueError
     team_1 = [r()]
     team_2 = [r(), r()]
