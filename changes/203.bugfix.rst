@@ -1,0 +1,1 @@
+Fixed tie adjustment being a no-op in ``PlackettLuce``, ``BradleyTerryFull``, and ``ThurstoneMostellerFull`` due to object aliasing. Tied teams now receive the same averaged mu change.

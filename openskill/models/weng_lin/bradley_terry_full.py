@@ -748,6 +748,9 @@ class BradleyTerryFull:
                 rank_groups[team_i.rank] = []
             rank_groups[team_i.rank].append(i)
 
+        # Snapshot original mu values before mutation (needed for tie adjustment).
+        original_mus = [[p.mu for p in team] for team in original_teams]
+
         result = []
         for i, team_i in enumerate(team_ratings):
             omega = 0.0
@@ -837,11 +840,11 @@ class BradleyTerryFull:
         for rank, indices in rank_groups.items():
             if len(indices) > 1:
                 avg_mu_change = sum(
-                    result[i][0].mu - original_teams[i][0].mu for i in indices
+                    result[i][0].mu - original_mus[i][0] for i in indices
                 ) / len(indices)
                 for i in indices:
                     for j in range(len(result[i])):
-                        result[i][j].mu = original_teams[i][j].mu + avg_mu_change
+                        result[i][j].mu = original_mus[i][j] + avg_mu_change
 
         return result
 
