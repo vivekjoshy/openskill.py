@@ -1070,8 +1070,7 @@ class PlackettLuce:
 
         :return: A list of :class:`PlackettLuceTeamRating` objects.
         """
-        if ranks is None:
-            ranks = self._calculate_rankings(game)
+        ranks = self._calculate_rankings(game, ranks)
 
         result = []
         for index, team in enumerate(game):
